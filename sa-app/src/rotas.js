@@ -3,7 +3,7 @@ import React from 'react';
 
 import ListagemCursos from './views/listagem-cursos';
 
-import ListagemAlunos from './views/listagem-alunos';
+import ListagemPlanos from './views/listagem-planos';
 
 
 
@@ -27,7 +27,7 @@ function Rotas(props) {
         
         <Route path='/listagem-cursos' element={<ListagemCursos />} />
         
-        <Route path='/listagem-alunos' element={<ListagemAlunos />} />
+        <Route path='/listagem-planos' element={<ListagemPlanos />} />
         
       
       </Routes>

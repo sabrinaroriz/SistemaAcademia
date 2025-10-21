@@ -8,7 +8,7 @@ function Navbar(props) {
     <div className='navbar navbar-expand-lg fixed-top navbar-dark bg-primary'>
       <div className='container'>
         <a href='/' className='navbar-brand'>
-          SCAC
+          AlphaFit
         </a>
         <button
           className='navbar-toggler'
@@ -26,41 +26,40 @@ function Navbar(props) {
             <NavbarItem
               render='true'
               href='/listagem-usuarios'
-              label='Usuários'
+              label='Atividade'
             />
           </ul>
           <ul className='navbar-nav'>
-            <NavbarItem render='true' href='/listagem-cursos' label='Cursos' />
+            <NavbarItem 
+              render='true' 
+              href='/listagem-cursos' 
+              label='Cliente' />
           </ul>
           <ul className='navbar-nav'>
             <NavbarItem
               render='true'
               href='/listagem-professores'
-              label='Professores'
+              label='Funcionário'
             />
           </ul>
           <ul className='navbar-nav'>
-            <NavbarItem render='true' href='/listagem-alunos' label='Alunos' />
+            <NavbarItem 
+              render='true' 
+              href='/listagem-planos' 
+              label='Plano' />
           </ul>
           <ul className='navbar-nav'>
             <NavbarItem
               render='true'
               href='/listagem-categorias'
-              label='Categorias'
+              label='Cobrança'
             />
           </ul>
           <ul className='navbar-nav'>
             <NavbarItem
               render='true'
               href='/listagem-atividades-complementares'
-              label='Atividades'
-            />
-          </ul>
-          <ul className='navbar-nav'>
-            <NavbarItem
-              render='true'
-              href='/acompanhamento-atividades-complementares'
-              label='Acompanhamento'
+              label='Relatório'
             />
           </ul>
           <ul className='navbar-nav'>

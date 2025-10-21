@@ -16,9 +16,9 @@ import EditIcon from '@mui/icons-material/Edit';
 import axios from 'axios';
 import { BASE_URL } from '../config/axios';
 
-const baseURL = `${BASE_URL}/alunos`;
+const baseURL = `${BASE_URL}/planos`;
 
-function ListagemAlunos() {
+function ListagemPlanos() {
   const navigate = useNavigate();
 
   const cadastrar = () => {
@@ -40,7 +40,7 @@ function ListagemAlunos() {
         headers: { 'Content-Type': 'application/json' },
       })
       .then(function (response) {
-        mensagemSucesso(`Aluno excluído com sucesso!`);
+        mensagemSucesso(`Plano excluído com sucesso!`);
         setDados(
           dados.filter((dado) => {
             return dado.id !== id;
@@ -48,7 +48,7 @@ function ListagemAlunos() {
         );
       })
       .catch(function (error) {
-        mensagemErro(`Erro ao excluir o aluno`);
+        mensagemErro(`Erro ao excluir o plano`);
       });
   }
 
@@ -62,7 +62,7 @@ function ListagemAlunos() {
 
   return (
     <div className='container'>
-      <Card title='Listagem de Alunos'>
+      <Card title='Listagem de Planos'>
         <div className='row'>
           <div className='col-lg-12'>
             <div className='bs-component'>
@@ -71,7 +71,7 @@ function ListagemAlunos() {
                 className='btn btn-warning'
                 onClick={() => cadastrar()}
               >
-                Novo Aluno
+                Novo Plano
               </button>
               <table className='table table-hover'>
                 <thead>
@@ -118,4 +118,4 @@ function ListagemAlunos() {
   );
 }
 
-export default ListagemAlunos;
+export default ListagemPlanos;
