@@ -16,17 +16,17 @@ import EditIcon from '@mui/icons-material/Edit';
 import axios from 'axios';
 import { BASE_URL } from '../config/axios';
 
-const baseURL = `${BASE_URL}/cursos`;
+const baseURL = `${BASE_URL}/aulas`;
 
-function ListagemCursos() {
+function ListagemAulas() {
   const navigate = useNavigate();
 
   const cadastrar = () => {
-    navigate(`/cadastro-cursos`);
+    navigate(`/cadastro-aulas`);
   };
 
   const editar = (id) => {
-    navigate(`/cadastro-cursos/${id}`);
+    navigate(`/cadastro-aulas/${id}`);
   };
 
   const [dados, setDados] = React.useState(null);
@@ -40,7 +40,7 @@ function ListagemCursos() {
         headers: { 'Content-Type': 'application/json' },
       })
       .then(function (response) {
-        mensagemSucesso(`Curso excluído com sucesso!`);
+        mensagemSucesso(`Aula excluída com sucesso!`);
         setDados(
           dados.filter((dado) => {
             return dado.id !== id;
@@ -48,7 +48,7 @@ function ListagemCursos() {
         );
       })
       .catch(function (error) {
-        mensagemErro(`Erro ao excluir o curso`);
+        mensagemErro(`Erro ao excluir a aula`);
       });
   }
 
@@ -62,7 +62,7 @@ function ListagemCursos() {
 
   return (
     <div className='container'>
-      <Card title='Listagem de Cursos'>
+      <Card title='Listagem de Aulas'>
         <div className='row'>
           <div className='col-lg-12'>
             <div className='bs-component'>
@@ -71,12 +71,16 @@ function ListagemCursos() {
                 className='btn btn-warning'
                 onClick={() => cadastrar()}
               >
-                Novo Curso
+                Nova Aula
               </button>
               <table className='table table-hover'>
                 <thead>
                   <tr>
-                    <th scope='col'>Nome</th>
+                    <th scope='col'>Nome da Aula</th>
+                    <th scope='col'>Instrutor</th>
+                    <th scope='col'>Data</th>
+                    <th scope='col'>Hora</th>
+                    <th scope='col'>Status</th>
                     <th scope='col'>Ações</th>
                   </tr>
                 </thead>
@@ -84,6 +88,10 @@ function ListagemCursos() {
                   {dados.map((dado) => (
                     <tr key={dado.id}>
                       <td>{dado.nome}</td>
+                      <td>{dado.instrutor}</td>
+                      <td>{dado.data}</td>
+                      <td>{dado.hora}</td>
+                      <td>{dado.status}</td>
                       <td>
                         <Stack spacing={1} padding={0} direction='row'>
                           <IconButton
@@ -112,4 +120,4 @@ function ListagemCursos() {
   );
 }
 
-export default ListagemCursos;
+export default ListagemAulas;

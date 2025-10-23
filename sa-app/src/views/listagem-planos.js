@@ -22,11 +22,11 @@ function ListagemPlanos() {
   const navigate = useNavigate();
 
   const cadastrar = () => {
-    navigate(`/cadastro-alunos`);
+    navigate(`/cadastro-planos`);
   };
 
   const editar = (id) => {
-    navigate(`/cadastro-alunos/${id}`);
+    navigate(`/cadastro-planos/${id}`);
   };
 
   const [dados, setDados] = React.useState(null);
@@ -76,20 +76,18 @@ function ListagemPlanos() {
               <table className='table table-hover'>
                 <thead>
                   <tr>
-                    <th scope='col'>Matrícula</th>
-                    <th scope='col'>Nome</th>
-                    <th scope='col'>Email</th>
-                    <th scope='col'>Celular</th>
+                    <th scope='col'>Nome do Plano</th>
+                    <th scope='col'>Duração</th>
+                    <th scope='col'>Valor</th>
                     <th scope='col'>Ações</th>
                   </tr>
                 </thead>
                 <tbody>
                   {dados.map((dado) => (
                     <tr key={dado.id}>
-                      <td>{dado.matricula}</td>
                       <td>{dado.nome}</td>
-                      <td>{dado.email}</td>
-                      <td>{dado.celular}</td>
+                      <td>{dado.duracao}</td>
+                      <td>{dado.valor}</td>
                       <td>
                         <Stack spacing={1} padding={0} direction='row'>
                           <IconButton

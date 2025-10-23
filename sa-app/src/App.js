@@ -1,5 +1,6 @@
 import React from 'react';
 import 'bootswatch/dist/brite/bootstrap.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import 'toastr/build/toastr.min';
 import 'toastr/build/toastr.css';
 import Navbar from './components/navbar.js';
