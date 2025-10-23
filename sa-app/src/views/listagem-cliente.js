@@ -16,17 +16,17 @@ import EditIcon from '@mui/icons-material/Edit';
 import axios from 'axios';
 import { BASE_URL } from '../config/axios';
 
-const baseURL = `${BASE_URL}/clientes`;
+const baseURL = `${BASE_URL}/cliente`;
 
-function ListagemClientes() {
+function ListagemCliente() {
   const navigate = useNavigate();
 
   const cadastrar = () => {
-    navigate(`/cadastro-clientes`);
+    navigate(`/cadastro-cliente`);
   };
 
   const editar = (id) => {
-    navigate(`/cadastro-clientes/${id}`);
+    navigate(`/cadastro-cliente/${id}`);
   };
 
   const [dados, setDados] = React.useState(null);
@@ -62,7 +62,7 @@ function ListagemClientes() {
 
   return (
     <div className='container'>
-      <Card title='Listagem de Clientes'>
+      <Card title='Listagem de Cliente'>
         <div className='row'>
           <div className='col-lg-12'>
             <div className='bs-component'>
@@ -117,4 +117,4 @@ function ListagemClientes() {
   );
 }
 
-export default ListagemClientes;
+export default ListagemCliente;
