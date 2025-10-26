@@ -16,17 +16,17 @@ import EditIcon from '@mui/icons-material/Edit';
 import axios from 'axios';
 import { BASE_URL } from '../config/axios';
 
-const baseURL = `${BASE_URL}/cliente`;
+const baseURL = `${BASE_URL}/funcionarios`;
 
 function ListagemFuncionarios() {
   const navigate = useNavigate();
 
   const cadastrar = () => {
-    navigate(`/cadastro-funcionario`);
+    navigate(`/cadastro-funcionarios`);
   };
 
   const editar = (id) => {
-    navigate(`/cadastro-funcionario/${id}`);
+    navigate(`/cadastro-funcionarios/${id}`);
   };
 
   const [dados, setDados] = React.useState(null);
@@ -40,7 +40,7 @@ function ListagemFuncionarios() {
         headers: { 'Content-Type': 'application/json' },
       })
       .then(function (response) {
-        mensagemSucesso(`funcionario excluído com sucesso!`);
+        mensagemSucesso(`Funcionário excluído com sucesso!`);
         setDados(
           dados.filter((dado) => {
             return dado.id !== id;
@@ -48,7 +48,7 @@ function ListagemFuncionarios() {
         );
       })
       .catch(function (error) {
-        mensagemErro(`Erro ao excluir o funcionario`);
+        mensagemErro(`Erro ao excluir o funcionário`);
       });
   }
 
@@ -62,16 +62,16 @@ function ListagemFuncionarios() {
 
   return (
     <div className='container'>
-      <Card title='Listagem de Funcionarios'>
+      <Card title='Listagem de Funcionários'>
         <div className='row'>
           <div className='col-lg-12'>
             <div className='bs-component'>
               <button
                 type='button'
-                className='btn btn-warning'
+                className='btn btn-primary'
                 onClick={() => cadastrar()}
               >
-                Novo Cliente
+                Novo Funcionário
               </button>
               <table className='table table-hover'>
                 <thead>
@@ -80,8 +80,7 @@ function ListagemFuncionarios() {
                     <th scope='col'>CPF</th>
                     <th scope='col'>Telefone</th>
                     <th scope='col'>Email</th>
-                    <th scope='col'>Cargos</th>
-                    <th scope='col'>Status</th>
+                    <th scope='col'>Cargo</th>
                     <th scope='col'>Ações</th>
                   </tr>
                 </thead>
@@ -90,10 +89,9 @@ function ListagemFuncionarios() {
                     <tr key={dado.id}>
                       <td>{dado.nome}</td>
                       <td>{dado.cpf}</td>
+                      <td>{dado.telefone}</td>
                       <td>{dado.email}</td>
-                      <td>{dado.cargos}</td>
-                       <td>{dado.email}</td>
-                      <td>{dado.cargos}</td>
+                       <td>{dado.idcargo}</td>
                       <td>
                         <Stack spacing={1} padding={0} direction='row'>
                           <IconButton

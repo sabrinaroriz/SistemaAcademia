@@ -68,7 +68,7 @@ function ListagemAulas() {
             <div className='bs-component'>
               <button
                 type='button'
-                className='btn btn-warning'
+                className='btn btn-primary'
                 onClick={() => cadastrar()}
               >
                 Nova Aula
@@ -88,7 +88,7 @@ function ListagemAulas() {
                   {dados.map((dado) => (
                     <tr key={dado.id}>
                       <td>{dado.nome}</td>
-                      <td>{dado.instrutor}</td>
+                      <td>{dado.idfuncionario}</td>
                       <td>{dado.data}</td>
                       <td>{dado.hora}</td>
                       <td>{dado.status}</td>

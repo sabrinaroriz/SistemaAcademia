@@ -16,17 +16,17 @@ import EditIcon from '@mui/icons-material/Edit';
 import axios from 'axios';
 import { BASE_URL } from '../config/axios';
 
-const baseURL = `${BASE_URL}/cargo`;
+const baseURL = `${BASE_URL}/cargos`;
 
 function ListagemCargos() {
   const navigate = useNavigate();
 
   const cadastrar = () => {
-    navigate(`/cadastro-cargo`);
+    navigate(`/cadastro-cargos`);
   };
 
   const editar = (id) => {
-    navigate(`/cadastro-cargo/${id}`);
+    navigate(`/cadastro-cargos/${id}`);
   };
 
   const [dados, setDados] = React.useState(null);
@@ -68,7 +68,7 @@ function ListagemCargos() {
             <div className='bs-component'>
               <button
                 type='button'
-                className='btn btn-warning'
+                className='btn btn-primary'
                 onClick={() => cadastrar()}
               >
                 Novo Cargo

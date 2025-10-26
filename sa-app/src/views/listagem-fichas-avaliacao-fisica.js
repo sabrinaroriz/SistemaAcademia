@@ -68,10 +68,10 @@ function ListagemFichasAvaliacaoFisica() {
             <div className='bs-component'>
               <button
                 type='button'
-                className='btn btn-warning'
+                className='btn btn-primary'
                 onClick={() => cadastrar()}
               >
-                Nova Aula
+                Nova Ficha de Avaliação Física
               </button>
               <table className='table table-hover'>
                 <thead>
@@ -88,8 +88,8 @@ function ListagemFichasAvaliacaoFisica() {
                   {dados.map((dado) => (
                     <tr key={dado.id}>
                       <td>{dado.data}</td>
-                      <td>{dado.cliente}</td>
-                      <td>{dado.instrutor}</td>
+                      <td>{dado.idcliente}</td>
+                      <td>{dado.idfuncionario}</td>
                       <td>{dado.peso}</td>
                       <td>{dado.altura}</td>
                       <td>

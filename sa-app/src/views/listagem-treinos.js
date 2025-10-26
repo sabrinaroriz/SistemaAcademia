@@ -68,7 +68,7 @@ function ListagemTreinos() {
             <div className='bs-component'>
               <button
                 type='button'
-                className='btn btn-warning'
+                className='btn btn-primary'
                 onClick={() => cadastrar()}
               >
                 Novo Treino
@@ -86,8 +86,8 @@ function ListagemTreinos() {
                   {dados.map((dado) => (
                     <tr key={dado.id}>
                       <td>{dado.data}</td>
-                      <td>{dado.cliente}</td>
-                      <td>{dado.instrutor}</td>
+                      <td>{dado.idcliente}</td>
+                      <td>{dado.idfuncionario}</td>
                       <td>
                         <Stack spacing={1} padding={0} direction='row'>
                           <IconButton

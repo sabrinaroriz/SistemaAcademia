@@ -11,7 +11,7 @@ import ListagemCargos from './views/listagem-cargos';
 //import ListagemFormasPagamento from './views/listagem-formas-pagamento';
 import ListagemFuncionarios from './views/listagem-funcionarios';
 //import ListagemTreinos from './views/listagem-treinos';
-import ListagemCliente from './views/listagem-cliente';
+import ListagemClientes from './views/listagem-clientes';
 
 
 
@@ -25,7 +25,7 @@ function Rotas(props) {
         
         <Route path='/listagem-planos' element={<ListagemPlanos />} />
         <Route path='/listagem-cargos' element={<ListagemCargos />} />
-        <Route path='/listagem-cliente' element={<ListagemCliente />} />
+        <Route path='/listagem-clientes' element={<ListagemClientes />} />
        {/* <Route path='/listagem-ajustes-financeiros' element={<ListagemAjustesFinanceiros />} /> */}
        {/*<Route path='/listagem-aulas' element={<ListagemAulas />} /> */}
        {/* <Route path='/listagem-equipamentos' element={<ListagemEquipamentos />} /> */}

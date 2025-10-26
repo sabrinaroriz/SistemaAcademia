@@ -56,7 +56,7 @@ function Navbar(props) {
                 Cliente
               </a>
               <div className="dropdown-menu">
-                <a className="dropdown-item" href='/listagem-cliente'>Cliente</a>
+                <a className="dropdown-item" href='/listagem-clientes'>Cliente</a>
                 <a className="dropdown-item" href='/listagem-fichas-avaliacao-fisica'>Ficha de Avaliação Física</a>
               </div>
             </li>

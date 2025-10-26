@@ -16,17 +16,17 @@ import EditIcon from '@mui/icons-material/Edit';
 import axios from 'axios';
 import { BASE_URL } from '../config/axios';
 
-const baseURL = `${BASE_URL}/cliente`;
+const baseURL = `${BASE_URL}/clientes`;
 
-function ListagemCliente() {
+function ListagemClientes() {
   const navigate = useNavigate();
 
   const cadastrar = () => {
-    navigate(`/cadastro-cliente`);
+    navigate(`/cadastro-clientes`);
   };
 
   const editar = (id) => {
-    navigate(`/cadastro-cliente/${id}`);
+    navigate(`/cadastro-clientes/${id}`);
   };
 
   const [dados, setDados] = React.useState(null);
@@ -62,13 +62,13 @@ function ListagemCliente() {
 
   return (
     <div className='container'>
-      <Card title='Listagem de Cliente'>
+      <Card title='Listagem de Clientes'>
         <div className='row'>
           <div className='col-lg-12'>
             <div className='bs-component'>
               <button
                 type='button'
-                className='btn btn-warning'
+                className='btn btn-primary'
                 onClick={() => cadastrar()}
               >
                 Novo Cliente
@@ -87,8 +87,9 @@ function ListagemCliente() {
                   {dados.map((dado) => (
                     <tr key={dado.id}>
                       <td>{dado.nome}</td>
-                      <td>{dado.duracao}</td>
-                      <td>{dado.valor}</td>
+                      <td>{dado.cpf}</td>
+                      <td>{dado.telefone}</td>
+                      <td>{dado.status}</td>
                       <td>
                         <Stack spacing={1} padding={0} direction='row'>
                           <IconButton
@@ -117,4 +118,4 @@ function ListagemCliente() {
   );
 }
 
-export default ListagemCliente;
+export default ListagemClientes;
