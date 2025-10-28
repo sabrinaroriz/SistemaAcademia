@@ -78,7 +78,7 @@ function ListagemFichasAvaliacaoFisica() {
                   <tr>
                     <th scope='col'>Data</th>
                     <th scope='col'>Nome do cliente</th>
-                    <th scope='col'>Nome do instrutor</th>
+                    <th scope='col'>Nome do funcionario</th>
                     <th scope='col'>Peso</th>
                     <th scope='col'>Altura</th>
                     <th scope='col'>Ações</th>
