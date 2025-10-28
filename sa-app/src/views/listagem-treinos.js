@@ -78,7 +78,7 @@ function ListagemTreinos() {
                   <tr>
                     <th scope='col'>Data</th>
                     <th scope='col'>Nome do Cliente</th>
-                    <th scope='col'>Nome do Instrutor</th>
+                    <th scope='col'>Nome do Funcionario</th>
                     <th scope='col'>Ações</th>
                   </tr>
                 </thead>
