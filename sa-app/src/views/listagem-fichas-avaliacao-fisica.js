@@ -16,7 +16,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import axios from 'axios';
 import { BASE_URL } from '../config/axios';
 
-const baseURL = `${BASE_URL}/fichasavaliacaofisica`;
+const baseURL = `${BASE_URL}3/fichasavaliacaofisica`;
 
 function ListagemFichasAvaliacaoFisica() {
   const navigate = useNavigate();
@@ -76,9 +76,9 @@ function ListagemFichasAvaliacaoFisica() {
               <table className='table table-hover'>
                 <thead>
                   <tr>
-                    <th scope='col'>Data</th>
-                    <th scope='col'>Nome do cliente</th>
-                    <th scope='col'>Nome do funcionario</th>
+                    <th scope='col'>Data da Avaliação</th>
+                    <th scope='col'>Nome do Cliente</th>
+                    <th scope='col'>Nome do Funcionario</th>
                     <th scope='col'>Peso</th>
                     <th scope='col'>Altura</th>
                     <th scope='col'>Ações</th>
@@ -87,11 +87,12 @@ function ListagemFichasAvaliacaoFisica() {
                 <tbody>
                   {dados.map((dado) => (
                     <tr key={dado.id}>
-                      <td>{dado.data}</td>
-                      <td>{dado.idcliente}</td>
-                      <td>{dado.idfuncionario}</td>
+                      <td>{dado.datafichaavaliacao}</td>
+                      <td>{dado.cliente.id} - {dado.cliente.nome}</td>
+                      <td>{dado.funcionario.id} - {dado.funcionario.nome}</td>
                       <td>{dado.peso}</td>
                       <td>{dado.altura}</td>
+
                       <td>
                         <Stack spacing={1} padding={0} direction='row'>
                           <IconButton
