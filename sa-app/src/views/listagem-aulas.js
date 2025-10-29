@@ -16,7 +16,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import axios from 'axios';
 import { BASE_URL } from '../config/axios';
 
-const baseURL = `${BASE_URL}/aulas`;
+const baseURL = `${BASE_URL}2/aulas`;
 
 function ListagemAulas() {
   const navigate = useNavigate();
@@ -77,9 +77,9 @@ function ListagemAulas() {
                 <thead>
                   <tr>
                     <th scope='col'>Nome da Aula</th>
-                    <th scope='col'>Instrutor</th>
+                    <th scope='col'>Funcionario</th>
                     <th scope='col'>Data</th>
-                    <th scope='col'>Hora</th>
+                    <th scope='col'>Horario</th>
                     <th scope='col'>Status</th>
                     <th scope='col'>Ações</th>
                   </tr>
@@ -88,9 +88,9 @@ function ListagemAulas() {
                   {dados.map((dado) => (
                     <tr key={dado.id}>
                       <td>{dado.nome}</td>
-                      <td>{dado.idfuncionario}</td>
+                      <td>{dado.funcionario.id} - {dado.funcionario.nome}</td>
                       <td>{dado.data}</td>
-                      <td>{dado.hora}</td>
+                      <td>{dado.horario}</td>
                       <td>{dado.status}</td>
                       <td>
                         <Stack spacing={1} padding={0} direction='row'>

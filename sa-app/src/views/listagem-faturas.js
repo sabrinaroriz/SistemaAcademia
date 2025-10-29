@@ -16,7 +16,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import axios from 'axios';
 import { BASE_URL } from '../config/axios';
 
-const baseURL = `${BASE_URL}/faturas`;
+const baseURL = `${BASE_URL}2/faturas`;
 
 function ListagemFaturas() {
   const navigate = useNavigate();
@@ -80,16 +80,22 @@ function ListagemFaturas() {
                     <th scope='col'>Data de vencimento</th>
                     <th scope='col'>Data de pagamento</th>
                     <th scope='col'>Plano</th>
+                    <th scope='col'>Em Atraso</th>
+                    <th scope='col'>Dias de Atraso</th>
+                    <th scope='col'>Multa</th>
                     <th scope='col'>Ações</th>
                   </tr>
                 </thead>
                 <tbody>
                   {dados.map((dado) => (
                     <tr key={dado.id}>
-                      <td>{dado.idcliente}</td>
+                      <td>{dado.cliente.id} - {dado.cliente.nome}</td>
                       <td>{dado.datavencimento}</td>
                       <td>{dado.datapagamento}</td>
                       <td>{dado.idplano}</td>
+                      <td>{dado.ematraso}</td>
+                      <td>{dado.diasatraso}</td>
+                      <td>{dado.multa}</td>
                       <td>
                         <Stack spacing={1} padding={0} direction='row'>
                           <IconButton

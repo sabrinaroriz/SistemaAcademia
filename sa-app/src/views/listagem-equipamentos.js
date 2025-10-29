@@ -16,7 +16,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import axios from 'axios';
 import { BASE_URL } from '../config/axios';
 
-const baseURL = `${BASE_URL}/equipamentos`;
+const baseURL = `${BASE_URL}2/equipamentos`;
 
 function ListagemEquipamentos() {
   const navigate = useNavigate();
@@ -79,6 +79,8 @@ function ListagemEquipamentos() {
                     <th scope='col'>Equipamento</th>
                     <th scope='col'>Modelo</th>
                     <th scope='col'>Última manutenção</th>
+                    <th scope='col'>Disponivel</th>
+                    <th scope='col'>Local</th>
                     <th scope='col'>Ações</th>
                   </tr>
                 </thead>
@@ -88,6 +90,8 @@ function ListagemEquipamentos() {
                       <td>{dado.nome}</td>
                       <td>{dado.modelo}</td>
                       <td>{dado.ultmanutencao}</td>
+                      <td>{dado.disponivel}</td>
+                      <td>{dado.local}</td>
                       <td>
                         <Stack spacing={1} padding={0} direction='row'>
                           <IconButton

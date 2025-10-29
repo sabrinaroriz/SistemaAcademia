@@ -16,7 +16,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import axios from 'axios';
 import { BASE_URL } from '../config/axios';
 
-const baseURL = `${BASE_URL}/treinos`;
+const baseURL = `${BASE_URL}2/treinos`;
 
 function ListagemTreinos() {
   const navigate = useNavigate();
@@ -85,9 +85,9 @@ function ListagemTreinos() {
                 <tbody>
                   {dados.map((dado) => (
                     <tr key={dado.id}>
-                      <td>{dado.data}</td>
-                      <td>{dado.idcliente}</td>
-                      <td>{dado.idfuncionario}</td>
+                      <td>{dado.datatreino}</td>
+                      <td>{dado.cliente.id} - {dado.cliente.nome}</td>
+                      <td>{dado.funcionario.id} - {dado.funcionario.nome}</td>
                       <td>
                         <Stack spacing={1} padding={0} direction='row'>
                           <IconButton
