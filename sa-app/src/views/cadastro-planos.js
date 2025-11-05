@@ -76,14 +76,16 @@ function CadastroPlanos() {
   }
 
   async function buscar() {
-    await axios.get(`${baseURL}/${idParam}`).then((response) => {
-      setDados(response.data);
-    });
-    setId(dados.id);
-    setNome(dados.nome);
-    setDuracao(dados.duracao);
-    setValor(dados.valor);
-    setDescricao(dados.descricao);
+    if (idParam != null) {
+      await axios.get(`${baseURL}/${idParam}`).then((response) => {
+        setDados(response.data);
+      });
+      setId(dados.id);
+      setNome(dados.nome);
+      setDuracao(dados.duracao);
+      setValor(dados.valor);
+      setDescricao(dados.descricao);
+    }
   }
 
   useEffect(() => {
