@@ -14,6 +14,9 @@ import ListagemTreinos from './views/listagem-treinos';
 import ListagemClientes from './views/listagem-clientes';
 
 
+import CadastroPlanos from './views/cadastro-planos';
+
+
 
 
 import { Route, Routes, BrowserRouter } from 'react-router-dom';
@@ -22,7 +25,9 @@ function Rotas(props) {
   return (
     <BrowserRouter>
       <Routes>
-        
+
+        <Route path='/cadastro-planos/:idParam?'element={<CadastroPlanos />} />
+
         <Route path='/listagem-planos' element={<ListagemPlanos />} />
         <Route path='/listagem-cargos' element={<ListagemCargos />} />
         <Route path='/listagem-clientes' element={<ListagemClientes />} />
@@ -35,6 +40,7 @@ function Rotas(props) {
         <Route path='/listagem-funcionarios' element={<ListagemFuncionarios />} />
         <Route path='/listagem-treinos' element={<ListagemTreinos />} /> 
         
+
       </Routes>
     </BrowserRouter>
   );
