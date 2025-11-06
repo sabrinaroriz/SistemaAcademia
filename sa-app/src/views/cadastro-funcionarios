@@ -24,7 +24,7 @@ function CadastroFuncionarios() {
   const [nome, setNome] = useState('');
   const [cpf, setCpf] = useState('');
   const [telefone, setTelefone] = useState('');
-  const [cargo, setCargo] = useState('');
+  const [idcargo, setCargo] = useState('');
   const [email, setEmail] = useState('');
 
   const [dados, setDados] = React.useState([]);
@@ -140,10 +140,10 @@ function CadastroFuncionarios() {
               <FormGroup label='Cargo: *' htmlFor='inputIdCargo'>
                 <input
                   type='text'
-                  id='imputIdCargo'
+                  id='inputIdCargo'
                   value={cargo}
                   className='form-control'
-                  name='Cabel'
+                  name='cargo'
                   placeholder='Selecione o cargo'
                   onChange={(e) => setIdCargo(e.target.value)}
                 />
