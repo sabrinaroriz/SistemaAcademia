@@ -100,7 +100,7 @@ function CadastroPlanos() {
         <div className='row'>
           <div className='col-lg-12'>
             <div className='bs-component'>
-              <FormGroup label='Nome do Plano: *' htmlFor='inputNome'>
+              <FormGroup label='Nome: *' htmlFor='inputNome'>
                 <input
                   type='text'
                   id='inputNome'
@@ -117,7 +117,6 @@ function CadastroPlanos() {
                   value={duracao}
                   className='form-select'
                   name='duracao'
-                  aria-describedby="descricaoHelp"
                   onChange={(e) => setDuracao(e.target.value)}
                   >
                     <option value=''>Selecione...</option>
