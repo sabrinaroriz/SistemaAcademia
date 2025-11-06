@@ -1,0 +1,186 @@
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+
+import Stack from '@mui/material/Stack';
+
+import Card from '../components/card';
+import FormGroup from '../components/form-group';
+
+import { mensagemSucesso, mensagemErro } from '../components/toastr';
+
+import '../custom.css';
+
+import axios from 'axios';
+import { BASE_URL } from '../config/axios';
+
+function CadastroFuncionarios() {
+  const { idParam } = useParams();
+
+  const navigate = useNavigate();
+
+  const baseURL = `${BASE_URL}/funcionarios`;
+
+  const [id, setId] = useState('');
+  const [nome, setNome] = useState('');
+  const [cpf, setCpf] = useState('');
+  const [telefone, setTelefone] = useState('');
+  const [cargo, setCargo] = useState('');
+  const [email, setEmail] = useState('');
+
+  const [dados, setDados] = React.useState([]);
+
+  function inicializar() {
+    if (idParam == null) {
+      setId('');
+      setNome('');
+      setCpf('');
+      setTelefone('');
+      setCargo('');
+      setEmail('');
+    } else {
+      setId(dados.id);
+      setNome(dados.nome);
+      setCpf(dados.cpf);
+      setTelefone(dados.telefone);
+      setCargo(dados.idcargo);
+      setEmail(dados.email);
+    }
+  }
+
+  async function salvar() {
+    let data = { id, nome, cpf, telefone,idcargo, email};
+    data = JSON.stringify(data);
+    if (idParam == null) {
+      await axios
+        .post(baseURL, data, {
+          headers: { 'Content-Type': 'application/json' },
+        })
+        .then(function (response) {
+          mensagemSucesso(`Funcionário ${nome} cadastrado com sucesso!`);
+          navigate(`/listagem-funcionarios`);
+        })
+        .catch(function (error) {
+          mensagemErro(error.response.data);
+        });
+    } else {
+      await axios
+        .put(`${baseURL}/${idParam}`, data, {
+          headers: { 'Content-Type': 'application/json' },
+        })
+        .then(function (response) {
+          mensagemSucesso(`Funcionário ${nome} alterado com sucesso!`);
+          navigate(`/listagem-funcionario`);
+        })
+        .catch(function (error) {
+          mensagemErro(error.response.data);
+        });
+    }
+  }
+
+  async function buscar() {
+    if (idParam != null) {
+      await axios.get(`${baseURL}/${idParam}`).then((response) => {
+        setDados(response.data);
+      });
+      setId(dados.id);
+      setNome(dados.nome);
+      setCpf(dados.cpf);
+      setTelefone(dados.telefone);
+      setCargo(dados.idcargo);
+      setEmail(dados.email);
+    }
+  }
+
+  useEffect(() => {
+    buscar(); // eslint-disable-next-line
+  }, [id]);
+
+  if (!dados) return null;
+
+  return (
+    <div className='container'>
+      <Card title='Cadastro de Funcionário'>
+        <div className='row'>
+          <div className='col-lg-12'>
+            <div className='bs-component'>
+              <FormGroup label='Nome: *' htmlFor='inputNome'>
+                <input
+                  type='text'
+                  id='inputNome'
+                  value={nome}
+                  className='form-control'
+                  name='nome'
+                  placeholder='Digite o nome do funcionário'
+                  onChange={(e) => setNome(e.target.value)}
+                />
+              </FormGroup>
+              
+              <FormGroup label='CPF:' htmlFor='imputCpf'>
+                <textarea
+                  type='text'
+                  maxLength='11'
+                  id='inputCpf'
+                  value={cpf}
+                  className='form-control'
+                  name='cpf'
+                  onChange={(e) => setCpf(e.target.value)}
+                ></textarea>
+              </FormGroup>
+              <FormGroup label='Telefone: *' htmlFor='inputTelefone'>
+                <input
+                  type='text'
+                  id='inputTelefone'
+                  value={telefone}
+                  className='form-control'
+                  name='telefone'
+                  placeholder='Digite o numero do telefone'
+                  onChange={(e) => setTelefone(e.target.value)}
+                />
+              </FormGroup>
+              <FormGroup label='Cargo: *' htmlFor='inputIdCargo'>
+                <input
+                  type='text'
+                  id='imputIdCargo'
+                  value={cargo}
+                  className='form-control'
+                  name='Cabel'
+                  placeholder='Selecione o cargo'
+                  onChange={(e) => setIdCargo(e.target.value)}
+                />
+              </FormGroup>
+              <FormGroup label='Email: *' htmlFor='inputEmail'>
+                <input
+                  type='email'
+                  id='inputEmail'
+                  value={email}
+                  className='form-control'
+                  name='email'
+                  placeholder='Digite o email'
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </FormGroup>
+              <Stack spacing={1} padding={1} direction='row'>
+                <button
+                  onClick={salvar}
+                  type='button'
+                  className='btn btn-primary'
+                >
+                  Salvar
+                </button>
+                <button
+                  onClick={inicializar}
+                  type='button'
+                  className='btn btn-danger'
+                >
+                  Cancelar
+                </button>
+              </Stack>
+            </div>
+          </div>
+        </div>
+      </Card>
+    </div>
+  );
+}
+
+export default CadastroFuncionarios;
