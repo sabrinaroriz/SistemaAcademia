@@ -141,11 +141,11 @@ function CadastroFuncionarios() {
                 <input
                   type='text'
                   id='inputIdCargo'
-                  value={cargo}
+                  value={idcargo}
                   className='form-control'
                   name='cargo'
                   placeholder='Selecione o cargo'
-                  onChange={(e) => setIdCargo(e.target.value)}
+                  onChange={(e) => setCargo(e.target.value)}
                 />
               </FormGroup>
               <FormGroup label='Email: *' htmlFor='inputEmail'>
