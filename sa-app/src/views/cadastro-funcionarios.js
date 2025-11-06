@@ -13,6 +13,9 @@ import '../custom.css';
 import axios from 'axios';
 import { BASE_URL } from '../config/axios';
 
+/* O CARGO DEVE SER MODIFICADO */
+
+
 function CadastroFuncionarios() {
   const { idParam } = useParams();
 
@@ -24,10 +27,28 @@ function CadastroFuncionarios() {
   const [nome, setNome] = useState('');
   const [cpf, setCpf] = useState('');
   const [telefone, setTelefone] = useState('');
+  /* O CARGO DEVE SER MODIFICADO */
   const [idcargo, setCargo] = useState('');
   const [email, setEmail] = useState('');
 
   const [dados, setDados] = React.useState([]);
+
+  function cancelar() {
+    if (idParam != null) {
+    navigate('/listagem-funcionarios');
+    return;
+    }
+    const temCamposPreenchidos =
+      nome !== '' || cpf !== '' || telefone !== '' || idcargo !== '' || email !== '';
+
+    if (temCamposPreenchidos) {
+      if (window.confirm('Deseja realmente limpar o formulário?')) {
+        inicializar();
+      }
+    } else {
+      navigate('/listagem-funcionarios');
+    }
+  }
 
   function inicializar() {
     if (idParam == null) {
@@ -35,6 +56,7 @@ function CadastroFuncionarios() {
       setNome('');
       setCpf('');
       setTelefone('');
+      /* O CARGO DEVE SER MODIFICADO */
       setCargo('');
       setEmail('');
     } else {
@@ -42,6 +64,7 @@ function CadastroFuncionarios() {
       setNome(dados.nome);
       setCpf(dados.cpf);
       setTelefone(dados.telefone);
+      /* O CARGO DEVE SER MODIFICADO */
       setCargo(dados.idcargo);
       setEmail(dados.email);
     }
@@ -86,6 +109,7 @@ function CadastroFuncionarios() {
       setNome(dados.nome);
       setCpf(dados.cpf);
       setTelefone(dados.telefone);
+      /* O CARGO DEVE SER MODIFICADO */
       setCargo(dados.idcargo);
       setEmail(dados.email);
     }
@@ -114,9 +138,8 @@ function CadastroFuncionarios() {
                   onChange={(e) => setNome(e.target.value)}
                 />
               </FormGroup>
-              
               <FormGroup label='CPF:' htmlFor='imputCpf'>
-                <textarea
+                <input
                   type='text'
                   maxLength='11'
                   id='inputCpf'
@@ -124,7 +147,7 @@ function CadastroFuncionarios() {
                   className='form-control'
                   name='cpf'
                   onChange={(e) => setCpf(e.target.value)}
-                ></textarea>
+                />
               </FormGroup>
               <FormGroup label='Telefone: *' htmlFor='inputTelefone'>
                 <input
@@ -137,6 +160,7 @@ function CadastroFuncionarios() {
                   onChange={(e) => setTelefone(e.target.value)}
                 />
               </FormGroup>
+              {/* O CARGO DEVE SER MODIFICADO */}
               <FormGroup label='Cargo: *' htmlFor='inputIdCargo'>
                 <input
                   type='text'
@@ -148,6 +172,7 @@ function CadastroFuncionarios() {
                   onChange={(e) => setCargo(e.target.value)}
                 />
               </FormGroup>
+
               <FormGroup label='Email: *' htmlFor='inputEmail'>
                 <input
                   type='email'
@@ -168,7 +193,7 @@ function CadastroFuncionarios() {
                   Salvar
                 </button>
                 <button
-                  onClick={inicializar}
+                  onClick={cancelar}
                   type='button'
                   className='btn btn-danger'
                 >

@@ -29,6 +29,23 @@ function CadastroAjustesFinanceiros() {
 
   const [dados, setDados] = React.useState([]);
 
+  function cancelar() {
+    if (idParam != null) {
+    navigate('/listagem-ajustes-financeiros');
+    return;
+    }
+    const temCamposPreenchidos =
+      nome !== '' || tipo !== '' || valor !== '' || descricao !== '';
+
+    if (temCamposPreenchidos) {
+      if (window.confirm('Deseja realmente limpar o formulário?')) {
+        inicializar();
+      }
+    } else {
+      navigate('/listagem-ajustes-financeiros');
+    }
+  }
+
   function inicializar() {
     if (idParam == null) {
       setId('');
@@ -158,7 +175,7 @@ function CadastroAjustesFinanceiros() {
                   Salvar
                 </button>
                 <button
-                  onClick={inicializar}
+                  onClick={cancelar}
                   type='button'
                   className='btn btn-danger'
                 >

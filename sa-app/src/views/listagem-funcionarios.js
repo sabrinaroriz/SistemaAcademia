@@ -91,7 +91,7 @@ function ListagemFuncionarios() {
                       <td>{dado.cpf}</td>
                       <td>{dado.telefone}</td>
                       <td>{dado.email}</td>
-                       <td>{dado.idcargo}</td>
+                      <td>{dado.idcargo.id} - {dado.idcargo.nome}</td>
                       <td>
                         <Stack spacing={1} padding={0} direction='row'>
                           <IconButton
