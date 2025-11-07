@@ -146,6 +146,7 @@ function CadastroFuncionarios() {
                   value={cpf}
                   className='form-control'
                   name='cpf'
+                  placeholder='Digite o numero do CPF'
                   onChange={(e) => setCpf(e.target.value)}
                 />
               </FormGroup>

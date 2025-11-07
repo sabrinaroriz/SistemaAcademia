@@ -21,6 +21,7 @@ import CadastroFormasPagamento from './views/cadastro-formas-pagamento';
 import CadastroAjustesFinanceiros from './views/cadastro-ajustes-financeiros';
 import CadastroCargos from './views/cadastro-cargos';
 import CadastroFuncionarios from './views/cadastro-funcionarios';
+import CadastroClientes from './views/cadastro-clientes';
 
 
 
@@ -39,6 +40,7 @@ function Rotas(props) {
         <Route path='/cadastro-ajustes-financeiros/:idParam?'element={<CadastroAjustesFinanceiros />} />
         <Route path='/cadastro-cargos/:idParam?'element={<CadastroCargos />} />
         <Route path='/cadastro-funcionarios/:idParam?'element={<CadastroFuncionarios />} />
+        <Route path='/cadastro-clientes/:idParam?'element={<CadastroClientes />} />
 
 
 
