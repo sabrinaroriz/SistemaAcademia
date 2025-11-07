@@ -1,3 +1,58 @@
+/* === Restaurar estilo original do Toastr === */
+#toast-container > .toast {
+  opacity: 0.95 !important;
+  border-radius: 4px !important;
+  background-color: #030303 !important;
+  color: #fff !important;
+  box-shadow: 0 0 12px #999 !important;
+  transition: all 0.2s ease-in-out;
+  border: 1px solid transparent !important;
+}
+
+/* === Efeito hover (como no toastr original) === */
+#toast-container > .toast:hover {
+  box-shadow: 0 0 12px #000 !important;
+  opacity: 1 !important;
+  border: 1px solid #fff3 !important; /* borda sutil */
+}
+
+/* === Cores padrão do toastr === */
+#toast-container > .toast-success {
+  background-color: #51a351 !important; /* verde */
+}
+
+#toast-container > .toast-error {
+  background-color: #bd362f !important; /* vermelho */
+}
+
+#toast-container > .toast-info {
+  background-color: #2f96b4 !important; /* azul */
+}
+
+#toast-container > .toast-warning {
+  background-color: #f89406 !important; /* laranja */
+}
+
+/* === Barra de progresso === */
+#toast-container > .toast-progress {
+  background-color: rgba(255, 255, 255, 0.7) !important;
+}
+
+/* === Texto === */
+.toast-title {
+  font-weight: bold;
+}
+
+.toast-message {
+  word-wrap: break-word;
+}
+
+
+
+
+
+
+
 .App {
   text-align: center;
 }
