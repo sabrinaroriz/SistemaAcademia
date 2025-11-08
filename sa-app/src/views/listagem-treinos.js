@@ -1,9 +1,7 @@
 import React from 'react';
 
 import Card from '../components/card';
-
 import { mensagemSucesso, mensagemErro } from '../components/toastr';
-
 import '../custom.css';
 
 import { useNavigate } from 'react-router-dom';
@@ -53,9 +51,14 @@ function ListagemTreinos() {
   }
 
   React.useEffect(() => {
-    axios.get(baseURL).then((response) => {
-      setDados(response.data);
-    });
+    axios
+      .get(baseURL)
+      .then((response) => {
+        setDados(response.data);
+      })
+      .catch((error) => {
+        mensagemErro('Erro ao buscar os Treinos.');
+      });
   }, []);
 
   if (!dados) return null;
@@ -77,17 +80,29 @@ function ListagemTreinos() {
                 <thead>
                   <tr>
                     <th scope='col'>Data</th>
-                    <th scope='col'>Nome do Cliente</th>
-                    <th scope='col'>Nome do Funcionario</th>
+                    <th scope='col'>Cliente</th>
+                    <th scope='col'>Instrutor</th>
+                    <th scope='col'>Exercício</th>
+                    <th scope='col'>Séries</th>
+                    <th scope='col'>Repetições</th>
+                    <th scope='col'>Carga</th>
                     <th scope='col'>Ações</th>
                   </tr>
                 </thead>
                 <tbody>
                   {dados.map((dado) => (
                     <tr key={dado.id}>
-                      <td>{dado.datatreino}</td>
-                      <td>{dado.cliente.id} - {dado.cliente.nome}</td>
-                      <td>{dado.funcionario.id} - {dado.funcionario.nome}</td>
+                      <td>{dado.dataregistroficha}</td>
+                      <td>
+                        {dado.cliente?.id} - {dado.cliente?.nome}
+                      </td>
+                      <td>
+                        {dado.funcionario?.id} - {dado.funcionario?.nome}
+                      </td>
+                      <td>{dado.exercicios?.nome}</td>
+                      <td>{dado.series}</td>
+                      <td>{dado.repeticoes}</td>
+                      <td>{dado.carga}</td>
                       <td>
                         <Stack spacing={1} padding={0} direction='row'>
                           <IconButton
@@ -107,7 +122,7 @@ function ListagemTreinos() {
                     </tr>
                   ))}
                 </tbody>
-              </table>{' '}
+              </table>
             </div>
           </div>
         </div>
