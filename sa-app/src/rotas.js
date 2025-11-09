@@ -23,8 +23,8 @@ import CadastroCargos from './views/cadastro-cargos';
 import CadastroFuncionarios from './views/cadastro-funcionarios';
 import CadastroClientes from './views/cadastro-clientes';
 import CadastroTreinos from './views/cadastro-treinos';
-
-
+import CadastroAulas from './views/cadastro-aulas';
+import CadastroEquipamentos from './views/cadastro-equipamentos';
 
 
 import { Route, Routes, BrowserRouter } from 'react-router-dom';
@@ -41,7 +41,8 @@ function Rotas(props) {
         <Route path='/cadastro-cargos/:idParam?' element={<CadastroCargos />} />
         <Route path='/cadastro-funcionarios/:idParam?' element={<CadastroFuncionarios />} />
         <Route path='/cadastro-treinos/:idParam?' element={<CadastroTreinos />} />
-
+        <Route path='/cadastro-aulas/:idParam?' element={<CadastroAulas />} />
+        <Route path='/cadastro-equipamentos/:idParam?' element={<CadastroEquipamentos />} />
 
 
 
