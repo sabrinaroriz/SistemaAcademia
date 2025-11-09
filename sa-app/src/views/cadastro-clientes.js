@@ -166,7 +166,7 @@ function CadastroClientes() {
                   value={nome}
                   className='form-control'
                   name='nome'
-                  placeholder='Digite o nome do funcionário'
+                  placeholder='Digite o nome do cliente'
                   onChange={(e) => setNome(e.target.value)}
                 />
               </FormGroup>

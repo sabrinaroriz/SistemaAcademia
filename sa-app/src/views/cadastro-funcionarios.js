@@ -1,206 +1,294 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-
 import Stack from '@mui/material/Stack';
 
 import Card from '../components/card';
 import FormGroup from '../components/form-group';
-
 import { mensagemSucesso, mensagemErro } from '../components/toastr';
-
 import '../custom.css';
-
 import axios from 'axios';
 import { BASE_URL } from '../config/axios';
 
-/* O CARGO DEVE SER MODIFICADO */
-
-
 function CadastroFuncionarios() {
   const { idParam } = useParams();
-
   const navigate = useNavigate();
-
-  const baseURL = `${BASE_URL}/funcionarios`;
+  const baseURL = `${BASE_URL}2/funcionarios`;
 
   const [id, setId] = useState('');
   const [nome, setNome] = useState('');
   const [cpf, setCpf] = useState('');
   const [telefone, setTelefone] = useState('');
-  /* O CARGO DEVE SER MODIFICADO */
-  const [idcargo, setCargo] = useState('');
   const [email, setEmail] = useState('');
+  const [dataNascimento, setDataNascimento] = useState('');
+  const [cargo, setCargo] = useState('');
+  const [dataAdmissao, setDataAdmissao] = useState('');
+  const [status, setStatus] = useState('Ativo');
+  const [observacoes, setObservacoes] = useState('');
 
-  const [dados, setDados] = React.useState([]);
+  const [logradouro, setLogradouro] = useState('');
+  const [numero, setNumero] = useState('');
+  const [bairro, setBairro] = useState('');
+  const [cidade, setCidade] = useState('');
+  const [estado, setEstado] = useState('');
+  const [cep, setCep] = useState('');
+
+  const [cargosList, setCargosList] = useState([]);
+
+  useEffect(() => {
+    setCargosList([
+      { id: 1, nome: 'Instrutor' },
+      { id: 2, nome: 'Personal Trainer' },
+      { id: 3, nome: 'Recepcionista' },
+      { id: 4, nome: 'Gerente' },
+    ]);
+  }, []);
 
   function cancelar() {
-    if (idParam != null) {
-    navigate('/listagem-funcionarios');
-    return;
-    }
-    const temCamposPreenchidos =
-      nome !== '' || cpf !== '' || telefone !== '' || idcargo !== '' || email !== '';
-
-    if (temCamposPreenchidos) {
-      if (window.confirm('Deseja realmente limpar o formulário?')) {
-        inicializar();
-      }
-    } else {
+    if (window.confirm('Deseja realmente cancelar o cadastro?')) {
       navigate('/listagem-funcionarios');
     }
   }
 
-  function inicializar() {
-    if (idParam == null) {
-      setId('');
-      setNome('');
-      setCpf('');
-      setTelefone('');
-      /* O CARGO DEVE SER MODIFICADO */
-      setCargo('');
-      setEmail('');
-    } else {
-      setId(dados.id);
-      setNome(dados.nome);
-      setCpf(dados.cpf);
-      setTelefone(dados.telefone);
-      /* O CARGO DEVE SER MODIFICADO */
-      setCargo(dados.idcargo);
-      setEmail(dados.email);
-    }
-  }
-
   async function salvar() {
-    let data = { id, nome, cpf, telefone,idcargo, email};
-    data = JSON.stringify(data);
-    if (idParam == null) {
-      await axios
-        .post(baseURL, data, {
+    try {
+      const funcionarioData = {
+        id,
+        nome,
+        cpf,
+        telefone,
+        email,
+        dataNascimento,
+        cargo: { id: cargo },
+        dataAdmissao,
+        status,
+        observacoes,
+        endereco: {
+          logradouro,
+          numero,
+          bairro,
+          cidade,
+          estado,
+          cep,
+        },
+      };
+
+      if (!nome || !cpf || !cargo) {
+        mensagemErro('Preencha os campos obrigatórios.');
+        return;
+      }
+
+      if (idParam == null) {
+        await axios.post(baseURL, funcionarioData, {
           headers: { 'Content-Type': 'application/json' },
-        })
-        .then(function (response) {
-          mensagemSucesso(`Funcionário ${nome} cadastrado com sucesso!`);
-          navigate(`/listagem-funcionarios`);
-        })
-        .catch(function (error) {
-          mensagemErro(error.response.data);
         });
-    } else {
-      await axios
-        .put(`${baseURL}/${idParam}`, data, {
+        mensagemSucesso(`Funcionário "${nome}" cadastrado com sucesso!`);
+      } else {
+        await axios.put(`${baseURL}/${idParam}`, funcionarioData, {
           headers: { 'Content-Type': 'application/json' },
-        })
-        .then(function (response) {
-          mensagemSucesso(`Funcionário ${nome} alterado com sucesso!`);
-          navigate(`/listagem-funcionario`);
-        })
-        .catch(function (error) {
-          mensagemErro(error.response.data);
         });
+        mensagemSucesso(`Funcionário "${nome}" atualizado com sucesso!`);
+      }
+
+      navigate('/listagem-funcionarios');
+    } catch (error) {
+      mensagemErro('Erro ao salvar o funcionário. Verifique os dados.');
     }
   }
-
-  async function buscar() {
-    if (idParam != null) {
-      await axios.get(`${baseURL}/${idParam}`).then((response) => {
-        setDados(response.data);
-      });
-      setId(dados.id);
-      setNome(dados.nome);
-      setCpf(dados.cpf);
-      setTelefone(dados.telefone);
-      /* O CARGO DEVE SER MODIFICADO */
-      setCargo(dados.idcargo);
-      setEmail(dados.email);
-    }
-  }
-
-  useEffect(() => {
-    buscar(); // eslint-disable-next-line
-  }, [id]);
-
-  if (!dados) return null;
 
   return (
-    <div className='container'>
-      <Card title='Cadastro de Funcionário'>
-        <div className='row'>
-          <div className='col-lg-12'>
-            <div className='bs-component'>
-              <FormGroup label='Nome: *' htmlFor='inputNome'>
+    <div className="container">
+      <Card title="Cadastro de Funcionários">
+        <div className="row">
+          <div className="col-lg-12">
+            <div className="bs-component">
+
+              <h5 className="mb-3 mt-3">Dados Pessoais</h5>
+
+              <FormGroup label="Nome Completo: *" htmlFor="inputNome">
                 <input
-                  type='text'
-                  id='inputNome'
+                  type="text"
+                  id="inputNome"
+                  className="form-control"
                   value={nome}
-                  className='form-control'
-                  name='nome'
-                  placeholder='Digite o nome do funcionário'
                   onChange={(e) => setNome(e.target.value)}
-                />
-              </FormGroup>
-              <FormGroup label='CPF:' htmlFor='imputCpf'>
-                <input
-                  type='text'
-                  maxLength='11'
-                  id='inputCpf'
-                  value={cpf}
-                  className='form-control'
-                  name='cpf'
-                  placeholder='Digite o numero do CPF'
-                  onChange={(e) => setCpf(e.target.value)}
-                />
-              </FormGroup>
-              <FormGroup label='Telefone: *' htmlFor='inputTelefone'>
-                <input
-                  type='text'
-                  id='inputTelefone'
-                  value={telefone}
-                  className='form-control'
-                  name='telefone'
-                  placeholder='Digite o numero do telefone'
-                  onChange={(e) => setTelefone(e.target.value)}
-                />
-              </FormGroup>
-              {/* O CARGO DEVE SER MODIFICADO */}
-              <FormGroup label='Cargo: *' htmlFor='inputIdCargo'>
-                <input
-                  type='text'
-                  id='inputIdCargo'
-                  value={idcargo}
-                  className='form-control'
-                  name='cargo'
-                  placeholder='Selecione o cargo'
-                  onChange={(e) => setCargo(e.target.value)}
+                  placeholder="Digite o nome completo"
                 />
               </FormGroup>
 
-              <FormGroup label='Email: *' htmlFor='inputEmail'>
+              <FormGroup label="CPF: *" htmlFor="inputCpf">
                 <input
-                  type='email'
-                  id='inputEmail'
-                  value={email}
-                  className='form-control'
-                  name='email'
-                  placeholder='Digite o email'
-                  onChange={(e) => setEmail(e.target.value)}
+                  type="text"
+                  id="inputCpf"
+                  className="form-control"
+                  value={cpf}
+                  onChange={(e) => setCpf(e.target.value)}
+                  placeholder="000.000.000-00"
                 />
               </FormGroup>
-              <Stack spacing={1} padding={1} direction='row'>
-                <button
-                  onClick={salvar}
-                  type='button'
-                  className='btn btn-primary'
+
+              <FormGroup label="Telefone: *" htmlFor="inputTelefone">
+                <input
+                  type="text"
+                  id="inputTelefone"
+                  className="form-control"
+                  value={telefone}
+                  onChange={(e) => setTelefone(e.target.value)}
+                  placeholder="(00) 00000-0000"
+                />
+              </FormGroup>
+
+              <FormGroup label="E-mail: *" htmlFor="inputEmail">
+                <input
+                  type="email"
+                  id="inputEmail"
+                  className="form-control"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="exemplo@email.com"
+                />
+              </FormGroup>
+
+              <FormGroup label="Data de Nascimento:" htmlFor="inputDataNascimento">
+                <input
+                  type="date"
+                  id="inputDataNascimento"
+                  className="form-control"
+                  value={dataNascimento}
+                  onChange={(e) => setDataNascimento(e.target.value)}
+                />
+              </FormGroup>
+
+              <h5 className="mb-3 mt-4">Endereço</h5>
+
+              <FormGroup label="Logradouro: *" htmlFor="inputLogradouro">
+                <input
+                  type="text"
+                  id="inputLogradouro"
+                  className="form-control"
+                  value={logradouro}
+                  onChange={(e) => setLogradouro(e.target.value)}
+                  placeholder="Rua, Avenida, Travessa..."
+                />
+              </FormGroup>
+
+              <FormGroup label="Número: *" htmlFor="inputNumero">
+                <input
+                  type="text"
+                  id="inputNumero"
+                  className="form-control"
+                  value={numero}
+                  onChange={(e) => setNumero(e.target.value)}
+                  placeholder="Número"
+                />
+              </FormGroup>
+
+              <FormGroup label="Bairro:" htmlFor="inputBairro">
+                <input
+                  type="text"
+                  id="inputBairro"
+                  className="form-control"
+                  value={bairro}
+                  onChange={(e) => setBairro(e.target.value)}
+                  placeholder="Bairro"
+                />
+              </FormGroup>
+
+              <FormGroup label="Cidade: *" htmlFor="inputCidade">
+                <input
+                  type="text"
+                  id="inputCidade"
+                  className="form-control"
+                  value={cidade}
+                  onChange={(e) => setCidade(e.target.value)}
+                  placeholder="Cidade"
+                />
+              </FormGroup>
+
+              <FormGroup label="Estado: *" htmlFor="inputEstado">
+                <input
+                  type="text"
+                  id="inputEstado"
+                  className="form-control"
+                  value={estado}
+                  onChange={(e) => setEstado(e.target.value)}
+                  placeholder="Estado"
+                />
+              </FormGroup>
+
+              <FormGroup label="CEP:" htmlFor="inputCep">
+                <input
+                  type="text"
+                  id="inputCep"
+                  className="form-control"
+                  value={cep}
+                  onChange={(e) => setCep(e.target.value)}
+                  placeholder="00000-000"
+                />
+              </FormGroup>
+
+
+              <h5 className="mb-3 mt-4">Dados Profissionais</h5>
+
+              <FormGroup label="Cargo: *" htmlFor="selectCargo">
+                <select
+                  id="selectCargo"
+                  className="form-select"
+                  value={cargo}
+                  onChange={(e) => setCargo(e.target.value)}
                 >
+                  <option value="">Selecione um cargo</option>
+                  {cargosList.map((c) => (
+                    <option key={c.id} value={c.id}>
+                      {c.nome}
+                    </option>
+                  ))}
+                </select>
+              </FormGroup>
+
+              <FormGroup label="Data de Admissão: *" htmlFor="inputDataAdmissao">
+                <input
+                  type="date"
+                  id="inputDataAdmissao"
+                  className="form-control"
+                  value={dataAdmissao}
+                  onChange={(e) => setDataAdmissao(e.target.value)}
+                />
+              </FormGroup>
+
+              <FormGroup label="Status:" htmlFor="selectStatus">
+                <select
+                  id="selectStatus"
+                  className="form-select"
+                  value={status}
+                  onChange={(e) => setStatus(e.target.value)}
+                >
+                  <option value="Ativo">Ativo</option>
+                  <option value="Inativo">Inativo</option>
+                </select>
+              </FormGroup>
+
+
+
+              <h5 className="mb-3 mt-4">Observações</h5>
+              <FormGroup label="Informações adicionais:" htmlFor="inputObservacoes">
+                <textarea
+                  id="inputObservacoes"
+                  className="form-control"
+                  value={observacoes}
+                  onChange={(e) => setObservacoes(e.target.value)}
+                  placeholder="Digite observações adicionais, se houver..."
+                />
+              </FormGroup>
+
+              <Stack spacing={1} padding={1} direction="row">
+                <button onClick={salvar} type="button" className="btn btn-primary">
                   Salvar
                 </button>
-                <button
-                  onClick={cancelar}
-                  type='button'
-                  className='btn btn-danger'
-                >
+                <button onClick={cancelar} type="button" className="btn btn-danger">
                   Cancelar
                 </button>
               </Stack>
+
             </div>
           </div>
         </div>

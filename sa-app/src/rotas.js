@@ -43,7 +43,7 @@ function Rotas(props) {
         <Route path='/cadastro-treinos/:idParam?' element={<CadastroTreinos />} />
         <Route path='/cadastro-aulas/:idParam?' element={<CadastroAulas />} />
         <Route path='/cadastro-equipamentos/:idParam?' element={<CadastroEquipamentos />} />
-
+        <Route path='/cadastro-clientes/:idParam?' element={<CadastroClientes />} />
 
 
 
