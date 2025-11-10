@@ -13,7 +13,6 @@ import '../custom.css';
 import axios from 'axios';
 import { BASE_URL } from '../config/axios';
 
-/* O PLANO DO CLIENTE DEVE SER MODIFICADO */
 
 
 function CadastroClientes() {
@@ -29,7 +28,6 @@ function CadastroClientes() {
   const [telefone, setTelefone] = useState('');
   const [status, setStatus] = useState('');
   const [datanascimento, setDatanascimento] = useState('');
-  /* O PLANO DEVE SER MODIFICADO */
   const [idplano, setPlano] = useState('');
   const [logradouro, setLogradouro] = useState('');
   const [numero, setNumero] = useState('');
@@ -66,7 +64,6 @@ function CadastroClientes() {
       setTelefone('');
       setStatus('');
       setDatanascimento('');
-      /* O PLANO DEVE SER MODIFICADO */
       setPlano('');
       setLogradouro('');
       setNumero('');
@@ -82,7 +79,6 @@ function CadastroClientes() {
       setTelefone(dados.telefone);
       setStatus(dados.status);
       setDatanascimento(dados.datanascimento);
-      /* O PLANO DEVE SER MODIFICADO */
       setPlano(dados.idplano);
       setLogradouro(dados.logradouro);
       setNumero(dados.numero);
@@ -135,7 +131,6 @@ function CadastroClientes() {
       setTelefone(dados.telefone);
       setStatus(dados.status);
       setDatanascimento(dados.datanascimento);
-      /* O PLANO DEVE SER MODIFICADO */
       setPlano(dados.idplano);
       setLogradouro(dados.logradouro);
       setNumero(dados.numero);
@@ -294,16 +289,17 @@ function CadastroClientes() {
                 </select>
               </FormGroup>
 
-              {/* O PLANO DEVE SER MODIFICADO */}
-              <FormGroup label='Plano: *' htmlFor='inputIdPlano'>
-                <input
-                  type='text'
+              <FormGroup label='Plano: *' htmlFor='selectIdPlano'>
+                <select
                   id='inputIdPlano'
                   value={idplano}
-                  className='form-control'
+                  className='form-select'
                   name='plano'
                   onChange={(e) => setPlano(e.target.value)}
-                />
+                >
+                  <option></option>
+
+                </select>
               </FormGroup>
 
               <FormGroup label='Status: *' htmlFor='inputStatus'>

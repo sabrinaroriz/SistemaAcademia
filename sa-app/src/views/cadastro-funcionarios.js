@@ -12,7 +12,7 @@ import { BASE_URL } from '../config/axios';
 function CadastroFuncionarios() {
   const { idParam } = useParams();
   const navigate = useNavigate();
-  const baseURL = `${BASE_URL}2/funcionarios`;
+  const baseURL = `${BASE_URL}/funcionarios`;
 
   const [id, setId] = useState('');
   const [nome, setNome] = useState('');
@@ -20,80 +20,138 @@ function CadastroFuncionarios() {
   const [telefone, setTelefone] = useState('');
   const [email, setEmail] = useState('');
   const [dataNascimento, setDataNascimento] = useState('');
-  const [cargo, setCargo] = useState('');
+  const [idcargo, setIdCargo] = useState('');
   const [dataAdmissao, setDataAdmissao] = useState('');
   const [status, setStatus] = useState('Ativo');
   const [observacoes, setObservacoes] = useState('');
-
   const [logradouro, setLogradouro] = useState('');
   const [numero, setNumero] = useState('');
+  const [complemento, setComplemento] = useState('');
   const [bairro, setBairro] = useState('');
   const [cidade, setCidade] = useState('');
   const [estado, setEstado] = useState('');
   const [cep, setCep] = useState('');
 
-  const [cargosList, setCargosList] = useState([]);
+  const [dados, setDados] = React.useState([]);
 
-  useEffect(() => {
-    setCargosList([
-      { id: 1, nome: 'Instrutor' },
-      { id: 2, nome: 'Personal Trainer' },
-      { id: 3, nome: 'Recepcionista' },
-      { id: 4, nome: 'Gerente' },
-    ]);
-  }, []);
 
   function cancelar() {
-    if (window.confirm('Deseja realmente cancelar o cadastro?')) {
+    if (idParam != null) {
+    navigate('/listagem-funcionarios');
+    return;
+    }
+    const temCamposPreenchidos =
+      nome !== '' || cpf !== '' || telefone !== '' || email !== '' || dataNascimento !== '' || idcargo !== '' || dataAdmissao !== '' || status !== '' || observacoes !== '' || logradouro !== '' || numero !== '' || complemento !== '' || bairro !== '' || cidade !== '' || estado !== '' || cep !== '';
+
+    if (temCamposPreenchidos) {
+      if (window.confirm('Deseja realmente limpar o formulário?')) {
+        inicializar();
+      }
+    } else {
       navigate('/listagem-funcionarios');
+    }
+  }
+
+  function inicializar() {
+    if (idParam == null) {
+      setId('');
+      setNome('');
+      setCpf('');
+      setTelefone('');
+      setEmail('');
+      setDataNascimento('');
+      setIdCargo('');
+      setDataAdmissao('');
+      setStatus('');
+      setObservacoes('');
+      setLogradouro('');
+      setNumero('');
+      setComplemento('');
+      setBairro('');
+      setCidade('');
+      setEstado('');
+      setCep('');
+    } else {
+      setId(dados.id);
+      setNome(dados.nome);
+      setCpf(dados.cpf);
+      setTelefone(dados.telefone);
+      setEmail(dados.email);
+      setDataNascimento(dados.dataNascimento);
+      setIdCargo(dados.idcargo);
+      setDataAdmissao(dados.dataAdmissao);
+      setStatus(dados.status);
+      setObservacoes(dados.observacoes);
+      setLogradouro(dados.logradouro);
+      setNumero(dados.numero);
+      setComplemento(dados.complemento);
+      setBairro(dados.bairro);
+      setCidade(dados.cidade);
+      setEstado(dados.estado);
+      setCep(dados.cep);
     }
   }
 
   async function salvar() {
-    try {
-      const funcionarioData = {
-        id,
-        nome,
-        cpf,
-        telefone,
-        email,
-        dataNascimento,
-        cargo: { id: cargo },
-        dataAdmissao,
-        status,
-        observacoes,
-        endereco: {
-          logradouro,
-          numero,
-          bairro,
-          cidade,
-          estado,
-          cep,
-        },
-      };
-
-      if (!nome || !cpf || !cargo) {
-        mensagemErro('Preencha os campos obrigatórios.');
-        return;
-      }
-
-      if (idParam == null) {
-        await axios.post(baseURL, funcionarioData, {
+    let data = { id, nome, cpf, telefone, email, dataNascimento, idcargo, dataAdmissao, status, observacoes, logradouro, numero, complemento ,bairro ,cidade ,estado, cep};
+    data = JSON.stringify(data);
+    if (idParam == null) {
+      await axios
+        .post(baseURL, data, {
           headers: { 'Content-Type': 'application/json' },
+        })
+        .then(function (response) {
+          mensagemSucesso(`Funcionário ${nome} cadastrado com sucesso!`);
+          navigate(`/listagem-funcionarios`);
+        })
+        .catch(function (error) {
+          mensagemErro(error.response.data);
         });
-        mensagemSucesso(`Funcionário "${nome}" cadastrado com sucesso!`);
-      } else {
-        await axios.put(`${baseURL}/${idParam}`, funcionarioData, {
+    } else {
+      await axios
+        .put(`${baseURL}/${idParam}`, data, {
           headers: { 'Content-Type': 'application/json' },
+        })
+        .then(function (response) {
+          mensagemSucesso(`Funcionário ${nome} alterado com sucesso!`);
+          navigate(`/listagem-funcionarios`);
+        })
+        .catch(function (error) {
+          mensagemErro(error.response.data);
         });
-        mensagemSucesso(`Funcionário "${nome}" atualizado com sucesso!`);
-      }
-
-      navigate('/listagem-funcionarios');
-    } catch (error) {
-      mensagemErro('Erro ao salvar o funcionário. Verifique os dados.');
     }
   }
+
+  async function buscar() {
+    if (idParam != null) {
+      await axios.get(`${baseURL}/${idParam}`).then((response) => {
+        setDados(response.data);
+      });
+      setId(dados.id);
+      setNome(dados.nome);
+      setCpf(dados.cpf);
+      setTelefone(dados.telefone);
+      setEmail(dados.email);
+      setDataNascimento(dados.dataNascimento);
+      setIdCargo(dados.idcargo);
+      setDataAdmissao(dados.dataAdmissao);
+      setStatus(dados.status);
+      setObservacoes(dados.observacoes);
+      setLogradouro(dados.logradouro);
+      setNumero(dados.numero);
+      setComplemento(dados.complemento);
+      setBairro(dados.bairro);
+      setCidade(dados.cidade);
+      setEstado(dados.estado);
+      setCep(dados.cep);
+    }
+  }
+
+  useEffect(() => {
+    buscar(); // eslint-disable-next-line
+  }, [id]);
+
+  if (!dados) return null;
 
   return (
     <div className="container">
@@ -110,6 +168,7 @@ function CadastroFuncionarios() {
                   id="inputNome"
                   className="form-control"
                   value={nome}
+                  name='nome'
                   onChange={(e) => setNome(e.target.value)}
                   placeholder="Digite o nome completo"
                 />
@@ -118,9 +177,11 @@ function CadastroFuncionarios() {
               <FormGroup label="CPF: *" htmlFor="inputCpf">
                 <input
                   type="text"
+                  maxLength='11'
                   id="inputCpf"
                   className="form-control"
                   value={cpf}
+                  name='cpf'
                   onChange={(e) => setCpf(e.target.value)}
                   placeholder="000.000.000-00"
                 />
@@ -132,6 +193,7 @@ function CadastroFuncionarios() {
                   id="inputTelefone"
                   className="form-control"
                   value={telefone}
+                  name='telefone'
                   onChange={(e) => setTelefone(e.target.value)}
                   placeholder="(00) 00000-0000"
                 />
@@ -143,6 +205,7 @@ function CadastroFuncionarios() {
                   id="inputEmail"
                   className="form-control"
                   value={email}
+                  name='email'
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="exemplo@email.com"
                 />
@@ -154,94 +217,114 @@ function CadastroFuncionarios() {
                   id="inputDataNascimento"
                   className="form-control"
                   value={dataNascimento}
+                  name='dataNascimento'
                   onChange={(e) => setDataNascimento(e.target.value)}
                 />
               </FormGroup>
 
               <h5 className="mb-3 mt-4">Endereço</h5>
 
-              <FormGroup label="Logradouro: *" htmlFor="inputLogradouro">
+              <FormGroup label='Logradouro: *' htmlFor='inputLogradouro'>
                 <input
-                  type="text"
-                  id="inputLogradouro"
-                  className="form-control"
+                  type='text'
+                  id='inputLogradouro'
                   value={logradouro}
+                  className='form-control'
+                  name='logradouro'
                   onChange={(e) => setLogradouro(e.target.value)}
-                  placeholder="Rua, Avenida, Travessa..."
                 />
               </FormGroup>
-
-              <FormGroup label="Número: *" htmlFor="inputNumero">
+              <FormGroup label='Número: *' htmlFor='inputNumero'>
                 <input
-                  type="text"
-                  id="inputNumero"
-                  className="form-control"
+                  type='text'
+                  id='inputNumero'
                   value={numero}
+                  className='form-control'
+                  name='numero'
                   onChange={(e) => setNumero(e.target.value)}
-                  placeholder="Número"
                 />
               </FormGroup>
-
-              <FormGroup label="Bairro:" htmlFor="inputBairro">
+              <FormGroup label='Complemento: ' htmlFor='inputComplemento'>
                 <input
-                  type="text"
-                  id="inputBairro"
-                  className="form-control"
+                  type='text'
+                  id='inputComplemento'
+                  value={complemento}
+                  className='form-control'
+                  name='complemento'
+                  onChange={(e) => setComplemento(e.target.value)}
+                />
+              </FormGroup>
+              <FormGroup label='Bairro: *' htmlFor='inputBairro'>
+                <input
+                  type='text'
+                  id='inputBairro'
                   value={bairro}
+                  className='form-control'
+                  name='bairro'
                   onChange={(e) => setBairro(e.target.value)}
-                  placeholder="Bairro"
                 />
               </FormGroup>
-
-              <FormGroup label="Cidade: *" htmlFor="inputCidade">
+              <FormGroup label='Cidade: *' htmlFor='inputCidade'>
                 <input
-                  type="text"
-                  id="inputCidade"
-                  className="form-control"
+                  type='text'
+                  id='inputCidade'
                   value={cidade}
+                  className='form-control'
+                  name='cidade'
                   onChange={(e) => setCidade(e.target.value)}
-                  placeholder="Cidade"
                 />
               </FormGroup>
-
-              <FormGroup label="Estado: *" htmlFor="inputEstado">
-                <input
-                  type="text"
-                  id="inputEstado"
-                  className="form-control"
+              <FormGroup label='Estado: *' htmlFor='inputEstado'>
+                <select
+                  id='inputEstado'
                   value={estado}
+                  className='form-select'
+                  name='estado'
                   onChange={(e) => setEstado(e.target.value)}
-                  placeholder="Estado"
-                />
+                  >
+                    <option value=''>Selecione um estado</option>
+                    <option value='AC'>AC</option>
+                    <option value='AL'>AL</option>
+                    <option value='AP'>AP</option>
+                    <option value='AM'>AM</option>
+                    <option value='BA'>BA</option>
+                    <option value='CE'>CE</option>
+                    <option value='DF'>DF</option>
+                    <option value='ES'>ES</option>
+                    <option value='GO'>GO</option>
+                    <option value='MA'>MA</option>
+                    <option value='MT'>MT</option>
+                    <option value='MS'>MS</option>
+                    <option value='MG'>MG</option>
+                    <option value='PA'>PA</option>
+                    <option value='PB'>PB</option>
+                    <option value='PR'>PR</option>
+                    <option value='PE'>PE</option>
+                    <option value='PI'>PI</option>
+                    <option value='RJ'>RJ</option>
+                    <option value='RN'>RN</option>
+                    <option value='RS'>RS</option>
+                    <option value='RO'>RO</option>
+                    <option value='RR'>RR</option>
+                    <option value='SC'>SC</option>
+                    <option value='SP'>SP</option>
+                    <option value='SE'>SE</option>
+                    <option value='TO'>TO</option>
+                </select>
               </FormGroup>
-
-              <FormGroup label="CEP:" htmlFor="inputCep">
-                <input
-                  type="text"
-                  id="inputCep"
-                  className="form-control"
-                  value={cep}
-                  onChange={(e) => setCep(e.target.value)}
-                  placeholder="00000-000"
-                />
-              </FormGroup>
-
 
               <h5 className="mb-3 mt-4">Dados Profissionais</h5>
 
-              <FormGroup label="Cargo: *" htmlFor="selectCargo">
+              <FormGroup label="Cargo: *" htmlFor="selectIdCargo">
                 <select
-                  id="selectCargo"
+                  id="selectIdCargo"
                   className="form-select"
-                  value={cargo}
-                  onChange={(e) => setCargo(e.target.value)}
+                  value={idcargo}
+                  name='cargo'
+                  onChange={(e) => setIdCargo(e.target.value)}
                 >
-                  <option value="">Selecione um cargo</option>
-                  {cargosList.map((c) => (
-                    <option key={c.id} value={c.id}>
-                      {c.nome}
-                    </option>
-                  ))}
+                  <option></option>
+                  
                 </select>
               </FormGroup>
 
@@ -251,23 +334,43 @@ function CadastroFuncionarios() {
                   id="inputDataAdmissao"
                   className="form-control"
                   value={dataAdmissao}
+                  name='dataAdmissao'
                   onChange={(e) => setDataAdmissao(e.target.value)}
                 />
               </FormGroup>
 
-              <FormGroup label="Status:" htmlFor="selectStatus">
-                <select
-                  id="selectStatus"
-                  className="form-select"
-                  value={status}
-                  onChange={(e) => setStatus(e.target.value)}
-                >
-                  <option value="Ativo">Ativo</option>
-                  <option value="Inativo">Inativo</option>
-                </select>
+              <FormGroup label='Status: *' htmlFor='inputStatus'>
+                <div>
+                    <div className="form-check form-check-inline">
+                        <input
+                            type="radio"
+                            id='statusAtivo'
+                            value="ativo"
+                            className="form-check-input"
+                            name='status'
+                            checked={status === "ativo"}
+                            onChange={(e) => setStatus(e.target.value)}
+                        />
+                        <label className="form-check-label" htmlFor="statusAtivo">
+                            Ativo
+                        </label>
+                    </div>
+                    <div className="form-check form-check-inline">
+                        <input
+                            type="radio"
+                            id='statusInativo'
+                            value="inativo"
+                            className="form-check-input"
+                            name='status'
+                            checked={status === "inativo"}
+                            onChange={(e) => setStatus(e.target.value)}
+                        />
+                        <label className="form-check-label" htmlFor="statusInativo">
+                            Inativo
+                        </label>
+                    </div>
+                </div>
               </FormGroup>
-
-
 
               <h5 className="mb-3 mt-4">Observações</h5>
               <FormGroup label="Informações adicionais:" htmlFor="inputObservacoes">

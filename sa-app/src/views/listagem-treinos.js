@@ -79,6 +79,7 @@ function ListagemTreinos() {
               <table className='table table-hover'>
                 <thead>
                   <tr>
+                    <th scope='col'>Treino</th>
                     <th scope='col'>Data</th>
                     <th scope='col'>Cliente</th>
                     <th scope='col'>Instrutor</th>
@@ -92,14 +93,11 @@ function ListagemTreinos() {
                 <tbody>
                   {dados.map((dado) => (
                     <tr key={dado.id}>
+                      <td>{dado.nome}</td>
                       <td>{dado.dataregistroficha}</td>
-                      <td>
-                        {dado.cliente?.id} - {dado.cliente?.nome}
-                      </td>
-                      <td>
-                        {dado.funcionario?.id} - {dado.funcionario?.nome}
-                      </td>
-                      <td>{dado.exercicios?.nome}</td>
+                      <td>{dado.idcliente.id} - {dado.idcliente.nome}</td>
+                      <td>{dado.idfuncionario.id} - {dado.idfuncionario.nome}</td>
+                      <td>{dado.idexercicios.id} - {dado.idexercicios.nome}</td>
                       <td>{dado.series}</td>
                       <td>{dado.repeticoes}</td>
                       <td>{dado.carga}</td>

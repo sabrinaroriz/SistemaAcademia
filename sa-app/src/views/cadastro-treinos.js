@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import CurrencyInput from 'react-currency-input-field';
+
 import Stack from '@mui/material/Stack';
 
 import Card from '../components/card';
+import SubCard from '../components/sub-card';
 import FormGroup from '../components/form-group';
+
 import { mensagemSucesso, mensagemErro } from '../components/toastr';
 
 import '../custom.css';
@@ -19,21 +21,16 @@ function CadastroTreinos() {
 
   const [id, setId] = useState('');
   const [nome, setNome] = useState('');
-  const [funcionario, setFuncionario] = useState('');
+  const [idcliente, setIdCliente] = useState('');
+  const [idfuncionario, setIdFuncionario] = useState('');
   const [dataregistroficha, setDataRegistroFicha] = useState('');
-  const [dados, setDados] = useState([]);
-  const [funcionarios, setFuncionarios] = useState([]);
-  const [treinos, setTreinos] = useState([
-    { descricao: '', series: '', repeticoes: '', tipo: '' },
-  ]);
-  const [historicoFichas, setHistoricoFichas] = useState([]);
+  const [descricao, setDescricao] = useState('');
+  const [idexercicios, setIdExercicios] = useState('');
+  const [series, setSeries] = useState('');
+  const [repeticoes, setRepeticoes] = useState('');
+  const [carga, setCarga] = useState('');
 
-  useEffect(() => {
-    axios
-      .get(`${BASE_URL}2/funcionarios`)
-      .then((response) => setFuncionarios(response.data))
-      .catch((error) => console.error('Erro ao buscar funcionários:', error));
-  }, []);
+  const [dados, setDados] = React.useState([]);
 
   function cancelar() {
     if (idParam != null) {
@@ -41,7 +38,7 @@ function CadastroTreinos() {
       return;
     }
     const temCamposPreenchidos =
-      nome !== '' || funcionario !== '' || dataregistroficha !== '';
+      nome !== '' || idcliente !== '' || idfuncionario !== '' || dataregistroficha !== '' || descricao !== '' || idexercicios !== '' || series !== '' || repeticoes !==''|| carga !=='' ;
 
     if (temCamposPreenchidos) {
       if (window.confirm('Deseja realmente limpar o formulário?')) {
@@ -56,28 +53,38 @@ function CadastroTreinos() {
     if (idParam == null) {
       setId('');
       setNome('');
-      setFuncionario('');
+      setIdCliente('');
+      setIdFuncionario('');
       setDataRegistroFicha('');
-      setTreinos([{ descricao: '', series: '', repeticoes: '', tipo: '' }]);
-      setHistoricoFichas([]);
+      setDescricao('');
+      setIdExercicios('')
+      setSeries('');
+      setRepeticoes('');
+      setCarga('');
     } else {
       setId(dados.id);
       setNome(dados.nome);
-      setFuncionario(dados.funcionario);
+      setIdCliente(dados.idcliente);
+      setIdFuncionario(dados.idfuncionario);
       setDataRegistroFicha(dados.dataregistroficha);
-      setTreinos(dados.treinos || []);
-      setHistoricoFichas(dados.historicoFichas || []);
+      setDescricao(dados.descricao);
+      setIdExercicios(dados.idexercicios)
+      setSeries(dados.series);
+      setRepeticoes(dados.repeticoes);
+      setCarga(dados.carga);
     }
   }
 
   async function salvar() {
-    let dataObj = { id, nome, funcionario, dataregistroficha, treinos, historicoFichas };
-    const json = JSON.stringify(dataObj);
+    let data = {id, nome, idcliente, idfuncionario, dataregistroficha, descricao, idexercicios, series, repeticoes, carga };
+    data = JSON.stringify(data);
 
-    if (idParam == null) {
+     if (idParam == null) {
       await axios
-        .post(baseURL, json, { headers: { 'Content-Type': 'application/json' } })
-        .then(function () {
+        .post(baseURL, data, {
+          headers: { 'Content-Type': 'application/json' },
+        })
+        .then(function (response) {
           mensagemSucesso(`Treino ${nome} cadastrado com sucesso!`);
           navigate(`/listagem-treinos`);
         })
@@ -86,10 +93,10 @@ function CadastroTreinos() {
         });
     } else {
       await axios
-        .put(`${baseURL}/${idParam}`, json, {
+        .put(`${baseURL}/${idParam}`, data, {
           headers: { 'Content-Type': 'application/json' },
         })
-        .then(function () {
+        .then(function (response) {
           mensagemSucesso(`Treino ${nome} alterado com sucesso!`);
           navigate(`/listagem-treinos`);
         })
@@ -103,31 +110,31 @@ function CadastroTreinos() {
     if (idParam != null) {
       await axios.get(`${baseURL}/${idParam}`).then((response) => {
         setDados(response.data);
-        setId(response.data.id);
-        setNome(response.data.nome);
-        setFuncionario(response.data.funcionario);
-        setDataRegistroFicha(response.data.dataregistroficha);
-        setTreinos(response.data.treinos || []);
-        setHistoricoFichas(response.data.historicoFichas || []);
       });
+      setId(dados.id);
+      setNome(dados.nome);
+      setIdCliente(dados.idcliente);
+      setIdFuncionario(dados.idfuncionario);
+      setDataRegistroFicha(dados.dataregistroficha);
+      setDescricao(dados.descricao);
+      setIdExercicios(dados.idexercicios)
+      setSeries(dados.series);
+      setRepeticoes(dados.repeticoes);
+      setCarga(dados.carga);
     }
   }
 
   useEffect(() => {
     buscar(); // eslint-disable-next-line
-  }, [idParam]);
-
-  function adicionarTreino() {
-    setTreinos([...treinos, { descricao: '', series: '', repeticoes: '', tipo: '' }]);
-  }
-
-  function atualizarTreino(index, campo, valor) {
-    const novosTreinos = [...treinos];
-    novosTreinos[index][campo] = valor;
-    setTreinos(novosTreinos);
-  }
+  }, [id]);
 
   if (!dados) return null;
+
+  function adicionarTreinos() {
+    setIdExercicios([
+      ...idexercicios, { id: '', nome: '' }
+    ]);
+  }
 
   return (
     <div className='container'>
@@ -135,22 +142,42 @@ function CadastroTreinos() {
         <div className='row'>
           <div className='col-lg-12'>
             <div className='bs-component'>
-             
 
-              <FormGroup label='Instrutor: *' htmlFor='inputFuncionario'>
+              <FormGroup label='Nome do Treino: *' htmlFor='inputTreino'>
+                <input
+                  type='text'
+                  id='inputNome'
+                  value={nome}
+                  className='form-control'
+                  name='nome'
+                  placeholder='Digite nome do Treino'
+                  onChange={(e) => setNome(e.target.value)}
+                />
+              </FormGroup>
+
+              <FormGroup label='Cliente: *' htmlFor='selectCliente'>
+                  <select
+                    id='selectCliente'
+                    value={idcliente}
+                    className='form-select'
+                    name='idcliente'
+                    onChange={(e) => setIdCliente(e.target.value)}
+                  >
+                    <option></option>
+
+                  </select> 
+                </FormGroup>
+             
+              <FormGroup label='Instrutor: *' htmlFor='selectIdFuncionario'>
                 <select
-                  id='inputFuncionario'
-                  value={funcionario}
+                  id='selectIdFuncionario'
+                  value={idfuncionario}
                   className='form-select'
-                  name='funcionario'
-                  onChange={(e) => setFuncionario(e.target.value)}
+                  name='idfuncionario'
+                  onChange={(e) => setIdFuncionario(e.target.value)}
                 >
-                  <option value=''>Selecione o instrutor</option>
-                  {funcionarios.map((f) => (
-                    <option key={f.id} value={f.id}>
-                      {f.nome}
-                    </option>
-                  ))}
+                  <option></option>
+
                 </select>
               </FormGroup>
 
@@ -164,145 +191,75 @@ function CadastroTreinos() {
                   onChange={(e) => setDataRegistroFicha(e.target.value)}
                 />
               </FormGroup>
+              <br></br>
+              <SubCard title='Treino'>
+                <FormGroup label='Exercicios: *' htmlFor='selectExercicios'>
+                  <select
+                    id='selectExercicios'
+                    value={idexercicios}
+                    className='form-select'
+                    name='idexercicios'
+                    onChange={(e) => setIdExercicios(e.target.value)}
+                  >
+                    <option></option>
 
-              {treinos.map((t, index) => (
-                <div key={index} className='border rounded p-3 mb-3'>
-                  <FormGroup label={`Treino ${index + 1}:`} htmlFor={`inputTreino${index}`}>
-                    <select
-                      id={`inputTreino${index}`}
-                      className='form-select'
-                      value={t.tipo}
-                      onChange={(e) => atualizarTreino(index, 'tipo', e.target.value)}
-                    >
-                      <option value=''>Selecione o Treino</option>
+                  </select>
+                </FormGroup>
 
-                      <optgroup label='Abdômen'>
-                        <option value='AbdominalInfra'>Abdominal Infra</option>
-                        <option value='AbdominalObliquo'>Abdominal Oblíquo</option>
-                        <option value='AbdominalReto'>Abdominal Reto</option>
-                        <option value='AbRoller'>Ab Roller</option>
-                        <option value='ElevacaoDePerna'>Elevação de Perna</option>
-                        <option value='Prancha'>Prancha</option>
-                      </optgroup>
+                <FormGroup label='Séries:' htmlFor='inputSeries'>
+                  <input
+                    type='number'
+                    id='inputSeries'
+                    value={series}
+                    className='form-control'
+                    name='series'
+                    placeholder='Ex: 3'
+                    onChange={(e) => setSeries(e.target.value)}
+                  />
+                </FormGroup>
 
-                      <optgroup label='Bíceps'>
-                        <option value='RoscaAlternada'>Rosca Alternada</option>
-                        <option value='RoscaConcentrada'>Rosca Concentrada</option>
-                        <option value='RoscaDireta'>Rosca Direta</option>
-                        <option value='RoscaMartelo'>Rosca Martelo</option>
-                        <option value='RoscaScott'>Rosca Scott</option>
-                      </optgroup>
+                <FormGroup label='Repetições:' htmlFor='inputRepeticoes'>
+                  <input
+                    type='number'
+                    id='inputRepeticoes'
+                    value={repeticoes}
+                    className='form-control'
+                    name='repeticoes'
+                    placeholder='Ex: 3'
+                    onChange={(e) => setRepeticoes(e.target.value)}
+                  />
+                </FormGroup>
 
-                      <optgroup label='Costas'>
-                        <option value='BarraFixa'>Barra Fixa</option>
-                        <option value='LevantamentoTerra'>Levantamento Terra</option>
-                        <option value='PuxadaFrontal'>Puxada Frontal</option>
-                        <option value='PuxadaTras'>Puxada Trás</option>
-                        <option value='RemadaBaixa'>Remada Baixa</option>
-                        <option value='RemadaCurvada'>Remada Curvada</option>
-                        <option value='RemadaUnilateral'>Remada Unilateral</option>
-                      </optgroup>
+                <FormGroup label='Carga (kg):' htmlFor='inputCarga'>
+                  <input
+                    type='number'
+                    id='inputCarga'
+                    value={carga}
+                    className='form-control'
+                    name='carga'
+                    placeholder='Ex: 10'
+                    onChange={(e) => setCarga(e.target.value)}
+                  />
+                </FormGroup>
+                <button
+                  type='button'
+                  className='btn btn-secondary mb-3'
+                  onClick={adicionarTreinos}
+                >
+                    + Adicionar Treinos
+                </button>
+              </SubCard>
 
-                      <optgroup label='Ombros'>
-                        <option value='DesenvolvimentoBarra'>Desenvolvimento com Barra</option>
-                        <option value='DesenvolvimentoHalteres'>Desenvolvimento com Halteres</option>
-                        <option value='ElevacaoFrontal'>Elevação Frontal</option>
-                        <option value='ElevacaoLateral'>Elevação Lateral</option>
-                        <option value='Encolhimento'>Encolhimento</option>
-                        <option value='RemadaAlta'>Remada Alta</option>
-                      </optgroup>
-
-                      <optgroup label='Peito'>
-                        <option value='CrucifixoInclinado'>Crucifixo Inclinado</option>
-                        <option value='CrucifixoReto'>Crucifixo Reto</option>
-                        <option value='Crossover'>Crossover</option>
-                        <option value='FlexaoDeBracos'>Flexão de Braços</option>
-                        <option value='SupinoDeclinado'>Supino Declinado</option>
-                        <option value='SupinoInclinado'>Supino Inclinado</option>
-                        <option value='SupinoReto'>Supino Reto</option>
-                      </optgroup>
-
-                      <optgroup label='Pernas'>
-                        <option value='AgachamentoLivre'>Agachamento Livre</option>
-                        <option value='Avanco'>Avanço</option>
-                        <option value='CadeiraExtensora'>Cadeira Extensora</option>
-                        <option value='CadeiraFlexora'>Cadeira Flexora</option>
-                        <option value='LegPress'>Leg Press</option>
-                        <option value='MesaFlexora'>Mesa Flexora</option>
-                        <option value='PanturrilhaEmPe'>Panturrilha em Pé</option>
-                        <option value='PanturrilhaSentado'>Panturrilha Sentado</option>
-                        <option value='Stiff'>Stiff</option>
-                      </optgroup>
-
-                      <optgroup label='Tríceps'>
-                        <option value='MergulhoEntreBancos'>Mergulho Entre Bancos</option>
-                        <option value='TricepsBanco'>Tríceps Banco</option>
-                        <option value='TricepsCorda'>Tríceps Corda</option>
-                        <option value='TricepsFrances'>Tríceps Francês</option>
-                        <option value='TricepsPulley'>Tríceps Pulley</option>
-                        <option value='TricepsTesta'>Tríceps Testa</option>
-                      </optgroup>
-                    </select>
-                  </FormGroup>
-
-                  <FormGroup label='Séries:' htmlFor={`inputSeries${index}`}>
-                    <input
-                      type='number'
-                      id={`inputSeries${index}`}
-                      value={t.series}
-                      className='form-control'
-                      name='series'
-                      placeholder='Ex: 3'
-                      onChange={(e) => atualizarTreino(index, 'series', e.target.value)}
-                    />
-                  </FormGroup>
-
-                  <FormGroup label='Repetições:' htmlFor={`inputRepeticoes${index}`}>
-                    <input
-                      type='number'
-                      id={`inputRepeticoes${index}`}
-                      value={t.repeticoes}
-                      className='form-control'
-                      name='repeticoes'
-                      placeholder='Ex: 12'
-                      onChange={(e) => atualizarTreino(index, 'repeticoes', e.target.value)}
-                    />
-                  </FormGroup>
-
-                  <FormGroup label='Descrição:' htmlFor={`inputDescricao${index}`}>
-                    <textarea
-                      type='text'
-                      id={`inputDescricao${index}`}
-                      value={t.descricao}
-                      className='form-control'
-                      name='descricao'
-                      rows='3'
-                      onChange={(e) => atualizarTreino(index, 'descricao', e.target.value)}
-                    ></textarea>
-                  </FormGroup>
-                </div>
-              ))}
-
-              {historicoFichas.length > 0 && (
-                <div className='border rounded p-3 mb-3'>
-                  <h6>Histórico de Fichas:</h6>
-                  <ul>
-                    {historicoFichas.map((h, index) => (
-                      <li key={index}>
-                        {h.dataregistroficha} - {h.descricao}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-
-              <button
-                type='button'
-                className='btn btn-secondary mb-3'
-                onClick={adicionarTreino}
-              >
-                + Adicionar Treino
-              </button>
+              <FormGroup label="Descrição e observações:" htmlFor="inputDescricao">
+                <textarea
+                  id="inputDescricao"
+                  className="form-control"
+                  value={descricao}
+                  name='descricao'
+                  onChange={(e) => setDescricao(e.target.value)}
+                  placeholder="Informe objetivo do aulo e observações"
+                />
+              </FormGroup>
 
               <Stack spacing={1} padding={1} direction='row'>
                 <button onClick={salvar} type='button' className='btn btn-primary'>

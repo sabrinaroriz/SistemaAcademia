@@ -17,91 +17,104 @@ function CadastroEquipamentos() {
   const [id, setId] = useState('');
   const [nome, setNome] = useState('');
   const [modelo, setModelo] = useState('');
-  const [numeroSerie, setNumeroSerie] = useState('');
-  const [ultManutencao, setUltManutencao] = useState('');
+  const [ultmanutencao, setUltManutencao] = useState('');
   const [quantidade, setQuantidade] = useState('');
-  const [disponivel, setDisponivel] = useState('sim');
+  const [disponivel, setDisponivel] = useState('');
   const [local, setLocal] = useState('');
   const [descricao, setDescricao] = useState('');
-  const [equipamentosList, setEquipamentosList] = useState([]);
 
-  useEffect(() => {
-    const dados = [
-      {
-        id: 1,
-        nome: 'Esteira',
-        modelo: 'ProFit X200',
-        numeroSerie: 'EST-001',
-        ultmanutencao: '2025-09-10',
-        quantidade: '5',
-        disponivel: 'sim',
-        local: 'Sala de Musculação',
-        descricao: 'Equipamento com alto desempenho para corrida indoor.',
-      },
-      {
-        id: 2,
-        nome: 'Bicicleta Ergométrica',
-        modelo: 'SpinMaster 500',
-        numeroSerie: 'BIC-002',
-        ultmanutencao: '2025-08-05',
-        quantidade: '3',
-        disponivel: 'não',
-        local: 'Sala de Manutenção',
-        descricao: 'Equipamento com sistema de resistência ajustável.',
-      },
-    ];
-    setEquipamentosList(dados);
-  }, []);
+  const [dados, setDados] = React.useState([]);
 
   function cancelar() {
-    if (window.confirm('Deseja realmente cancelar o cadastro?')) {
+    if (idParam != null) {
+    navigate('/listagem-equipamentos');
+    return;
+    }
+    const temCamposPreenchidos =
+      nome !== '' || modelo !== '' || ultmanutencao !== '' || quantidade !== '' || local !== '' || descricao !== '';
+
+    if (temCamposPreenchidos) {
+      if (window.confirm('Deseja realmente limpar o formulário?')) {
+        inicializar();
+      }
+    } else {
       navigate('/listagem-equipamentos');
+    }
+  }
+
+  function inicializar() {
+    if (idParam == null) {
+      setId('');
+      setNome('');
+      setModelo('');
+      setUltManutencao('');
+      setQuantidade('');
+      setDisponivel('');
+      setLocal('');
+      setDescricao('');
+    } else {
+      setId(dados.id);
+      setNome(dados.nome);
+      setModelo(dados.modelo);
+      setUltManutencao(dados.ultmanutencao);
+      setQuantidade(dados.quantidade);
+      setDisponivel(dados.disponivel);
+      setLocal(dados.local);
+      setDescricao(dados.descricao);
     }
   }
 
   async function salvar() {
-    try {
-      if (!nome || !modelo || !numeroSerie || !quantidade || !local) {
-        mensagemErro('Preencha todos os campos obrigatórios: Nome, Modelo, Nº de Série, Quantidade e Local.');
-        return;
-      }
-
-      const dataEnvio = {
-        id,
-        nome,
-        modelo,
-        numeroSerie,
-        ultmanutencao: ultManutencao,
-        quantidade,
-        disponivel,
-        local,
-        descricao,
-      };
-
-      if (idParam == null) {
-        await axios.post(baseURL, dataEnvio, {
+    let data = { id, nome, modelo, ultmanutencao, quantidade, disponivel, local, descricao};
+    data = JSON.stringify(data);
+    if (idParam == null) {
+      await axios
+        .post(baseURL, data, {
           headers: { 'Content-Type': 'application/json' },
+        })
+        .then(function (response) {
+          mensagemSucesso(`Equipamento ${nome} cadastrado com sucesso!`);
+          navigate(`/listagem-equipamentos`);
+        })
+        .catch(function (error) {
+          mensagemErro(error.response.data);
         });
-        mensagemSucesso(`Equipamento "${nome}" cadastrado com sucesso!`);
-      } else {
-        await axios.put(`${baseURL}/${idParam}`, dataEnvio, {
+    } else {
+      await axios
+        .put(`${baseURL}/${idParam}`, data, {
           headers: { 'Content-Type': 'application/json' },
+        })
+        .then(function (response) {
+          mensagemSucesso(`Equipamento ${nome} alterado com sucesso!`);
+          navigate(`/listagem-equipamentos`);
+        })
+        .catch(function (error) {
+          mensagemErro(error.response.data);
         });
-        mensagemSucesso(`Equipamento "${nome}" atualizado com sucesso!`);
-      }
-
-      navigate('/listagem-equipamentos');
-    } catch (error) {
-      mensagemErro('Erro ao salvar o equipamento. Verifique os dados.');
     }
   }
 
-  const formatarData = (dataISO) => {
-    if (!dataISO) return '';
-    const partes = dataISO.split('-');
-    if (partes.length !== 3) return dataISO;
-    return `${partes[2].padStart(2, '0')}/${partes[1].padStart(2, '0')}/${partes[0]}`;
-  };
+  async function buscar() {
+    if (idParam != null) {
+      await axios.get(`${baseURL}/${idParam}`).then((response) => {
+        setDados(response.data);
+      });
+      setId(dados.id);
+      setNome(dados.nome);
+      setModelo(dados.modelo);
+      setUltManutencao(dados.ultmanutencao);
+      setQuantidade(dados.quantidade);
+      setDisponivel(dados.disponivel);
+      setLocal(dados.local);
+      setDescricao(dados.descricao);
+    }
+  }
+
+  useEffect(() => {
+      buscar(); // eslint-disable-next-line
+    }, [id]);
+  
+    if (!dados) return null;
 
   return (
     <div className="container">
@@ -109,14 +122,13 @@ function CadastroEquipamentos() {
         <div className="row">
           <div className="col-lg-12">
             <div className="bs-component">
-
-              {/* Agora os campos Nome e Modelo são livres */}
               <FormGroup label="Nome do Equipamento: *" htmlFor="inputNome">
                 <input
                   type="text"
                   id="inputNome"
                   className="form-control"
                   value={nome}
+                  name='nome'
                   onChange={(e) => setNome(e.target.value)}
                   placeholder="Digite o nome do equipamento"
                 />
@@ -128,19 +140,9 @@ function CadastroEquipamentos() {
                   id="inputModelo"
                   className="form-control"
                   value={modelo}
+                  name='modelo'
                   onChange={(e) => setModelo(e.target.value)}
                   placeholder="Digite o modelo do equipamento"
-                />
-              </FormGroup>
-
-              <FormGroup label="Número de Série: *" htmlFor="inputNumeroSerie">
-                <input
-                  type="text"
-                  id="inputNumeroSerie"
-                  className="form-control"
-                  value={numeroSerie}
-                  onChange={(e) => setNumeroSerie(e.target.value)}
-                  placeholder="Ex: EST-001"
                 />
               </FormGroup>
 
@@ -149,7 +151,8 @@ function CadastroEquipamentos() {
                   type="date"
                   id="inputUltManutencao"
                   className="form-control"
-                  value={ultManutencao}
+                  value={ultmanutencao}
+                  name='ultmanutencao'
                   onChange={(e) => setUltManutencao(e.target.value)}
                 />
               </FormGroup>
@@ -160,21 +163,43 @@ function CadastroEquipamentos() {
                   id="inputQuantidade"
                   className="form-control"
                   value={quantidade}
+                  name='quantidade'
                   onChange={(e) => setQuantidade(e.target.value)}
                   placeholder="Ex: 5"
                 />
               </FormGroup>
 
-              <FormGroup label="Disponível: *" htmlFor="selectDisponivel">
-                <select
-                  id="selectDisponivel"
-                  className="form-select"
-                  value={disponivel}
-                  onChange={(e) => setDisponivel(e.target.value)}
-                >
-                  <option value="sim">Sim</option>
-                  <option value="não">Não</option>
-                </select>
+              <FormGroup label='Disponível: *' htmlFor='inputDisponivel'>
+                <div>
+                    <div className="form-check form-check-inline">
+                        <input
+                            type="radio"
+                            id='disponivelSim'
+                            value="sim"
+                            className="form-check-input"
+                            name='disponivel'
+                            checked={disponivel === "sim"}
+                            onChange={(e) => setDisponivel(e.target.value)}
+                        />
+                        <label className="form-check-label" htmlFor="disponivelSim">
+                            Sim
+                        </label>
+                    </div>
+                    <div className="form-check form-check-inline">
+                        <input
+                            type="radio"
+                            id='disponivelNao'
+                            value="nao"
+                            className="form-check-input"
+                            name='disponivel'
+                            checked={disponivel === "não"}
+                            onChange={(e) => setDisponivel(e.target.value)}
+                        />
+                        <label className="form-check-label" htmlFor="disponivelNao">
+                            Nao
+                        </label>
+                    </div>
+                </div>
               </FormGroup>
 
               <FormGroup label="Local: *" htmlFor="inputLocal">
@@ -183,6 +208,7 @@ function CadastroEquipamentos() {
                   id="inputLocal"
                   className="form-control"
                   value={local}
+                  name='local'
                   onChange={(e) => setLocal(e.target.value)}
                   placeholder="Ex: Sala de Musculação"
                 />
@@ -193,6 +219,7 @@ function CadastroEquipamentos() {
                   id="inputDescricao"
                   className="form-control"
                   value={descricao}
+                  name='descricao'
                   onChange={(e) => setDescricao(e.target.value)}
                   placeholder="Informe observações ou detalhes técnicos"
                 />
@@ -206,46 +233,6 @@ function CadastroEquipamentos() {
                   Cancelar
                 </button>
               </Stack>
-
-              <hr />
-
-              <h5>Equipamentos Cadastrados</h5>
-              <table className="table table-striped mt-3">
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>Nome</th>
-                    <th>Modelo</th>
-                    <th>Nº de Série</th>
-                    <th>Última Manutenção</th>
-                    <th>Qtd</th>
-                    <th>Disponível</th>
-                    <th>Local</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {equipamentosList.map((eq) => (
-                    <tr key={eq.id}>
-                      <td>{eq.id}</td>
-                      <td>{eq.nome}</td>
-                      <td>{eq.modelo}</td>
-                      <td>{eq.numeroSerie}</td>
-                      <td>{formatarData(eq.ultmanutencao)}</td>
-                      <td>{eq.quantidade}</td>
-                      <td>{eq.disponivel}</td>
-                      <td>{eq.local}</td>
-                    </tr>
-                  ))}
-                  {equipamentosList.length === 0 && (
-                    <tr>
-                      <td colSpan="8" className="text-center text-muted">
-                        Nenhum equipamento cadastrado.
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-
             </div>
           </div>
         </div>

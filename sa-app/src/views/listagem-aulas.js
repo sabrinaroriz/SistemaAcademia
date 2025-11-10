@@ -88,7 +88,7 @@ function ListagemAulas() {
                   {dados.map((dado) => (
                     <tr key={dado.id}>
                       <td>{dado.nome}</td>
-                      <td>{dado.funcionario.id} - {dado.funcionario.nome}</td>
+                      <td>{dado.idfuncionario.id} - {dado.idfuncionario.nome}</td>
                       <td>{dado.data}</td>
                       <td>{dado.horario}</td>
                       <td>{dado.status}</td>
