@@ -23,18 +23,9 @@ function CadastroEquipamentos() {
   const [disponivel, setDisponivel] = useState('sim');
   const [local, setLocal] = useState('');
   const [descricao, setDescricao] = useState('');
-  const [catalogoEquipamentos, setCatalogoEquipamentos] = useState([]);
   const [equipamentosList, setEquipamentosList] = useState([]);
 
   useEffect(() => {
-    const catalogo = [
-      { id: 'c1', nome: 'Esteira', modelo: 'ProFit X200' },
-      { id: 'c2', nome: 'Bicicleta Ergométrica', modelo: 'SpinMaster 500' },
-      { id: 'c3', nome: 'Leg Press', modelo: 'LegPress 3000' },
-      { id: 'c4', nome: 'Cadeira Extensora', modelo: 'Extensor Pro' },
-    ];
-    setCatalogoEquipamentos(catalogo);
-
     const dados = [
       {
         id: 1,
@@ -44,7 +35,7 @@ function CadastroEquipamentos() {
         ultmanutencao: '2025-09-10',
         quantidade: '5',
         disponivel: 'sim',
-        local: 'sala de musculação',
+        local: 'Sala de Musculação',
         descricao: 'Equipamento com alto desempenho para corrida indoor.',
       },
       {
@@ -55,7 +46,7 @@ function CadastroEquipamentos() {
         ultmanutencao: '2025-08-05',
         quantidade: '3',
         disponivel: 'não',
-        local: 'sala de manutenção',
+        local: 'Sala de Manutenção',
         descricao: 'Equipamento com sistema de resistência ajustável.',
       },
     ];
@@ -65,17 +56,6 @@ function CadastroEquipamentos() {
   function cancelar() {
     if (window.confirm('Deseja realmente cancelar o cadastro?')) {
       navigate('/listagem-equipamentos');
-    }
-  }
-
-  function aoSelecionarNome(catalogoId) {
-    const item = catalogoEquipamentos.find((c) => c.id === catalogoId);
-    if (item) {
-      setNome(item.nome);
-      setModelo(item.modelo || '');
-    } else {
-      setNome('');
-      setModelo('');
     }
   }
 
@@ -130,20 +110,16 @@ function CadastroEquipamentos() {
           <div className="col-lg-12">
             <div className="bs-component">
 
-              <FormGroup label="Nome do Equipamento: *" htmlFor="selectNome">
-                <select
-                  id="selectNome"
-                  className="form-select"
-                  value={catalogoEquipamentos.find(c => c.nome === nome)?.id || ''}
-                  onChange={(e) => aoSelecionarNome(e.target.value)}
-                >
-                  <option value="">-- selecione um equipamento --</option>
-                  {catalogoEquipamentos.map((c) => (
-                    <option key={c.id} value={c.id}>
-                      {c.nome} {c.modelo ? `— ${c.modelo}` : ''}
-                    </option>
-                  ))}
-                </select>
+              {/* Agora os campos Nome e Modelo são livres */}
+              <FormGroup label="Nome do Equipamento: *" htmlFor="inputNome">
+                <input
+                  type="text"
+                  id="inputNome"
+                  className="form-control"
+                  value={nome}
+                  onChange={(e) => setNome(e.target.value)}
+                  placeholder="Digite o nome do equipamento"
+                />
               </FormGroup>
 
               <FormGroup label="Modelo: *" htmlFor="inputModelo">
@@ -152,8 +128,8 @@ function CadastroEquipamentos() {
                   id="inputModelo"
                   className="form-control"
                   value={modelo}
-                  readOnly
-                  placeholder="Modelo selecionado automaticamente"
+                  onChange={(e) => setModelo(e.target.value)}
+                  placeholder="Digite o modelo do equipamento"
                 />
               </FormGroup>
 

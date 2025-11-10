@@ -116,7 +116,7 @@ function CadastroCargos() {
                   value={nome}
                   className='form-control'
                   name='nome'
-                  placeholder='Digite o nome do Exercício'
+                  placeholder='Digite o Cargo'
                   onChange={(e) => setNome(e.target.value)}
                 />
               </FormGroup>
