@@ -113,11 +113,30 @@ function CadastroFichasAvaliacaoFisica() {
     }
   }
 
+  const [dadosClientes, setDadosClientes] = React.useState(null);
+
+  useEffect(() => {
+    axios.get(`${BASE_URL}/clientes`).then((response) => {
+      setDadosClientes(response.data);
+    });
+  }, []);
+
+  const [dadosFuncionarios, setDadosFuncionarios] = React.useState(null);
+
+  useEffect(() => {
+    axios.get(`${BASE_URL}/funcionarios`).then((response) => {
+      setDadosFuncionarios(response.data);
+    });
+  }, []);
+
   useEffect(() => {
     buscar(); // eslint-disable-next-line
   }, [id]);
 
   if (!dados) return null;
+  if (!dadosClientes) return null;
+  if (!dadosFuncionarios) return null;
+
 
   return (
     <div className='container'>
@@ -133,7 +152,14 @@ function CadastroFichasAvaliacaoFisica() {
                   name='cliente'
                   onChange={(e) => setIdCliente(e.target.value)}
                   >
-                    <option></option>
+                  <option key='0' value='0'>
+                    {''}
+                  </option>
+                  {dadosClientes.map((dado) => (
+                    <option key={dado.id} value={dado.id}>
+                      {dado.nome}
+                    </option>
+                  ))}
                 </select>
               </FormGroup>
               <FormGroup label='Funcionario: *' htmlFor='selectIdFuncionario'>
@@ -144,7 +170,14 @@ function CadastroFichasAvaliacaoFisica() {
                   name='funcionario'
                   onChange={(e) => setIdFuncionario(e.target.value)}
                   >
-                    <option></option>
+                  <option key='0' value='0'>
+                    {''}
+                  </option>
+                  {dadosFuncionarios.map((dado) => (
+                    <option key={dado.id} value={dado.id}>
+                      {dado.nome}
+                    </option>
+                  ))}
                 </select>
               </FormGroup>
               <FormGroup label="Data Ficha Avaliação:" htmlFor="inputDataFichaAvaliacao">
