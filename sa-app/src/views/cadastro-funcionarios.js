@@ -147,11 +147,20 @@ function CadastroFuncionarios() {
     }
   }
 
+    const[ dadosCargo, setDadosCargo] = React.useState(null);  
+
+    useEffect(()=> {
+      axios.get(`${BASE_URL}/cargos`).then((response) => {
+        setDadosCargo(response.data);  
+    });
+  }, []);
+  
   useEffect(() => {
     buscar(); // eslint-disable-next-line
   }, [id]);
 
   if (!dados) return null;
+  if (!dadosCargo) return null;
 
   return (
     <div className="container">
@@ -315,15 +324,22 @@ function CadastroFuncionarios() {
 
               <h5 className="mb-3 mt-4">Dados Profissionais</h5>
 
-              <FormGroup label="Cargo: *" htmlFor="selectIdCargo">
+              <FormGroup label="Cargo: *" htmlFor="selectCargo">
                 <select
-                  id="selectIdCargo"
+                  id="selectCargo"
                   className="form-select"
                   value={idcargo}
                   name='cargo'
                   onChange={(e) => setIdCargo(e.target.value)}
                 >
-                  <option></option>
+                  <option key='0' value='0'>
+                    {' '}
+                  </option>
+                  {dadosCargo.map((dado) => (
+                    <option key={dado.id} value={dado.id}>
+                      {dado.nome}
+                    </option>
+                  ) )}
                   
                 </select>
               </FormGroup>
