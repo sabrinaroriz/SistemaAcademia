@@ -119,6 +119,16 @@ function CadastroFaturas() {
 
   if (!dados) return null;
 
+  const currency = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
+  const previewFinal = document.getElementById('previewFinal');
+  function updatePreview() {
+      const final = 10;//valor que será recebido pelo back-end
+      previewFinal.textContent = `Valor final: ${currency.format(final)}`;
+  }
+  if (datavencimento!== '') {
+        updatePreview();
+    }
+
   return (
     <div className='container'>
       <Card title='Cadastro de Faturas'>
