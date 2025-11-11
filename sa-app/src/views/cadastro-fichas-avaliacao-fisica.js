@@ -38,7 +38,7 @@ function CadastroFichasAvaliacaoFisica() {
     return;
     }
     const temCamposPreenchidos =
-      nome !== '' || tipo !== '' || valor !== '' || descricao !== '';
+      nome !== '' || idcliente !== '' || idfuncionario !== '' || datafichaavaliacao !== ''|| peso !== ''|| altura !== ''|| descricao !== '';
 
     if (temCamposPreenchidos) {
       if (window.confirm('Deseja realmente limpar o formulário?')) {
