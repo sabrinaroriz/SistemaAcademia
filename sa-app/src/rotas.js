@@ -21,9 +21,11 @@ import CadastroFormasPagamento from './views/cadastro-formas-pagamento';
 import CadastroAjustesFinanceiros from './views/cadastro-ajustes-financeiros';
 import CadastroCargos from './views/cadastro-cargos';
 import CadastroFuncionarios from './views/cadastro-funcionarios';
-
-
-
+import CadastroClientes from './views/cadastro-clientes';
+import CadastroTreinos from './views/cadastro-treinos';
+import CadastroAulas from './views/cadastro-aulas';
+import CadastroEquipamentos from './views/cadastro-equipamentos';
+import CadastroFaturas from './views/cadastro-faturas';
 
 
 import { Route, Routes, BrowserRouter } from 'react-router-dom';
@@ -33,12 +35,17 @@ function Rotas(props) {
     <BrowserRouter>
       <Routes>
 
-        <Route path='/cadastro-planos/:idParam?'element={<CadastroPlanos />} />
-        <Route path='/cadastro-exercicios/:idParam?'element={<CadastroExercicios />} />
-        <Route path='/cadastro-formas-pagamento/:idParam?'element={<CadastroFormasPagamento />} />
-        <Route path='/cadastro-ajustes-financeiros/:idParam?'element={<CadastroAjustesFinanceiros />} />
-        <Route path='/cadastro-cargos/:idParam?'element={<CadastroCargos />} />
-        <Route path='/cadastro-funcionarios/:idParam?'element={<CadastroFuncionarios />} />
+        <Route path='/cadastro-planos/:idParam?' element={<CadastroPlanos />} />
+        <Route path='/cadastro-exercicios/:idParam?' element={<CadastroExercicios />} />
+        <Route path='/cadastro-formas-pagamento/:idParam?' element={<CadastroFormasPagamento />} />
+        <Route path='/cadastro-ajustes-financeiros/:idParam?' element={<CadastroAjustesFinanceiros />} />
+        <Route path='/cadastro-cargos/:idParam?' element={<CadastroCargos />} />
+        <Route path='/cadastro-funcionarios/:idParam?' element={<CadastroFuncionarios />} />
+        <Route path='/cadastro-treinos/:idParam?' element={<CadastroTreinos />} />
+        <Route path='/cadastro-aulas/:idParam?' element={<CadastroAulas />} />
+        <Route path='/cadastro-equipamentos/:idParam?' element={<CadastroEquipamentos />} />
+        <Route path='/cadastro-clientes/:idParam?' element={<CadastroClientes />} />
+        <Route path='/cadastro-faturas/:idParam?' element={<CadastroFaturas />} />
 
 
 
@@ -54,9 +61,9 @@ function Rotas(props) {
         <Route path='/listagem-fichas-avaliacao-fisica' element={<ListagemFichasAvaliacaoFisica />} />
         <Route path='/listagem-formas-pagamento' element={<ListagemFormasPagamento />} />
         <Route path='/listagem-funcionarios' element={<ListagemFuncionarios />} />
-        <Route path='/listagem-treinos' element={<ListagemTreinos />} /> 
+        <Route path='/listagem-treinos' element={<ListagemTreinos />} />
         <Route path='/listagem-exercicios' element={<ListagemExercicios />} />
-        
+
 
       </Routes>
     </BrowserRouter>

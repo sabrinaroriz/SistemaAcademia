@@ -27,6 +27,23 @@ function CadastroCargos() {
 
   const [dados, setDados] = React.useState([]);
 
+  function cancelar() {
+    if (idParam != null) {
+    navigate('/listagem-cargos');
+    return;
+    }
+    const temCamposPreenchidos =
+      nome !== '' || descricao !== '';
+
+    if (temCamposPreenchidos) {
+      if (window.confirm('Deseja realmente limpar o formulário?')) {
+        inicializar();
+      }
+    } else {
+      navigate('/listagem-cargos');
+    }
+  }
+
   function inicializar() {
     if (idParam == null) {
       setId('');
@@ -99,7 +116,7 @@ function CadastroCargos() {
                   value={nome}
                   className='form-control'
                   name='nome'
-                  placeholder='Digite o nome do Exercício'
+                  placeholder='Digite o Cargo'
                   onChange={(e) => setNome(e.target.value)}
                 />
               </FormGroup>
@@ -124,7 +141,7 @@ function CadastroCargos() {
                   Salvar
                 </button>
                 <button
-                  onClick={inicializar}
+                  onClick={cancelar}
                   type='button'
                   className='btn btn-danger'
                 >

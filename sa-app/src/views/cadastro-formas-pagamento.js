@@ -26,6 +26,23 @@ function CadastroFormasPagamento() {
 
   const [dados, setDados] = React.useState([]);
 
+  function cancelar() {
+    if (idParam != null) {
+    navigate('/listagem-formas-pagamento');
+    return;
+    }
+    const temCamposPreenchidos =
+      nome !== '' || descricao !== '';
+
+    if (temCamposPreenchidos) {
+      if (window.confirm('Deseja realmente limpar o formulário?')) {
+        inicializar();
+      }
+    } else {
+      navigate('/listagem-formas-pagamento');
+    }
+  }
+
   function inicializar() {
     if (idParam == null) {
       setId('');
@@ -123,7 +140,7 @@ function CadastroFormasPagamento() {
                   Salvar
                 </button>
                 <button
-                  onClick={inicializar}
+                  onClick={cancelar}
                   type='button'
                   className='btn btn-danger'
                 >
