@@ -28,7 +28,7 @@ function CadastroClientes() {
   const [telefone, setTelefone] = useState('');
   const [status, setStatus] = useState('');
   const [datanascimento, setDatanascimento] = useState('');
-  const [idplano, setPlano] = useState('');
+  const [idplano, setIdPlano] = useState('');
   const [logradouro, setLogradouro] = useState('');
   const [numero, setNumero] = useState('');
   const [complemento, setComplemento] = useState('');
@@ -64,7 +64,7 @@ function CadastroClientes() {
       setTelefone('');
       setStatus('');
       setDatanascimento('');
-      setPlano('');
+      setIdPlano('');
       setLogradouro('');
       setNumero('');
       setComplemento('');
@@ -79,7 +79,7 @@ function CadastroClientes() {
       setTelefone(dados.telefone);
       setStatus(dados.status);
       setDatanascimento(dados.datanascimento);
-      setPlano(dados.idplano);
+      setIdPlano(dados.idplano);
       setLogradouro(dados.logradouro);
       setNumero(dados.numero);
       setComplemento(dados.complemento);
@@ -131,7 +131,7 @@ function CadastroClientes() {
       setTelefone(dados.telefone);
       setStatus(dados.status);
       setDatanascimento(dados.datanascimento);
-      setPlano(dados.idplano);
+      setIdPlano(dados.idplano);
       setLogradouro(dados.logradouro);
       setNumero(dados.numero);
       setComplemento(dados.complemento);
@@ -142,12 +142,20 @@ function CadastroClientes() {
     }
   }
 
+  const [dadosPlano, setDadosPlanos] = React.useState(null);
+
+  useEffect(() => {
+    axios.get(`${BASE_URL}/planos`).then((response) => {
+      setDadosPlanos(response.data);
+    });
+  }, []);
 
   useEffect(() => {
     buscar(); // eslint-disable-next-line
   }, [id]);
 
   if (!dados) return null;
+  if (!dadosPlano) return null;
 
   return (
     <div className='container'>
@@ -290,16 +298,22 @@ function CadastroClientes() {
                 </select>
               </FormGroup>
 
-              <FormGroup label='Plano: *' htmlFor='selectIdPlano'>
+              <FormGroup label='Plano: *' htmlFor='selectPlano'>
                 <select
-                  id='inputIdPlano'
+                  id='inputPlano'
                   value={idplano}
                   className='form-select'
-                  name='plano'
-                  onChange={(e) => setPlano(e.target.value)}
+                  name='idplano'
+                  onChange={(e) => setIdPlano(e.target.value)}
                 >
-                  <option></option>
-
+                  <option key='0' value='0'>
+                    {''}
+                  </option>
+                  {dadosPlano.map((dado) => (
+                    <option key={dado.id} value={dado.id}>
+                      {dado.nome}
+                    </option>
+                  ))}
                 </select>
               </FormGroup>
 
