@@ -124,11 +124,39 @@ function CadastroTreinos() {
     }
   }
 
+  const [dadosClientes, setDadosClientes] = React.useState(null);
+
+  useEffect(() => {
+    axios.get(`${BASE_URL}/clientes`).then((response) => {
+      setDadosClientes(response.data);
+    });
+  }, []);
+
+  const [dadosFuncionarios, setDadosFuncionarios] = React.useState(null);
+
+  useEffect(() => {
+    axios.get(`${BASE_URL}/funcionarios`).then((response) => {
+      setDadosFuncionarios(response.data);
+    });
+  }, []);
+
+  const [dadosExercicios, setDadosExercicios] = React.useState(null);
+
+  useEffect(() => {
+    axios.get(`${BASE_URL}3/exercicios`).then((response) => {
+      setDadosExercicios(response.data);
+    });
+  }, []);
+
   useEffect(() => {
     buscar(); // eslint-disable-next-line
   }, [id]);
 
   if (!dados) return null;
+  if (!dadosClientes) return null;
+  if (!dadosFuncionarios) return null;
+  if(!dadosExercicios) return null;
+
 
   function adicionarTreinos() {
     setIdExercicios([
