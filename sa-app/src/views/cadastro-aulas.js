@@ -305,7 +305,7 @@ function CadastroAulas() {
                             value="ativo"
                             className="form-check-input"
                             name='status'
-                            checked={status === "Ativo"}
+                            checked={status === "ativo"}
                             onChange={(e) => setStatus(e.target.value)}
                         />
                         <label className="form-check-label" htmlFor="statusAtivo">
@@ -319,7 +319,7 @@ function CadastroAulas() {
                             value="inativo"
                             className="form-check-input"
                             name='status'
-                            checked={status === "Inativo"}
+                            checked={status === "inativo"}
                             onChange={(e) => setStatus(e.target.value)}
                         />
                         <label className="form-check-label" htmlFor="statusInativo">
