@@ -137,8 +137,8 @@ function CadastroFuncionarios() {
                   onChange={(e) => setTelefone(e.target.value)}
                 />
               </FormGroup>
-              <FormGroup label='Cargo: *' htmlFor='inputIdCargo'>
-                <input
+              {/*<FormGroup label='Cargo: *' htmlFor='inputIdCargo'>
+                /<input
                   type='text'
                   id='inputIdCargo'
                   value={idcargo}
@@ -147,7 +147,7 @@ function CadastroFuncionarios() {
                   placeholder='Selecione o cargo'
                   onChange={(e) => setCargo(e.target.value)}
                 />
-              </FormGroup>
+              </FormGroup> */}
               <FormGroup label='Email: *' htmlFor='inputEmail'>
                 <input
                   type='email'
