@@ -22,7 +22,6 @@ function CadastroFichasAvaliacaoFisica() {
   const baseURL = `${BASE_URL}3/fichasavaliacaofisica`;
 
   const [id, setId] = useState('');
-  const [nome, setNome] = useState('');
   const [idcliente, setIdCliente] = useState('');
   const [idfuncionario, setIdFuncionario] = useState('');
   const [datafichaavaliacao, setDataFichaAvaliacao] = useState('');
@@ -38,7 +37,7 @@ function CadastroFichasAvaliacaoFisica() {
     return;
     }
     const temCamposPreenchidos =
-      nome !== '' || idcliente !== '' || idfuncionario !== '' || datafichaavaliacao !== ''|| peso !== ''|| altura !== ''|| descricao !== '';
+       idcliente !== '' || idfuncionario !== '' || datafichaavaliacao !== ''|| peso !== ''|| altura !== ''|| descricao !== '';
 
     if (temCamposPreenchidos) {
       if (window.confirm('Deseja realmente limpar o formulário?')) {
@@ -52,7 +51,6 @@ function CadastroFichasAvaliacaoFisica() {
   function inicializar() {
     if (idParam == null) {
       setId('');
-      setNome('');
       setIdCliente('');
       setIdFuncionario('');
       setDataFichaAvaliacao('');
@@ -61,7 +59,6 @@ function CadastroFichasAvaliacaoFisica() {
       setDescricao('');
     } else {
       setId(dados.id);
-      setNome(dados.nome);
       setIdCliente(dados.idcliente);
       setIdFuncionario(dados.idfuncionario);
       setDataFichaAvaliacao(dados.datafichaavaliacao);
@@ -72,7 +69,7 @@ function CadastroFichasAvaliacaoFisica() {
   }
 
   async function salvar() {
-    let data = { id, nome, idcliente, idfuncionario, datafichaavaliacao, peso, altura, descricao};
+    let data = { id, idcliente, idfuncionario, datafichaavaliacao, peso, altura, descricao};
     data = JSON.stringify(data);
     if (idParam == null) {
       await axios
@@ -80,7 +77,7 @@ function CadastroFichasAvaliacaoFisica() {
           headers: { 'Content-Type': 'application/json' },
         })
         .then(function (response) {
-          mensagemSucesso(`Ficha de Avaliação Física ${nome} cadastrada com sucesso!`);
+          mensagemSucesso(`Ficha de Avaliação Física cadastrada com sucesso!`);
           navigate(`/listagem-fichas-avaliacao-fisica`);
         })
         .catch(function (error) {
@@ -92,7 +89,7 @@ function CadastroFichasAvaliacaoFisica() {
           headers: { 'Content-Type': 'application/json' },
         })
         .then(function (response) {
-          mensagemSucesso(`Ficha de Avaliação Física ${nome} alterada com sucesso!`);
+          mensagemSucesso(`Ficha de Avaliação Física alterada com sucesso!`);
           navigate(`/listagem-fichas-avaliacao-fisica`);
         })
         .catch(function (error) {
@@ -107,7 +104,6 @@ function CadastroFichasAvaliacaoFisica() {
         setDados(response.data);
       });
       setId(dados.id);
-      setNome(dados.nome);
       setIdCliente(dados.idcliente);
       setIdFuncionario(dados.idfuncionario);
       setDataFichaAvaliacao(dados.datafichaavaliacao);
@@ -129,17 +125,6 @@ function CadastroFichasAvaliacaoFisica() {
         <div className='row'>
           <div className='col-lg-12'>
             <div className='bs-component'>
-              <FormGroup label='Nome: *' htmlFor='inputNome'>
-                <input
-                  type='text'
-                  id='inputNome'
-                  value={nome}
-                  className='form-control'
-                  name='nome'
-                  placeholder='Digite o nome da Ficha'
-                  onChange={(e) => setNome(e.target.value)}
-                />
-              </FormGroup>
               <FormGroup label='Cliente: *' htmlFor='selectIdCliente'>
                 <select
                   id='selectIdCliente'
