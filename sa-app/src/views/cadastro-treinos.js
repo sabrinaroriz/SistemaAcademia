@@ -191,9 +191,15 @@ function CadastroTreinos() {
                     name='idcliente'
                     onChange={(e) => setIdCliente(e.target.value)}
                   >
-                    <option></option>
-
-                  </select> 
+                  <option key='0' value='0'>
+                    {''}
+                  </option>
+                  {dadosClientes.map((dado) => (
+                    <option key={dado.id} value={dado.id}>
+                      {dado.nome}
+                    </option>
+                  ))}
+                </select>
                 </FormGroup>
              
               <FormGroup label='Instrutor: *' htmlFor='selectIdFuncionario'>
@@ -204,8 +210,14 @@ function CadastroTreinos() {
                   name='idfuncionario'
                   onChange={(e) => setIdFuncionario(e.target.value)}
                 >
-                  <option></option>
-
+                  <option key='0' value='0'>
+                    {''}
+                  </option>
+                  {dadosFuncionarios.map((dado) => (
+                    <option key={dado.id} value={dado.id}>
+                      {dado.nome}
+                    </option>
+                  ))}
                 </select>
               </FormGroup>
 
@@ -229,9 +241,15 @@ function CadastroTreinos() {
                     name='idexercicios'
                     onChange={(e) => setIdExercicios(e.target.value)}
                   >
-                    <option></option>
-
-                  </select>
+                  <option key='0' value='0'>
+                    {''}
+                  </option>
+                  {dadosExercicios.map((dado) => (
+                    <option key={dado.id} value={dado.id}>
+                      {dado.nome}
+                    </option>
+                  ))}
+                </select>
                 </FormGroup>
 
                 <FormGroup label='Séries:' htmlFor='inputSeries'>
