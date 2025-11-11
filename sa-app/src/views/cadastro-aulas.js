@@ -128,11 +128,41 @@ function CadastroAulas() {
     }
   }
 
+    const[ dadosClientes, setDadosClientes] = React.useState(null);  
+   
+       useEffect(()=> {
+         axios.get(`${BASE_URL}/clientes`).then((response) => {
+           setDadosClientes(response.data);  
+       });
+     }, []);
+
+     const[ dadosFuncionarios, setDadosFuncionarios] = React.useState(null);  
+   
+       useEffect(()=> {
+         axios.get(`${BASE_URL}/funcionarios`).then((response) => {
+           setDadosFuncionarios(response.data);  
+       });
+     }, []);
+
+     const[ dadosEquipamentos, setDadosEquipamentos] = React.useState(null);  
+   
+       useEffect(()=> {
+         axios.get(`${BASE_URL}2/equipamentos`).then((response) => {
+           setDadosEquipamentos(response.data);  
+       });
+     }, []);
+
+
   useEffect(() => {
     buscar(); // eslint-disable-next-line
   }, [id]);
 
   if (!dados) return null;
+  if (!dadosClientes) return null;
+  if (!dadosFuncionarios) return null;
+  if (!dadosEquipamentos) return null;
+
+
 
   function adicionarEquipamentos() {
     setIdEquipamento([
@@ -189,7 +219,14 @@ function CadastroAulas() {
                   name='idfuncionario'
                   onChange={(e) => setIdFuncionario(e.target.value)}
                 >
-                  <option></option>
+                  <option key='0' value='0'>
+                    {' '}
+                  </option>
+                  {dadosFuncionarios.map((dado) => (
+                    <option key={dado.id} value={dado.id}>
+                      {dado.nome}
+                    </option>
+                  ) )}
 
                 </select>
               </FormGroup>
@@ -214,7 +251,14 @@ function CadastroAulas() {
                     name='idequipamentos'
                     onChange={(e) => setIdEquipamento(e.target.value)}
                   >
-                    <option></option>
+                  <option key='0' value='0'>
+                    {' '}
+                  </option>
+                  {dadosEquipamentos.map((dado) => (
+                    <option key={dado.id} value={dado.id}>
+                      {dado.nome}
+                    </option>
+                  ) )}
 
                   </select> 
                 </FormGroup>
@@ -239,7 +283,14 @@ function CadastroAulas() {
                     name='idclientes'
                     onChange={(e) => setIdCliente(e.target.value)}
                   >
-                    <option></option>
+                  <option key='0' value='0'>
+                    {' '}
+                  </option>
+                  {dadosClientes.map((dado) => (
+                    <option key={dado.id} value={dado.id}>
+                      {dado.nome}
+                    </option>
+                  ) )}
 
                   </select> 
                 </FormGroup>

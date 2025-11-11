@@ -142,6 +142,7 @@ function CadastroClientes() {
     }
   }
 
+
   useEffect(() => {
     buscar(); // eslint-disable-next-line
   }, [id]);
