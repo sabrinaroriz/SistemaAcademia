@@ -125,7 +125,84 @@ function CadastroFaturas() {
         <div className='row'>
           <div className='col-lg-12'>
             <div className='bs-component'>
-              
+
+              <FormGroup label='Cliente: *' htmlFor='selectIdCliente'>
+                <select
+                  id='selectIdCliente'
+                  value={idcliente}
+                  className='form-select'
+                  name='idcliente'
+                  onChange={(e) => setIdCliente(e.target.value)}
+                >
+                  <option></option>
+
+                </select>
+              </FormGroup>
+
+              <FormGroup label='Plano do Cliente:' htmlFor='inputIdPlano'>
+                <input
+                  id='selectIdPlano'
+                  type='text'
+                  value={idplano}
+                  className='form-control'
+                  name='idplano'
+                  readonly placeholder='Plano do cliente'
+                />
+              </FormGroup>
+
+              <FormGroup label='Forma de Pagamento: *' htmlFor='selectIdFormaPagamento'>
+                <select
+                  id='selectIdFormaPagamento'
+                  value={idformaspagamento}
+                  className='form-select'
+                  name='idformaspagamento'
+                  onChange={(e) => setIdFormasPagamento(e.target.value)}
+                >
+                  <option></option>
+
+                </select>
+              </FormGroup>
+
+              <FormGroup label='Ajuste: *' htmlFor='selectIdAjusteFinanceiro'>
+                <select
+                  id='selectIdAjusteFinanceiro'
+                  value={idajustesfinanceiros}
+                  className='form-select'
+                  name='idajustesfinanceiros'
+                  onChange={(e) => setIdAjustesFinanceiros(e.target.value)}
+                >
+                  <option></option>
+
+                </select>
+              </FormGroup>
+
+              <FormGroup label="Data de Vencimento: *" htmlFor="inputDataVencimento">
+                <input
+                  type="date"
+                  id="inputDataVencimento"
+                  className="form-control"
+                  value={datavencimento}
+                  name='data'
+                  onChange={(e) => setDataVencimento(e.target.value)}
+                />
+              </FormGroup>
+
+              <FormGroup label="Data de Pagamento: *" htmlFor="inputDataPagamento">
+                <input
+                  type="date"
+                  id="inputDataPagamento"
+                  className="form-control"
+                  value={datapagamento}
+                  name='data'
+                  onChange={(e) => setDataPagamento(e.target.value)}
+                />
+              </FormGroup>
+               <div class="small">Se preencher data, fatura será marcada como paga.</div>
+
+              <br></br>
+              <div id="previewFinal">Valor final: R$ 0,00</div>
+              <br></br>
+
               <Stack spacing={1} padding={1} direction='row'>
                 <button
                   onClick={salvar}
