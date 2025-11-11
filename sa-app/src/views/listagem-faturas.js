@@ -89,7 +89,7 @@ function ListagemFaturas() {
                 <tbody>
                   {dados.map((dado) => (
                     <tr key={dado.id}>
-                      <td>{dado.cliente.id} - {dado.cliente.nome}</td>
+                      <td>{dado.idcliente.id} - {dado.idcliente.nome}</td>
                       <td>{dado.datavencimento}</td>
                       <td>{dado.datapagamento}</td>
                       <td>{dado.idplano.id} - {dado.idplano.nome}</td>

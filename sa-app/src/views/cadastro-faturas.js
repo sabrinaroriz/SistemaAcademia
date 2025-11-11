@@ -21,47 +21,55 @@ function CadastroFaturas() {
   const baseURL = `${BASE_URL}2/faturas`;
 
   const [id, setId] = useState('');
-  const [cliente, setCliente] = useState('');
-  const [plano, setPlano] = useState('');
+  const [idcliente, setIdCliente] = useState('');
+  const [idplano, setIdPlano] = useState('');
   const [datavencimento, setDataVencimento] = useState('');
   const [datapagamento, setDataPagamento] = useState('');
-  const [formaspagamento, setFormasPagamento] = useState('');
-  const [ajustesfinanceiros, setAjustesFinanceiros] = useState('');
+  const [idformaspagamento, setIdFormasPagamento] = useState('');
+  const [idajustesfinanceiros, setIdAjustesFinanceiros] = useState('');
 
 
   const [dados, setDados] = React.useState([]);
 
   function cancelar() {
     if (idParam != null) {
-    navigate('/listagem-formas-pagamento');
+    navigate('/listagem-faturas');
     return;
     }
     const temCamposPreenchidos =
-      nome !== '' || descricao !== '';
+      idcliente !== '' || idplano !== '' || datavencimento !== '' || datapagamento !== '' || idformaspagamento !== '' || idajustesfinanceiros !== '';
 
     if (temCamposPreenchidos) {
       if (window.confirm('Deseja realmente limpar o formulário?')) {
         inicializar();
       }
     } else {
-      navigate('/listagem-formas-pagamento');
+      navigate('/listagem-faturas');
     }
   }
 
   function inicializar() {
     if (idParam == null) {
       setId('');
-      setNome('');
-      setDescricao('');
+      setIdCliente('');
+      setIdPlano('');
+      setDataVencimento('');
+      setDataPagamento('');
+      setIdFormasPagamento('');
+      setIdAjustesFinanceiros('');
     } else {
       setId(dados.id);
-      setNome(dados.nome);
-      setDescricao(dados.descricao);
+      setIdCliente(dados.idcliente);
+      setIdPlano(dados.idplano);
+      setDataVencimento(dados.datavencimento);
+      setDataPagamento(dados.datapagamento);
+      setIdFormasPagamento(dados.idformaspagamento);
+      setIdAjustesFinanceiros(dados.idajustesfinanceiros);
     }
   }
 
   async function salvar() {
-    let data = { id, nome, descricao};
+    let data = { id, idcliente, idplano, datavencimento, datapagamento, idformaspagamento, idajustesfinanceiros};
     data = JSON.stringify(data);
     if (idParam == null) {
       await axios
@@ -69,8 +77,8 @@ function CadastroFaturas() {
           headers: { 'Content-Type': 'application/json' },
         })
         .then(function (response) {
-          mensagemSucesso(`Forma de pagamento ${nome} cadastrado com sucesso!`);
-          navigate(`/listagem-formas-pagamento`);
+          mensagemSucesso(`Fatura cadastrado com sucesso!`);
+          navigate(`/listagem-faturas`);
         })
         .catch(function (error) {
           mensagemErro(error.response.data);
@@ -81,8 +89,8 @@ function CadastroFaturas() {
           headers: { 'Content-Type': 'application/json' },
         })
         .then(function (response) {
-          mensagemSucesso(`Forma de pagamento ${nome} alterado com sucesso!`);
-          navigate(`/listagem-formas-pagamento`);
+          mensagemSucesso(`Fatura alterado com sucesso!`);
+          navigate(`/listagem-faturas`);
         })
         .catch(function (error) {
           mensagemErro(error.response.data);
@@ -96,8 +104,12 @@ function CadastroFaturas() {
         setDados(response.data);
       });
       setId(dados.id);
-      setNome(dados.nome);
-      setDescricao(dados.descricao);
+      setIdCliente(dados.idcliente);
+      setIdPlano(dados.idplano);
+      setDataVencimento(dados.datavencimento);
+      setDataPagamento(dados.datapagamento);
+      setIdFormasPagamento(dados.idformaspagamento);
+      setIdAjustesFinanceiros(dados.idajustesfinanceiros);
     }
   }
 
@@ -109,33 +121,11 @@ function CadastroFaturas() {
 
   return (
     <div className='container'>
-      <Card title='Cadastro de Formas de pagamento'>
+      <Card title='Cadastro de Faturas'>
         <div className='row'>
           <div className='col-lg-12'>
             <div className='bs-component'>
-              <FormGroup label='Nome: *' htmlFor='inputNome'>
-                <input
-                  type='text'
-                  id='inputNome'
-                  value={nome}
-                  className='form-control'
-                  name='nome'
-                  placeholder='Digite o nome da forma de pagamento'
-                  onChange={(e) => setNome(e.target.value)}
-                />
-              </FormGroup>
               
-              <FormGroup label='Descrição:' htmlFor='inputDescricao'>
-                <textarea
-                  type='text'
-                  id='inputDescricao'
-                  value={descricao}
-                  className='form-control'
-                  name='descricao'
-                  rows="3"
-                  onChange={(e) => setDescricao(e.target.value)}
-                ></textarea>
-              </FormGroup>
               <Stack spacing={1} padding={1} direction='row'>
                 <button
                   onClick={salvar}
@@ -160,4 +150,4 @@ function CadastroFaturas() {
   );
 }
 
-export default CadastroFormasPagamento;
+export default CadastroFaturas;
