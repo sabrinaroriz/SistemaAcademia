@@ -155,7 +155,7 @@ function CadastroTreinos() {
   if (!dados) return null;
   if (!dadosClientes) return null;
   if (!dadosFuncionarios) return null;
-  if(!dadosExercicios) return null;
+  if (!dadosExercicios) return null;
 
 
   function adicionarTreinos() {
