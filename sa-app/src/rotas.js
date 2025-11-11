@@ -26,6 +26,7 @@ import CadastroTreinos from './views/cadastro-treinos';
 import CadastroAulas from './views/cadastro-aulas';
 import CadastroEquipamentos from './views/cadastro-equipamentos';
 import CadastroFaturas from './views/cadastro-faturas';
+import CadastroFichasAvaliacaoFisica from './views/cadastro-fichas-avaliacao-fisica';
 
 
 import { Route, Routes, BrowserRouter } from 'react-router-dom';
@@ -46,6 +47,8 @@ function Rotas(props) {
         <Route path='/cadastro-equipamentos/:idParam?' element={<CadastroEquipamentos />} />
         <Route path='/cadastro-clientes/:idParam?' element={<CadastroClientes />} />
         <Route path='/cadastro-faturas/:idParam?' element={<CadastroFaturas />} />
+        <Route path='/cadastro-fichas-avaliacao-fisica/:idParam?' element={<CadastroFichasAvaliacaoFisica />} />
+
 
 
 
