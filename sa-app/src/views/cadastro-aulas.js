@@ -26,12 +26,44 @@ function CadastroAulas() {
   const [horario, setHorario] = useState('');
   const [status, setStatus] = useState('');
   const [capacidade, setCapacidade] = useState('');
-  const [idequipamentos, setIdEquipamento] = useState(0);
-  const [quantidadeEquipamentoUtilizado, setQuantidadeEquipamentoUtilizado] = useState('');
-  const [idclientes, setIdCliente] = useState(0);
+  const [idcliente, setIdCliente] = useState([]);
   const [descricao, setDescricao] = useState('');
 
+  const [equipamentos, setIdEquipamentos] = useState([
+  { idequipamento: 0, quantidade: '' }
+  ]);
+
   const [dados, setDados] = React.useState([]);
+
+  function adicionarEquipamento() {
+    setIdEquipamentos([...equipamentos, { idequipamento: 0, quantidade: '' }]);
+  }
+
+  function atualizarEquipamento(index, campo, valor) {
+    const novos = [...equipamentos];
+    novos[index][campo] = valor;
+    setIdEquipamentos(novos);
+  }
+
+  function removerEquipamento(index) {
+    const novos = equipamentos.filter((_, i) => i !== index);
+    setIdEquipamentos(novos);
+  }
+
+  function adicionarCliente() {
+  setIdCliente([...idcliente, 0]);
+  }
+
+  function atualizarCliente(index, valor) {
+    const novosClientes = [...idcliente];
+    novosClientes[index] = valor;
+    setIdCliente(novosClientes);  
+  }
+
+  function removerCliente(index) {
+  const novosClientes = idcliente.filter((_, i) => i !== index);
+  setIdCliente(novosClientes);
+ }
 
   function cancelar() {
     if (idParam != null) {
@@ -39,7 +71,7 @@ function CadastroAulas() {
       return;
     }
     const temCamposPreenchidos =
-      nome !== '' || idfuncionario !== '' || dataAula !== '' || horario !== '' || capacidade !== '' || idequipamentos !== '' || quantidadeEquipamentoUtilizado!== '' ||idclientes !== '';
+      nome !== '' || idfuncionario !== '' || dataAula !== '' || horario !== '' || capacidade !== '' || equipamentos.some(eq => eq.idequipamento !==0 || eq.quantidade!== '') ||idcliente.length >0;
 
     if (temCamposPreenchidos) {
       if (window.confirm('Deseja realmente limpar o formulário?')) {
@@ -59,9 +91,8 @@ function CadastroAulas() {
       setHorario('');
       setStatus('');
       setCapacidade('');
-      setIdEquipamento('');
-      setQuantidadeEquipamentoUtilizado('');
-      setIdCliente('');
+      setIdEquipamentos([{ idequipamento: 0, quantidade: '' }]);
+      setIdCliente([]);
       setDescricao('');
     } else {
       setId(dados.id);
@@ -71,16 +102,15 @@ function CadastroAulas() {
       setHorario(dados.horario);
       setStatus(dados.status);
       setCapacidade(dados.capacidade);
-      setIdEquipamento(dados.idequipamentos);
-      setQuantidadeEquipamentoUtilizado(dados.quantidadeEquipamentoUtilizado);
-      setIdCliente(dados.idclientes);
+      setIdEquipamentos(dados.equipamentos || [{ idequipamento: 0, quantidade: '' }]);
+      setIdCliente(dados.idcliente);
       setDescricao(dados.descricao);
     }
   }
 
   async function salvar() {
     let data = { id,nome,idfuncionario,dataAula,horario,
-        status,capacidade,idequipamentos,quantidadeEquipamentoUtilizado,idclientes,descricao };
+        status,capacidade,equipamentos,idcliente,descricao };
     data = JSON.stringify(data);
     if (idParam == null) {
       await axios
@@ -121,36 +151,35 @@ function CadastroAulas() {
       setHorario(dados.horario);
       setStatus(dados.status);
       setCapacidade(dados.capacidade);
-      setIdEquipamento(dados.idequipamentos);
-      setQuantidadeEquipamentoUtilizado(dados.quantidadeEquipamentoUtilizado);
-      setIdCliente(dados.idclientes);
+      setIdEquipamentos(dados.equipamentos || [{ idequipamento: 0, quantidade: '' }]);
+      setIdCliente(Array.isArray(dados.idcliente) ? dados.idcliente : dados.idcliente ? [dados.idcliente] : []);
       setDescricao(dados.descricao);
     }
   }
 
-    const[ dadosClientes, setDadosClientes] = React.useState(null);  
+  const[ dadosClientes, setDadosClientes] = React.useState(null);  
    
-       useEffect(()=> {
-         axios.get(`${BASE_URL}/clientes`).then((response) => {
-           setDadosClientes(response.data);  
-       });
-     }, []);
+  useEffect(()=> {
+    axios.get(`${BASE_URL}/clientes`).then((response) => {
+      setDadosClientes(response.data);  
+    });
+  }, []);
 
-     const[ dadosFuncionarios, setDadosFuncionarios] = React.useState(null);  
+  const[ dadosFuncionarios, setDadosFuncionarios] = React.useState(null);  
    
-       useEffect(()=> {
-         axios.get(`${BASE_URL}/funcionarios`).then((response) => {
-           setDadosFuncionarios(response.data);  
-       });
-     }, []);
+  useEffect(()=> {
+    axios.get(`${BASE_URL}/funcionarios`).then((response) => {
+      setDadosFuncionarios(response.data);  
+    });
+  }, []);
 
-     const[ dadosEquipamentos, setDadosEquipamentos] = React.useState(null);  
+  const[ dadosEquipamentos, setDadosEquipamentos] = React.useState(null);  
    
-       useEffect(()=> {
-         axios.get(`${BASE_URL}2/equipamentos`).then((response) => {
-           setDadosEquipamentos(response.data);  
-       });
-     }, []);
+  useEffect(()=> {
+    axios.get(`${BASE_URL}2/equipamentos`).then((response) => {
+      setDadosEquipamentos(response.data);  
+    });
+  }, []);
 
 
   useEffect(() => {
@@ -161,14 +190,6 @@ function CadastroAulas() {
   if (!dadosClientes) return null;
   if (!dadosFuncionarios) return null;
   if (!dadosEquipamentos) return null;
-
-
-
-  function adicionarEquipamentos() {
-    setIdEquipamento([
-      ...idequipamentos, { id: '', nome: '' }
-    ]);
-  }
 
   return (
     <div className="container">
@@ -243,57 +264,96 @@ function CadastroAulas() {
               </FormGroup>
               <br></br>
               <SubCard title='Equipamentos'>
-                <FormGroup label='Equipamentos Utilizados: *' htmlFor='selectEquipamento'>
-                  <select
-                    id='selectEquipamento'
-                    value={idequipamentos}
-                    className='form-select'
-                    name='idequipamentos'
-                    onChange={(e) => setIdEquipamento(e.target.value)}
-                  >
-                  <option key='0' value='0'>
-                    {' '}
-                  </option>
-                  {dadosEquipamentos.map((dado) => (
-                    <option key={dado.id} value={dado.id}>
-                      {dado.nome}
-                    </option>
-                  ) )}
+                {equipamentos.map((item, index) => (
+                  <div key={index} className="mb-3">
+                    <FormGroup label={`Equipamento ${index + 1}: *`} htmlFor={`selectEquipamento${index}`}>
+                      <select
+                        id={`selectEquipamento${index}`}
+                        value={item.idequipamento}
+                        className="form-select"
+                        name="idequipamentos"
+                        onChange={(e) => atualizarEquipamento(index, 'idequipamento', e.target.value)}
+                      >
+                        <option key="0" value="0">
+                          {' '}
+                        </option>
+                        {dadosEquipamentos.map((dado) => (
+                          <option key={dado.id} value={dado.id}>
+                            {dado.nome}
+                          </option>
+                        ))}
+                      </select>
+                    </FormGroup>
 
-                  </select> 
-                </FormGroup>
+                    <FormGroup label="Quantidade:" htmlFor={`inputQuantidade${index}`}>
+                      <input
+                        type="number"
+                        id={`inputQuantidade${index}`}
+                        className="form-control"
+                        name="quantidadeEquipamentoUtilizado"
+                        value={item.quantidade}
+                        onChange={(e) => atualizarEquipamento(index, 'quantidade', e.target.value)}
+                        placeholder="Informe a quantidade utilizada"
+                      />
+                    </FormGroup>
 
-                
+                    <button
+                      type="button"
+                      className="btn btn-danger btn-sm mt-1"
+                      onClick={() => removerEquipamento(index)}
+                    >
+                      Remover
+                    </button>
+                  </div>
+                ))}
+
                 <button
-                  type='button'
-                  className='btn btn-secondary mb-3'
-                  onClick={adicionarEquipamentos}
+                  type="button"
+                  className="btn btn-secondary"
+                  onClick={adicionarEquipamento}
                 >
-                    + Adicionar Equipamentos
+                  + Adicionar Equipamento
                 </button>
 
               </SubCard>
 
               <SubCard title='Clientes'>
-                <FormGroup label='Clientes participantes: *' htmlFor='selectCliente'>
-                  <select
-                    id='selectCliente'
-                    value={idclientes}
-                    className='form-select'
-                    name='idclientes'
-                    onChange={(e) => setIdCliente(e.target.value)}
+                 {idcliente.map((idcliente, index) => (
+                    <div key={index} className="mb-3">
+                      <FormGroup label={`Cliente participante ${index + 1}: *`} htmlFor={`selectCliente${index}`}>
+                        <select
+                          id={`selectCliente${index}`}
+                          value={idcliente}
+                          className='form-select'
+                          name='idcliente'
+                          onChange={(e) => atualizarCliente(index, e.target.value)}
+                        >
+                          <option key='0' value='0'>
+                            {' '}
+                          </option>
+                          {dadosClientes.map((dado) => (
+                            <option key={dado.id} value={dado.id}>
+                              {dado.nome}
+                            </option>
+                          ))}
+                        </select> 
+                      </FormGroup>
+                      <button
+                        type="button"
+                        className="btn btn-danger btn-sm mt-1"
+                        onClick={() => removerCliente(index)}
+                      >
+                        Remover
+                      </button>
+                    </div>
+                  ))}
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    onClick={adicionarCliente}
                   >
-                  <option key='0' value='0'>
-                    {' '}
-                  </option>
-                  {dadosClientes.map((dado) => (
-                    <option key={dado.id} value={dado.id}>
-                      {dado.nome}
-                    </option>
-                  ) )}
-
-                  </select> 
-                </FormGroup>
+                    + Adicionar Cliente
+                  </button>
               </SubCard>
 
               <FormGroup label='Status: *' htmlFor='inputStatus'>
