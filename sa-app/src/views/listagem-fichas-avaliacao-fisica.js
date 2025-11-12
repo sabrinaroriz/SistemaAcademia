@@ -30,6 +30,9 @@ function ListagemFichasAvaliacaoFisica() {
   };
 
   const [dados, setDados] = React.useState(null);
+  const [dadosClientes, setDadosClientes] = React.useState([]);
+  const [dadosFuncionarios, setDadosFuncionarios] = React.useState([]);
+  
 
   async function excluir(id) {
     let data = JSON.stringify({ id });
@@ -55,10 +58,40 @@ function ListagemFichasAvaliacaoFisica() {
   React.useEffect(() => {
     axios.get(baseURL).then((response) => {
       setDados(response.data);
-    });
+    })
+    .catch((error) => {
+        console.error('Erro ao buscar dados:', error);
+      });
   }, []);
 
+  React.useEffect(() => {
+    axios.get(`${BASE_URL}/clientes`).then((response) => {
+      setDadosClientes(response.data);
+    })
+    .catch((error) => {
+        console.error('Erro ao buscar clientes:', error);
+      });
+  }, []);
+
+  React.useEffect(() => {
+    axios.get(`${BASE_URL}/funcionarios`).then((response) => {
+      setDadosFuncionarios(response.data);
+    })
+    .catch((error) => {
+        console.error('Erro ao buscar funcionarios:', error);
+      });
+  }, []);
   if (!dados) return null;
+
+  function getNomeCliente(idcliente) {
+    const cliente = dadosClientes.find(c => c.id === idcliente);
+    return cliente ? cliente.nome : 'Sem cliente';
+  }
+
+  function getNomeFuncionario(idfuncionario) {
+    const funcionario = dadosFuncionarios.find(c => c.id === idfuncionario);
+    return funcionario ? funcionario.nome : 'Sem funcionario';
+  }
 
   return (
     <div className='container'>
@@ -88,8 +121,8 @@ function ListagemFichasAvaliacaoFisica() {
                   {dados.map((dado) => (
                     <tr key={dado.id}>
                       <td>{dado.datafichaavaliacao}</td>
-                      <td>{dado.cliente.id} - {dado.cliente.nome}</td>
-                      <td>{dado.funcionario.id} - {dado.funcionario.nome}</td>
+                      <td>{getNomeCliente(dado.idcliente)}</td>
+                      <td>{getNomeFuncionario(dado.idfuncionario)}</td>
                       <td>{dado.peso}</td>
                       <td>{dado.altura}</td>
 

@@ -28,6 +28,8 @@ function ListagemTreinos() {
   };
 
   const [dados, setDados] = React.useState(null);
+  const [dadosClientes, setDadosClientes] = React.useState([]);
+  const [dadosFuncionarios, setDadosFuncionarios] = React.useState([]);
 
   async function excluir(id) {
     let data = JSON.stringify({ id });
@@ -51,17 +53,38 @@ function ListagemTreinos() {
   }
 
   React.useEffect(() => {
-    axios
-      .get(baseURL)
-      .then((response) => {
+    axios.get(baseURL).then((response) => {
         setDados(response.data);
-      })
-      .catch((error) => {
-        mensagemErro('Erro ao buscar os Treinos.');
       });
   }, []);
 
+  React.useEffect(() => {
+    axios.get(`${BASE_URL}/clientes`).then((response) => {
+      setDadosClientes(response.data);
+    });
+  }, []);
+
+  React.useEffect(() => {
+    axios.get(`${BASE_URL}/funcionarios`).then((response) => {
+      setDadosFuncionarios(response.data);
+    });
+  }, []);
+
+  console.log(dados)
+  console.log(dadosClientes)
+  console.log(dadosFuncionarios)
+
   if (!dados) return null;
+
+  function getNomeCliente(idcliente) {
+    const cliente = dadosClientes.find(c => c.id === idcliente);
+    return cliente ? cliente.nome : 'Sem cliente';
+  }
+
+  function getNomeFuncionario(idfuncionario) {
+    const funcionario = dadosFuncionarios.find(c => c.id === idfuncionario);
+    return funcionario ? funcionario.nome : 'Sem funcionario';
+  }
 
   return (
     <div className='container'>
@@ -95,8 +118,8 @@ function ListagemTreinos() {
                     <tr key={dado.id}>
                       <td>{dado.nome}</td>
                       <td>{dado.dataregistroficha}</td>
-                      <td>{dado.idcliente.id} - {dado.idcliente.nome}</td>
-                      <td>{dado.idfuncionario.id} - {dado.idfuncionario.nome}</td>
+                      <td>{getNomeCliente(dado.idcliente)}</td>
+                      <td>{getNomeFuncionario(dado.idfuncionario)}</td>
                       <td>{dado.idexercicios.id} - {dado.idexercicios.nome}</td>
                       <td>{dado.series}</td>
                       <td>{dado.repeticoes}</td>

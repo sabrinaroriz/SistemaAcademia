@@ -22,7 +22,7 @@ function CadastroFuncionarios() {
   const [dataNascimento, setDataNascimento] = useState('');
   const [idcargo, setIdCargo] = useState('');
   const [dataAdmissao, setDataAdmissao] = useState('');
-  const [status, setStatus] = useState('Ativo');
+  const [status, setStatus] = useState('');
   const [observacoes, setObservacoes] = useState('');
   const [logradouro, setLogradouro] = useState('');
   const [numero, setNumero] = useState('');
@@ -147,11 +147,11 @@ function CadastroFuncionarios() {
     }
   }
 
-    const[ dadosCargo, setDadosCargo] = React.useState(null);  
+    const[ dadosCargos, setDadosCargos] = React.useState(null);  
 
     useEffect(()=> {
       axios.get(`${BASE_URL}/cargos`).then((response) => {
-        setDadosCargo(response.data);  
+        setDadosCargos(response.data);  
     });
   }, []);
   
@@ -160,7 +160,7 @@ function CadastroFuncionarios() {
   }, [id]);
 
   if (!dados) return null;
-  if (!dadosCargo) return null;
+  if (!dadosCargos) return null;
 
   return (
     <div className="container">
@@ -329,13 +329,13 @@ function CadastroFuncionarios() {
                   id="selectCargo"
                   className="form-select"
                   value={idcargo}
-                  name='cargo'
+                  name='idcargo'
                   onChange={(e) => setIdCargo(e.target.value)}
                 >
                   <option key='0' value='0'>
                     {' '}
                   </option>
-                  {dadosCargo.map((dado) => (
+                  {dadosCargos.map((dado) => (
                     <option key={dado.id} value={dado.id}>
                       {dado.nome}
                     </option>

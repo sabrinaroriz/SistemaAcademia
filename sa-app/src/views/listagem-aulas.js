@@ -30,6 +30,7 @@ function ListagemAulas() {
   };
 
   const [dados, setDados] = React.useState(null);
+  const [dadosFuncionarios, setDadosFuncionarios] = React.useState([]);
 
   async function excluir(id) {
     let data = JSON.stringify({ id });
@@ -58,7 +59,20 @@ function ListagemAulas() {
     });
   }, []);
 
+  React.useEffect(() => {
+    axios.get(`${BASE_URL}/funcionarios`).then((response) => {
+      setDadosFuncionarios(response.data);
+    });
+  }, []);
+  console.log(dados)
+  console.log(dadosFuncionarios)
+
   if (!dados) return null;
+
+  function getNomeFuncionario(idfuncionario) {
+    const funcionario = dadosFuncionarios.find(c => c.id === idfuncionario);
+    return funcionario ? funcionario.nome : 'Sem funcionario';
+  }
 
   return (
     <div className='container'>
@@ -88,8 +102,8 @@ function ListagemAulas() {
                   {dados.map((dado) => (
                     <tr key={dado.id}>
                       <td>{dado.nome}</td>
-                      <td>{dado.idfuncionario.id} - {dado.idfuncionario.nome}</td>
-                      <td>{dado.data}</td>
+                      <td>{getNomeFuncionario(dado.idfuncionario)}</td>
+                      <td>{dado.dataAula}</td>
                       <td>{dado.horario}</td>
                       <td>{dado.status}</td>
                       <td>

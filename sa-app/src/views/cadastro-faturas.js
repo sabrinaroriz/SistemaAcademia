@@ -113,11 +113,51 @@ function CadastroFaturas() {
     }
   }
 
+  const [dadosClientes, setDadosClientes] = React.useState(null);
+  const [dadosPlanos, setDadosPlanos] = React.useState(null);
+  const [dadosFormasPagamento, setDadosFormasPagamento] = React.useState(null);
+  const [dadosAjustesFinanceiros, setDadosAjustesFinanceiros] = React.useState(null);
+
+
+  useEffect(() => {
+    axios.get(`${BASE_URL}/clientes`).then((response) => {
+      setDadosClientes(response.data);
+    });
+  }, []);
+
+  useEffect(() => {
+    axios.get(`${BASE_URL}/planos`).then((response) => {
+      setDadosPlanos(response.data);
+    });
+  }, []);
+
+  useEffect(() => {
+    axios.get(`${BASE_URL}3/formaspagamento`).then((response) => {
+      setDadosFormasPagamento(response.data);
+    });
+  }, []);
+
+  useEffect(() => {
+    axios.get(`${BASE_URL}3/ajustesfinanceiros`).then((response) => {
+      setDadosAjustesFinanceiros(response.data);
+    });
+  }, []);
+
+  function getNomePlano(idcliente) {
+    const cliente = dadosClientes.find(c => c.id === idcliente);
+    const plano = dadosPlanos.find(c => c.id === cliente.idplano);
+    return plano ? plano.nome : 'Sem plano';
+  }
+
+
   useEffect(() => {
     buscar(); // eslint-disable-next-line
   }, [id]);
 
   if (!dados) return null;
+  if (!dadosClientes) return null;
+  if (!dadosFormasPagamento) return null;
+  if (!dadosAjustesFinanceiros) return null;
 
   const currency = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
   const previewFinal = document.getElementById('previewFinal');
@@ -136,52 +176,73 @@ function CadastroFaturas() {
           <div className='col-lg-12'>
             <div className='bs-component'>
 
-              <FormGroup label='Cliente: *' htmlFor='selectIdCliente'>
+              <FormGroup label='Cliente: *' htmlFor='selectCliente'>
                 <select
-                  id='selectIdCliente'
+                  id='selectCliente'
                   value={idcliente}
                   className='form-select'
                   name='idcliente'
-                  onChange={(e) => setIdCliente(e.target.value)}
+                  onChange={(e) => setIdCliente(e.target.value)
+                    
+                  }
                 >
-                  <option></option>
-
+                  <option key='0' value='0'>
+                    {''}
+                  </option>
+                  {dadosClientes.map((dado) => (
+                    <option key={dado.id} value={dado.id}>
+                      {dado.nome}
+                    </option>
+                  ))}
                 </select>
               </FormGroup>
 
-              <FormGroup label='Plano do Cliente:' htmlFor='inputIdPlano'>
+              <FormGroup label='Plano do Cliente:' htmlFor='inputPlano'>
                 <input
-                  id='selectIdPlano'
+                  id='inputPlano'
                   type='text'
-                  value={idplano}
+                  value={0}
                   className='form-control'
                   name='idplano'
-                  readonly placeholder='Plano do cliente'
                 />
               </FormGroup>
 
-              <FormGroup label='Forma de Pagamento: *' htmlFor='selectIdFormaPagamento'>
+              <FormGroup label='Forma de Pagamento: *' htmlFor='selectFormaPagamento'>
                 <select
-                  id='selectIdFormaPagamento'
+                  id='selectFormaPagamento'
                   value={idformaspagamento}
                   className='form-select'
                   name='idformaspagamento'
                   onChange={(e) => setIdFormasPagamento(e.target.value)}
                 >
-                  <option></option>
+                  <option key='0' value='0'>
+                    {''}
+                  </option>
+                  {dadosFormasPagamento.map((dado) => (
+                    <option key={dado.id} value={dado.id}>
+                      {dado.nome}
+                    </option>
+                  ))}
 
                 </select>
               </FormGroup>
 
-              <FormGroup label='Ajuste: *' htmlFor='selectIdAjusteFinanceiro'>
+              <FormGroup label='Ajuste: *' htmlFor='selectAjusteFinanceiro'>
                 <select
-                  id='selectIdAjusteFinanceiro'
+                  id='selectAjusteFinanceiro'
                   value={idajustesfinanceiros}
                   className='form-select'
                   name='idajustesfinanceiros'
                   onChange={(e) => setIdAjustesFinanceiros(e.target.value)}
                 >
-                  <option></option>
+                  <option key='0' value='0'>
+                    {''}
+                  </option>
+                  {dadosAjustesFinanceiros.map((dado) => (
+                    <option key={dado.id} value={dado.id}>
+                      {dado.nome}
+                    </option>
+                  ))}
 
                 </select>
               </FormGroup>

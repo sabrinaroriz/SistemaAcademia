@@ -30,6 +30,9 @@ function ListagemFaturas() {
   };
 
   const [dados, setDados] = React.useState(null);
+  const [dadosClientes, setDadosClientes] = React.useState([]);
+  const [dadosPlanos, setDadosPlanos] = React.useState([]);
+  
 
   async function excluir(id) {
     let data = JSON.stringify({ id });
@@ -58,7 +61,33 @@ function ListagemFaturas() {
     });
   }, []);
 
+  React.useEffect(() => {
+    axios.get(`${BASE_URL}/clientes`).then((response) => {
+      setDadosClientes(response.data);
+    });
+  }, []);
+
+  React.useEffect(() => {
+    axios.get(`${BASE_URL}/planos`).then((response) => {
+      setDadosPlanos(response.data);
+    });
+  }, []);
+
+
   if (!dados) return null;
+
+  function getNomeCliente(idcliente) {
+    const cliente = dadosClientes.find(c => c.id === idcliente);
+    return cliente ? cliente.nome : 'Sem cliente';
+  }
+
+  function getNomePlano(idcliente) {
+    const cliente = dadosClientes.find(c => c.id === idcliente);
+    const plano = dadosPlanos.find(c => c.id === cliente.idplano);
+    return plano ? plano.nome : 'Sem plano';
+  }
+
+  
 
   return (
     <div className='container'>
@@ -79,7 +108,7 @@ function ListagemFaturas() {
                     <th scope='col'>Nome do cliente</th>
                     <th scope='col'>Data de vencimento</th>
                     <th scope='col'>Data de pagamento</th>
-                    <th scope='col'>Plano</th>
+                    <th scope='col'>Plano do Cliente</th>
                     <th scope='col'>Em Atraso</th>
                     <th scope='col'>Dias de Atraso</th>
                     <th scope='col'>Multa</th>
@@ -89,10 +118,10 @@ function ListagemFaturas() {
                 <tbody>
                   {dados.map((dado) => (
                     <tr key={dado.id}>
-                      <td>{dado.idcliente.id} - {dado.idcliente.nome}</td>
+                      <td>{getNomeCliente(dado.idcliente)}</td>
                       <td>{dado.datavencimento}</td>
                       <td>{dado.datapagamento}</td>
-                      <td>{dado.idplano.id} - {dado.idplano.nome}</td>
+                      <td>{getNomePlano(dado.idcliente)}</td>
                       <td>{dado.ematraso}</td>
                       <td>{dado.diasatraso}</td>
                       <td>{dado.multa}</td>

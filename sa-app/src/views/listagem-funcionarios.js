@@ -30,6 +30,7 @@ function ListagemFuncionarios() {
   };
 
   const [dados, setDados] = React.useState(null);
+  const [dadosCargos, setDadosCargos] = React.useState([]);
 
   async function excluir(id) {
     let data = JSON.stringify({ id });
@@ -58,7 +59,19 @@ function ListagemFuncionarios() {
     });
   }, []);
 
+  React.useEffect(() => {
+    axios.get(`${BASE_URL}/cargos`).then((response) => {
+      setDadosCargos(response.data);
+    });
+  }, []);
+  console.log(dados)
+  console.log(dadosCargos)
   if (!dados) return null;
+  
+  function getNomeCargo(idcargo) {
+    const cargo = dadosCargos.find(c => c.id === idcargo);
+    return cargo ? cargo.nome : 'Sem cargo';
+  }
 
   return (
     <div className='container'>
@@ -91,7 +104,7 @@ function ListagemFuncionarios() {
                       <td>{dado.cpf}</td>
                       <td>{dado.telefone}</td>
                       <td>{dado.email}</td>
-                      <td>{dado.idcargo.id} - {dado.idcargo.nome}</td>
+                      <td>{getNomeCargo(dado.idcargo)}</td>
                       <td>
                         <Stack spacing={1} padding={0} direction='row'>
                           <IconButton

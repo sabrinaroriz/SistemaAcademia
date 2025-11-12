@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import CurrencyInput from 'react-currency-input-field';
 
 import Stack from '@mui/material/Stack';
 
@@ -22,8 +21,8 @@ function CadastroFichasAvaliacaoFisica() {
   const baseURL = `${BASE_URL}3/fichasavaliacaofisica`;
 
   const [id, setId] = useState('');
-  const [idcliente, setIdCliente] = useState('');
-  const [idfuncionario, setIdFuncionario] = useState('');
+  const [idcliente, setIdCliente] = useState(0);
+  const [idfuncionario, setIdFuncionario] = useState(0);
   const [datafichaavaliacao, setDataFichaAvaliacao] = useState('');
   const [peso, setPeso] = useState('');
   const [altura, setAltura] = useState('');
@@ -33,8 +32,8 @@ function CadastroFichasAvaliacaoFisica() {
 
   function cancelar() {
     if (idParam != null) {
-    navigate('/listagem-fichas-avaliacao-fisica');
-    return;
+      navigate('/listagem-fichas-avaliacao-fisica');
+      return;
     }
     const temCamposPreenchidos =
        idcliente !== '' || idfuncionario !== '' || datafichaavaliacao !== ''|| peso !== ''|| altura !== ''|| descricao !== '';
@@ -144,12 +143,12 @@ function CadastroFichasAvaliacaoFisica() {
         <div className='row'>
           <div className='col-lg-12'>
             <div className='bs-component'>
-              <FormGroup label='Cliente: *' htmlFor='selectIdCliente'>
+              <FormGroup label='Cliente: *' htmlFor='selectCliente'>
                 <select
-                  id='selectIdCliente'
+                  id='selectCliente'
                   value={idcliente}
                   className='form-select'
-                  name='cliente'
+                  name='idcliente'
                   onChange={(e) => setIdCliente(e.target.value)}
                   >
                   <option key='0' value='0'>
@@ -162,12 +161,12 @@ function CadastroFichasAvaliacaoFisica() {
                   ))}
                 </select>
               </FormGroup>
-              <FormGroup label='Funcionario: *' htmlFor='selectIdFuncionario'>
+              <FormGroup label='Funcionario: *' htmlFor='selectFuncionario'>
                 <select
-                  id='selectIdFuncionario'
+                  id='selectFuncionario'
                   value={idfuncionario}
                   className='form-select'
-                  name='funcionario'
+                  name='idfuncionario'
                   onChange={(e) => setIdFuncionario(e.target.value)}
                   >
                   <option key='0' value='0'>

@@ -30,6 +30,7 @@ function ListagemClientes() {
   };
 
   const [dados, setDados] = React.useState(null);
+  const [dadosPlanos, setDadosPlanos] = React.useState([]);
 
   async function excluir(id) {
     let data = JSON.stringify({ id });
@@ -58,7 +59,18 @@ function ListagemClientes() {
     });
   }, []);
 
+  React.useEffect(() => {
+    axios.get(`${BASE_URL}/planos`).then((response) => {
+      setDadosPlanos(response.data);
+    });
+  }, []);
+
   if (!dados) return null;
+
+  function getNomePlano(idplano) {
+    const plano = dadosPlanos.find(c => c.id === idplano);
+    return plano ? plano.nome : 'Sem Plano';
+  }
 
   return (
     <div className='container'>
@@ -79,6 +91,7 @@ function ListagemClientes() {
                     <th scope='col'>Nome</th>
                     <th scope='col'>CPF</th>
                     <th scope='col'>Telefone</th>
+                    <th scope='col'>Plano</th>
                     <th scope='col'>Status</th>
                     <th scope='col'>Ações</th>
                   </tr>
@@ -89,6 +102,7 @@ function ListagemClientes() {
                       <td>{dado.nome}</td>
                       <td>{dado.cpf}</td>
                       <td>{dado.telefone}</td>
+                      <td>{getNomePlano(dado.idplano)}</td>
                       <td>{dado.status}</td>
                       <td>
                         <Stack spacing={1} padding={0} direction='row'>

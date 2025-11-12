@@ -41,8 +41,8 @@ function CadastroClientes() {
 
   function cancelar() {
     if (idParam != null) {
-    navigate('/listagem-clientes');
-    return;
+      navigate('/listagem-clientes');
+      return;
     }
     const temCamposPreenchidos =
       nome !== '' || cpf !== '' || telefone !== '' || status !== '' || datanascimento !== '' || idplano !== '' || logradouro !== '' || numero !== '' || complemento !== '' || bairro !== '' || cidade !== '' || estado !== '' || cep !== '';
@@ -112,7 +112,7 @@ function CadastroClientes() {
         })
         .then(function (response) {
           mensagemSucesso(`Cliente ${nome} alterado com sucesso!`);
-          navigate(`/listagem-cliente`);
+          navigate(`/listagem-clientes`);
         })
         .catch(function (error) {
           mensagemErro(error.response.data);
@@ -142,7 +142,7 @@ function CadastroClientes() {
     }
   }
 
-  const [dadosPlano, setDadosPlanos] = React.useState(null);
+  const [dadosPlanos, setDadosPlanos] = React.useState(null);
 
   useEffect(() => {
     axios.get(`${BASE_URL}/planos`).then((response) => {
@@ -155,7 +155,7 @@ function CadastroClientes() {
   }, [id]);
 
   if (!dados) return null;
-  if (!dadosPlano) return null;
+  if (!dadosPlanos) return null;
 
   return (
     <div className='container'>
@@ -300,7 +300,7 @@ function CadastroClientes() {
 
               <FormGroup label='Plano: *' htmlFor='selectPlano'>
                 <select
-                  id='inputPlano'
+                  id='selectPlano'
                   value={idplano}
                   className='form-select'
                   name='idplano'
@@ -309,7 +309,7 @@ function CadastroClientes() {
                   <option key='0' value='0'>
                     {''}
                   </option>
-                  {dadosPlano.map((dado) => (
+                  {dadosPlanos.map((dado) => (
                     <option key={dado.id} value={dado.id}>
                       {dado.nome}
                     </option>

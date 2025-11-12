@@ -189,14 +189,14 @@ function CadastroEquipamentos() {
                         <input
                             type="radio"
                             id='disponivelNao'
-                            value="nao"
+                            value="não"
                             className="form-check-input"
                             name='disponivel'
                             checked={disponivel === "não"}
                             onChange={(e) => setDisponivel(e.target.value)}
                         />
                         <label className="form-check-label" htmlFor="disponivelNao">
-                            Nao
+                            Não
                         </label>
                     </div>
                 </div>

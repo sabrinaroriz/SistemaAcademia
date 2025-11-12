@@ -21,14 +21,14 @@ function CadastroAulas() {
 
   const [id, setId] = useState('');
   const [nome, setNome] = useState('');
-  const [idfuncionario, setIdFuncionario] = useState('');
-  const [data, setData] = useState('');
+  const [idfuncionario, setIdFuncionario] = useState(0);
+  const [dataAula, setDataAula] = useState('');
   const [horario, setHorario] = useState('');
   const [status, setStatus] = useState('');
   const [capacidade, setCapacidade] = useState('');
-  const [idequipamentos, setIdEquipamento] = useState('');
+  const [idequipamentos, setIdEquipamento] = useState(0);
   const [quantidadeEquipamentoUtilizado, setQuantidadeEquipamentoUtilizado] = useState('');
-  const [idclientes, setIdCliente] = useState('');
+  const [idclientes, setIdCliente] = useState(0);
   const [descricao, setDescricao] = useState('');
 
   const [dados, setDados] = React.useState([]);
@@ -39,7 +39,7 @@ function CadastroAulas() {
       return;
     }
     const temCamposPreenchidos =
-      nome !== '' || idfuncionario !== '' || data !== '' || horario !== '' || capacidade !== '' || idequipamentos !== '' || quantidadeEquipamentoUtilizado!== '' ||idclientes !== '';
+      nome !== '' || idfuncionario !== '' || dataAula !== '' || horario !== '' || capacidade !== '' || idequipamentos !== '' || quantidadeEquipamentoUtilizado!== '' ||idclientes !== '';
 
     if (temCamposPreenchidos) {
       if (window.confirm('Deseja realmente limpar o formulário?')) {
@@ -55,7 +55,7 @@ function CadastroAulas() {
       setId('');
       setNome('');
       setIdFuncionario('');
-      setData('');
+      setDataAula('');
       setHorario('');
       setStatus('');
       setCapacidade('');
@@ -67,7 +67,7 @@ function CadastroAulas() {
       setId(dados.id);
       setNome(dados.nome);
       setIdFuncionario(dados.idfuncionario);
-      setData(dados.data);
+      setDataAula(dados.dataAula);
       setHorario(dados.horario);
       setStatus(dados.status);
       setCapacidade(dados.capacidade);
@@ -79,7 +79,7 @@ function CadastroAulas() {
   }
 
   async function salvar() {
-    let data = { id,nome,idfuncionario,data,horario,
+    let data = { id,nome,idfuncionario,dataAula,horario,
         status,capacidade,idequipamentos,quantidadeEquipamentoUtilizado,idclientes,descricao };
     data = JSON.stringify(data);
     if (idParam == null) {
@@ -117,7 +117,7 @@ function CadastroAulas() {
       setId(dados.id);
       setNome(dados.nome);
       setIdFuncionario(dados.idfuncionario);
-      setData(dados.data);
+      setDataAula(dados.dataAula);
       setHorario(dados.horario);
       setStatus(dados.status);
       setCapacidade(dados.capacidade);
@@ -194,9 +194,9 @@ function CadastroAulas() {
                   type="date"
                   id="inputData"
                   className="form-control"
-                  value={data}
+                  value={dataAula}
                   name='data'
-                  onChange={(e) => setData(e.target.value)}
+                  onChange={(e) => setDataAula(e.target.value)}
                 />
               </FormGroup>
 
@@ -211,9 +211,9 @@ function CadastroAulas() {
                 />
               </FormGroup>
 
-              <FormGroup label='Instrutor: *' htmlFor='selectIdFuncionario'>
+              <FormGroup label='Instrutor: *' htmlFor='selectFuncionario'>
                 <select
-                  id='selectIdFuncionario'
+                  id='selectFuncionario'
                   value={idfuncionario}
                   className='form-select'
                   name='idfuncionario'
@@ -243,9 +243,9 @@ function CadastroAulas() {
               </FormGroup>
               <br></br>
               <SubCard title='Equipamentos'>
-                <FormGroup label='Equipamentos Utilizados: *' htmlFor='selectEquipamentos'>
+                <FormGroup label='Equipamentos Utilizados: *' htmlFor='selectEquipamento'>
                   <select
-                    id='selectEquipamentos'
+                    id='selectEquipamento'
                     value={idequipamentos}
                     className='form-select'
                     name='idequipamentos'
@@ -275,9 +275,9 @@ function CadastroAulas() {
               </SubCard>
 
               <SubCard title='Clientes'>
-                <FormGroup label='Clientes participantes: *' htmlFor='selectClientes'>
+                <FormGroup label='Clientes participantes: *' htmlFor='selectCliente'>
                   <select
-                    id='selectClientes'
+                    id='selectCliente'
                     value={idclientes}
                     className='form-select'
                     name='idclientes'
@@ -302,10 +302,10 @@ function CadastroAulas() {
                         <input
                             type="radio"
                             id='statusAtivo'
-                            value="ativo"
+                            value="Ativo"
                             className="form-check-input"
                             name='status'
-                            checked={status === "ativo"}
+                            checked={status === "Ativo"}
                             onChange={(e) => setStatus(e.target.value)}
                         />
                         <label className="form-check-label" htmlFor="statusAtivo">
@@ -316,10 +316,10 @@ function CadastroAulas() {
                         <input
                             type="radio"
                             id='statusInativo'
-                            value="inativo"
+                            value="Inativo"
                             className="form-check-input"
                             name='status'
-                            checked={status === "inativo"}
+                            checked={status === "Inativo"}
                             onChange={(e) => setStatus(e.target.value)}
                         />
                         <label className="form-check-label" htmlFor="statusInativo">
