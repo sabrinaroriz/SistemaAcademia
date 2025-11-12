@@ -26,7 +26,7 @@ function CadastroAulas() {
   const [horario, setHorario] = useState('');
   const [status, setStatus] = useState('');
   const [capacidade, setCapacidade] = useState('');
-  const [idcliente, setIdCliente] = useState([]);
+  const [clientes, setIdCliente] = useState([{idcliente: 0}]);
   const [descricao, setDescricao] = useState('');
 
   const [equipamentos, setIdEquipamentos] = useState([
@@ -51,17 +51,17 @@ function CadastroAulas() {
   }
 
   function adicionarCliente() {
-  setIdCliente([...idcliente, 0]);
+  setIdCliente([...clientes, { idcliente: 0}]);
   }
 
-  function atualizarCliente(index, valor) {
-    const novosClientes = [...idcliente];
-    novosClientes[index] = valor;
+  function atualizarCliente(index, campo, valor) {
+    const novosClientes = [...clientes];
+    novosClientes[index][campo] = valor;
     setIdCliente(novosClientes);  
   }
 
   function removerCliente(index) {
-  const novosClientes = idcliente.filter((_, i) => i !== index);
+  const novosClientes = clientes.filter((_, i) => i !== index);
   setIdCliente(novosClientes);
  }
 
@@ -71,7 +71,7 @@ function CadastroAulas() {
       return;
     }
     const temCamposPreenchidos =
-      nome !== '' || idfuncionario !== '' || dataAula !== '' || horario !== '' || capacidade !== '' || equipamentos.some(eq => eq.idequipamento !==0 || eq.quantidade!== '') ||idcliente.length >0;
+      nome !== '' || idfuncionario !== '' || dataAula !== '' || horario !== '' || capacidade !== '' || equipamentos.some(eq => eq.idequipamento !==0 || eq.quantidade!== '') || clientes.some(cl => cl.idcliente !== 0);
 
     if (temCamposPreenchidos) {
       if (window.confirm('Deseja realmente limpar o formulário?')) {
@@ -92,7 +92,7 @@ function CadastroAulas() {
       setStatus('');
       setCapacidade('');
       setIdEquipamentos([{ idequipamento: 0, quantidade: '' }]);
-      setIdCliente([]);
+      setIdCliente([{idcliente: 0}]);
       setDescricao('');
     } else {
       setId(dados.id);
@@ -103,14 +103,14 @@ function CadastroAulas() {
       setStatus(dados.status);
       setCapacidade(dados.capacidade);
       setIdEquipamentos(dados.equipamentos || [{ idequipamento: 0, quantidade: '' }]);
-      setIdCliente(dados.idcliente);
+      setIdCliente(dados.clientes || [{ idcliente: 0 }]);
       setDescricao(dados.descricao);
     }
   }
 
   async function salvar() {
     let data = { id,nome,idfuncionario,dataAula,horario,
-        status,capacidade,equipamentos,idcliente,descricao };
+        status,capacidade,equipamentos,clientes,descricao };
     data = JSON.stringify(data);
     if (idParam == null) {
       await axios
@@ -152,7 +152,7 @@ function CadastroAulas() {
       setStatus(dados.status);
       setCapacidade(dados.capacidade);
       setIdEquipamentos(dados.equipamentos || [{ idequipamento: 0, quantidade: '' }]);
-      setIdCliente(Array.isArray(dados.idcliente) ? dados.idcliente : dados.idcliente ? [dados.idcliente] : []);
+      setIdCliente(dados.clientes || [{ idcliente: 0}]);
       setDescricao(dados.descricao);
     }
   }
@@ -318,15 +318,15 @@ function CadastroAulas() {
               </SubCard>
 
               <SubCard title='Clientes'>
-                 {idcliente.map((idcliente, index) => (
+                 {clientes.map((item, index) => (
                     <div key={index} className="mb-3">
                       <FormGroup label={`Cliente participante ${index + 1}: *`} htmlFor={`selectCliente${index}`}>
                         <select
                           id={`selectCliente${index}`}
-                          value={idcliente}
+                          value={item.idcliente}
                           className='form-select'
                           name='idcliente'
-                          onChange={(e) => atualizarCliente(index, e.target.value)}
+                          onChange={(e) => atualizarCliente(index, 'idcliente', e.target.value)}
                         >
                           <option key='0' value='0'>
                             {' '}
