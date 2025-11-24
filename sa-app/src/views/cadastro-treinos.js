@@ -18,6 +18,7 @@ function CadastroTreinos() {
   const { idParam } = useParams();
   const navigate = useNavigate();
   const baseURL = `${BASE_URL}2/treinos`;
+  const baseURLlistaExercicioTreino = `${BASE_URL}4/listaexerciciotreino`;
 
   const [id, setId] = useState('');
   const [nome, setNome] = useState('');
@@ -25,12 +26,27 @@ function CadastroTreinos() {
   const [idfuncionario, setIdFuncionario] = useState('');
   const [dataregistroficha, setDataRegistroFicha] = useState('');
   const [descricao, setDescricao] = useState('');
-  const [idexercicios, setIdExercicios] = useState('');
-  const [series, setSeries] = useState('');
-  const [repeticoes, setRepeticoes] = useState('');
-  const [carga, setCarga] = useState('');
+
+  const [listaexerciciotreino , setListaExercicioTreino] = useState([
+    { id: 0, idtreino: 0, idexercicio: 0, serie: 0, repeticao: 0, carga: 0 }
+  ]);
 
   const [dados, setDados] = React.useState([]);
+
+  function adicionarExercicio() {
+    setListaExercicioTreino([...listaexerciciotreino, { idexercicio: 0, serie: '', repeticao: '', carga: '' }]);
+  }
+
+  function atualizarExercicio(index, campo, valor) {
+    const novos = [...listaexerciciotreino];
+    novos[index][campo] = valor;
+    setListaExercicioTreino(novos);
+  }
+
+  function removerExercicio(index) {
+    const novos = listaexerciciotreino.filter((_, i) => i !== index);
+    setListaExercicioTreino(novos);
+  }
 
   function cancelar() {
     if (idParam != null) {
@@ -38,7 +54,7 @@ function CadastroTreinos() {
       return;
     }
     const temCamposPreenchidos =
-      nome !== '' || idcliente !== '' || idfuncionario !== '' || dataregistroficha !== '' || descricao !== '' || idexercicios !== '' || series !== '' || repeticoes !==''|| carga !=='' ;
+      nome !== '' || idcliente !== '' || idfuncionario !== '' || dataregistroficha !== '' || descricao !== '';
 
     if (temCamposPreenchidos) {
       if (window.confirm('Deseja realmente limpar o formulário?')) {

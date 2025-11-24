@@ -24,6 +24,7 @@ function CadastroAjustesFinanceiros() {
   const [id, setId] = useState('');
   const [nome, setNome] = useState('');
   const [tipo, setTipo] = useState('');
+  const [unidade, setUnidade] = useState('');
   const [valor, setValor] = useState('');
   const [descricao, setDescricao] = useState('');
 
@@ -35,7 +36,7 @@ function CadastroAjustesFinanceiros() {
     return;
     }
     const temCamposPreenchidos =
-      nome !== '' || tipo !== '' || valor !== '' || descricao !== '';
+      nome !== '' || tipo !== '' || unidade !== '' || valor !== '' || descricao !== '';
 
     if (temCamposPreenchidos) {
       if (window.confirm('Deseja realmente limpar o formulário?')) {
@@ -51,19 +52,21 @@ function CadastroAjustesFinanceiros() {
       setId('');
       setNome('');
       setTipo('');
+      setUnidade('');
       setValor('');
       setDescricao('');
     } else {
       setId(dados.id);
       setNome(dados.nome);
       setTipo(dados.tipo);
+      setUnidade(dados.unidade);
       setValor(dados.valor);
       setDescricao(dados.descricao);
     }
   }
 
   async function salvar() {
-    let data = { id, nome, tipo, valor, descricao};
+    let data = { id, nome, tipo, unidade, valor, descricao};
     data = JSON.stringify(data);
     if (idParam == null) {
       await axios
@@ -100,6 +103,7 @@ function CadastroAjustesFinanceiros() {
       setId(dados.id);
       setNome(dados.nome);
       setTipo(dados.tipo);
+      setUnidade(dados.unidade);
       setValor(dados.valor);
       setDescricao(dados.descricao);
     }
@@ -128,9 +132,9 @@ function CadastroAjustesFinanceiros() {
                   onChange={(e) => setNome(e.target.value)}
                 />
               </FormGroup>
-              <FormGroup label='Tipo: *' htmlFor='inputTipo'>
+              <FormGroup label='Tipo: *' htmlFor='selectTipo'>
                 <select
-                  id='inputTipo'
+                  id='selectTipo'
                   value={tipo}
                   className='form-select'
                   name='tipo'
@@ -141,19 +145,44 @@ function CadastroAjustesFinanceiros() {
                     <option value='Acréscimo'>Acréscimo</option>
                 </select>
               </FormGroup>
+              <FormGroup label='Unidade: *' htmlFor='SelectUnidade'>
+                <select
+                  id='SelectUnidade'
+                  value={unidade}
+                  className='form-select'
+                  name='unidade'
+                  onChange={(e) => setUnidade(e.target.value)}
+                  >
+                    <option value=''>Selecione...</option>
+                    <option value='Porcentagem'>%</option>
+                    <option value='Moeda'>R$</option>
+                </select>
+              </FormGroup>
               <FormGroup label='Valor: *' htmlFor='inputValor'>
-                <CurrencyInput
-                  id='inputValor'
-                  value={valor}
-                  className='form-control'
-                  name='valor'
-                  placeholder='R$ 0,00'
-                  decimalsLimit={2}
-                  decimalSeparator=','
-                  groupSeparator='.'
-                  prefix='R$'
-                  onValueChange={(value) => setValor(value||'')}
-                />
+                {unidade === 'Moeda' ? (
+                  <CurrencyInput
+                    id='inputValor'
+                    value={valor}
+                    className='form-control'
+                    name='valor'
+                    placeholder='R$ 0,00'
+                    decimalsLimit={2}
+                    decimalSeparator=','
+                    groupSeparator='.'
+                    prefix='R$ '
+                    onValueChange={(value) => setValor(value || '')}
+                  />
+                ) : (
+                  <input
+                    type='number'
+                    id='inputValor'
+                    value={valor}
+                    className='form-control'
+                    name='valor'
+                    placeholder='0%'
+                    onChange={(e) => setValor(e.target.value)}
+                  />
+                )}
               </FormGroup>
               <FormGroup label='Descrição:' htmlFor='inputDescricao'>
                 <textarea

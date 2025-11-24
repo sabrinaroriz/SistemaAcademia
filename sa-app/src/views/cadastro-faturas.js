@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import Stack from '@mui/material/Stack';
 
 import Card from '../components/card';
+import SubCard from '../components/sub-card';
 import FormGroup from '../components/form-group';
 
 import { mensagemSucesso, mensagemErro } from '../components/toastr';
@@ -26,10 +27,25 @@ function CadastroFaturas() {
   const [datavencimento, setDataVencimento] = useState('');
   const [datapagamento, setDataPagamento] = useState('');
   const [idformaspagamento, setIdFormasPagamento] = useState('');
-  const [idajustesfinanceiros, setIdAjustesFinanceiros] = useState('');
-
+  const [ajustesfinanceiros, setIdAjustesFinanceiros] = useState([{idajustefinanceiro: 0}]);
+  const [valorFinal, setValorFinal] = useState(0);
 
   const [dados, setDados] = React.useState([]);
+
+  function adicionarAjusteFinanceiro() {
+  setIdAjustesFinanceiros([...ajustesfinanceiros, { idajustefinanceiro: 0}]);
+  }
+
+  function atualizarAjusteFinanceiro(index, campo, valor) {
+    const novosAjustesFinanceiros = [...ajustesfinanceiros];
+    novosAjustesFinanceiros[index][campo] = valor;
+    setIdAjustesFinanceiros(novosAjustesFinanceiros);  
+  }
+
+  function removeAjusteFinanceiro(index) {
+  const novosAjustesFinanceiros = ajustesfinanceiros.filter((_, i) => i !== index);
+  setIdAjustesFinanceiros(novosAjustesFinanceiros);
+ }
 
   function cancelar() {
     if (idParam != null) {
@@ -37,7 +53,7 @@ function CadastroFaturas() {
     return;
     }
     const temCamposPreenchidos =
-      idcliente !== '' || idplano !== '' || datavencimento !== '' || datapagamento !== '' || idformaspagamento !== '' || idajustesfinanceiros !== '';
+      idcliente !== '' || idplano !== '' || datavencimento !== '' || datapagamento !== '' || idformaspagamento !== '' || ajustesfinanceiros.some(aj => aj.idajustefinanceiro !== 0);
 
     if (temCamposPreenchidos) {
       if (window.confirm('Deseja realmente limpar o formulário?')) {
@@ -56,7 +72,7 @@ function CadastroFaturas() {
       setDataVencimento('');
       setDataPagamento('');
       setIdFormasPagamento('');
-      setIdAjustesFinanceiros('');
+      setIdAjustesFinanceiros([{idajustefinanceiro:0}]);
     } else {
       setId(dados.id);
       setIdCliente(dados.idcliente);
@@ -64,12 +80,12 @@ function CadastroFaturas() {
       setDataVencimento(dados.datavencimento);
       setDataPagamento(dados.datapagamento);
       setIdFormasPagamento(dados.idformaspagamento);
-      setIdAjustesFinanceiros(dados.idajustesfinanceiros);
+      setIdAjustesFinanceiros(dados.ajustesfinanceiros || [{idajustefinanceiro: 0}]);
     }
   }
 
   async function salvar() {
-    let data = { id, idcliente, idplano, datavencimento, datapagamento, idformaspagamento, idajustesfinanceiros};
+    let data = { id, idcliente, idplano, datavencimento, datapagamento, idformaspagamento, ajustesfinanceiros};
     data = JSON.stringify(data);
     if (idParam == null) {
       await axios
@@ -109,7 +125,7 @@ function CadastroFaturas() {
       setDataVencimento(dados.datavencimento);
       setDataPagamento(dados.datapagamento);
       setIdFormasPagamento(dados.idformaspagamento);
-      setIdAjustesFinanceiros(dados.idajustesfinanceiros);
+      setIdAjustesFinanceiros(dados.ajustesfinanceiros || [{idajustefinanceiro:0}]);
     }
   }
 
@@ -143,11 +159,23 @@ function CadastroFaturas() {
     });
   }, []);
 
+  useEffect(() => {
+    if (datavencimento !== '') {
+      const final = 10; // valor que será recebido pelo back-end
+      setValorFinal(final);
+    }
+  }, [datavencimento]);
+
   function getNomePlano(idcliente) {
-    const cliente = dadosClientes.find(c => c.id === idcliente);
-    const plano = dadosPlanos.find(c => c.id === cliente.idplano);
-    return plano ? plano.nome : 'Sem plano';
+  if (!dadosClientes || !dadosPlanos) return 'Sem plano'; // caso dados ainda não carregaram
+
+  const cliente = dadosClientes.find(c => c.id === Number(idcliente)); // cuidado: value do select é string
+  if (!cliente) return 'Sem plano';
+
+  const plano = dadosPlanos.find(c => c.id === cliente.idplano);
+  return plano ? plano.nome : 'Sem plano';
   }
+
 
 
   useEffect(() => {
@@ -160,14 +188,6 @@ function CadastroFaturas() {
   if (!dadosAjustesFinanceiros) return null;
 
   const currency = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
-  const previewFinal = document.getElementById('previewFinal');
-  function updatePreview() {
-      const final = 10;//valor que será recebido pelo back-end
-      previewFinal.textContent = `Valor final: ${currency.format(final)}`;
-  }
-  if (datavencimento!== '') {
-        updatePreview();
-    }
 
   return (
     <div className='container'>
@@ -201,8 +221,8 @@ function CadastroFaturas() {
                 <input
                   id='inputPlano'
                   type='text'
-                  value={0}
-                  className='form-control'
+                  value={getNomePlano(idcliente)}
+                 className='form-control'
                   name='idplano'
                 />
               </FormGroup>
@@ -226,26 +246,45 @@ function CadastroFaturas() {
 
                 </select>
               </FormGroup>
-
-              <FormGroup label='Ajuste: *' htmlFor='selectAjusteFinanceiro'>
-                <select
-                  id='selectAjusteFinanceiro'
-                  value={idajustesfinanceiros}
-                  className='form-select'
-                  name='idajustesfinanceiros'
-                  onChange={(e) => setIdAjustesFinanceiros(e.target.value)}
-                >
-                  <option key='0' value='0'>
-                    {''}
-                  </option>
-                  {dadosAjustesFinanceiros.map((dado) => (
-                    <option key={dado.id} value={dado.id}>
-                      {dado.nome}
-                    </option>
+              <br></br>
+               <SubCard title='Ajustes Financeiros'>
+                 {ajustesfinanceiros.map((item, index) => (
+                    <div key={index} className="mb-3">
+                      <FormGroup label={`Ajuste ${index + 1}: *`} htmlFor={`selectAjusteFinanceiro${index}`}>
+                        <select
+                          id={`selectAjusteFinanceiro${index}`}
+                          value={item.idajustefinanceiro}
+                          className='form-select'
+                          name='idajustefinanceiro'
+                          onChange={(e) => atualizarAjusteFinanceiro(index, 'idajustefinanceiro', e.target.value)}
+                        >
+                          <option key='0' value='0'>
+                            {' '}
+                          </option>
+                          {dadosAjustesFinanceiros.map((dado) => (
+                            <option key={dado.id} value={dado.id}>
+                              {dado.nome}
+                            </option>
+                          ))}
+                        </select> 
+                      </FormGroup>
+                      <button
+                        type="button"
+                        className="btn btn-danger btn-sm mt-1"
+                        onClick={() => removeAjusteFinanceiro(index)}
+                      >
+                        Remover
+                      </button>
+                    </div>
                   ))}
-
-                </select>
-              </FormGroup>
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    onClick={adicionarAjusteFinanceiro}
+                  >
+                    + Adicionar Ajuste
+                  </button>
+              </SubCard>
 
               <FormGroup label="Data de Vencimento: *" htmlFor="inputDataVencimento">
                 <input
@@ -268,10 +307,10 @@ function CadastroFaturas() {
                   onChange={(e) => setDataPagamento(e.target.value)}
                 />
               </FormGroup>
-               <div class="small">Se preencher data, fatura será marcada como paga.</div>
+               <div className="small">Se preencher data, fatura será marcada como paga.</div>
 
               <br></br>
-              <div id="previewFinal">Valor final: R$ 0,00</div>
+              <div className="small">Valor final: {currency.format(valorFinal)}</div>
               <br></br>
 
               <Stack spacing={1} padding={1} direction='row'>

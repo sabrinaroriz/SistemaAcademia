@@ -18,6 +18,7 @@ function CadastroAulas() {
   const { idParam } = useParams();
   const navigate = useNavigate();
   const baseURL = `${BASE_URL}2/aulas`;
+  const baseURLlistaEquipamentoAula = `${BASE_URL}4/listaequipamentoaula`;
 
   const [id, setId] = useState('');
   const [nome, setNome] = useState('');
@@ -29,25 +30,25 @@ function CadastroAulas() {
   const [clientes, setIdCliente] = useState([{idcliente: 0}]);
   const [descricao, setDescricao] = useState('');
 
-  const [equipamentos, setIdEquipamentos] = useState([
-  { idequipamento: 0, quantidade: '' }
+  const [listaequipamentoaula , setListaEquipamentoAula] = useState([
+    { id: 0,idequipamento: 0, quantidade: 0, idaula: 0 }
   ]);
 
   const [dados, setDados] = React.useState([]);
 
   function adicionarEquipamento() {
-    setIdEquipamentos([...equipamentos, { idequipamento: 0, quantidade: '' }]);
+    setListaEquipamentoAula([...listaequipamentoaula, { idequipamento: 0, quantidade: '' }]);
   }
 
   function atualizarEquipamento(index, campo, valor) {
-    const novos = [...equipamentos];
+    const novos = [...listaequipamentoaula];
     novos[index][campo] = valor;
-    setIdEquipamentos(novos);
+    setListaEquipamentoAula(novos);
   }
 
   function removerEquipamento(index) {
-    const novos = equipamentos.filter((_, i) => i !== index);
-    setIdEquipamentos(novos);
+    const novos = listaequipamentoaula.filter((_, i) => i !== index);
+    setListaEquipamentoAula(novos);
   }
 
   function adicionarCliente() {
@@ -71,7 +72,7 @@ function CadastroAulas() {
       return;
     }
     const temCamposPreenchidos =
-      nome !== '' || idfuncionario !== '' || dataAula !== '' || horario !== '' || capacidade !== '' || equipamentos.some(eq => eq.idequipamento !==0 || eq.quantidade!== '') || clientes.some(cl => cl.idcliente !== 0);
+      nome !== '' || idfuncionario !== '' || dataAula !== '' || horario !== '' || capacidade !== '' || clientes.some(cl => cl.idcliente !== 0);
 
     if (temCamposPreenchidos) {
       if (window.confirm('Deseja realmente limpar o formulário?')) {
@@ -81,7 +82,7 @@ function CadastroAulas() {
       navigate('/listagem-aulas');
     }
   }
-
+  
   function inicializar() {
     if (idParam == null) {
       setId('');
@@ -91,8 +92,8 @@ function CadastroAulas() {
       setHorario('');
       setStatus('');
       setCapacidade('');
-      setIdEquipamentos([{ idequipamento: 0, quantidade: '' }]);
-      setIdCliente([{idcliente: 0}]);
+      setListaEquipamentoAula([{ idequipamento: 0, quantidade: 0 }]);
+      setIdCliente([{ idcliente: 0 }]);
       setDescricao('');
     } else {
       setId(dados.id);
@@ -102,40 +103,63 @@ function CadastroAulas() {
       setHorario(dados.horario);
       setStatus(dados.status);
       setCapacidade(dados.capacidade);
-      setIdEquipamentos(dados.equipamentos || [{ idequipamento: 0, quantidade: '' }]);
+      if(dadosListaEquipamentoAula && dadosListaEquipamentoAula.length > 0){
+        setListaEquipamentoAula(
+          dadosListaEquipamentoAula.map((item) => ({
+            id: item.id,
+            idequipamento: item.idequipamento,
+            quantidade: item.quantidade
+          }))
+        );
+      }else {
+        setListaEquipamentoAula([{ idequipamento: 0, quantidade: 0 }]);
+      }
       setIdCliente(dados.clientes || [{ idcliente: 0 }]);
       setDescricao(dados.descricao);
     }
   }
 
   async function salvar() {
-    let data = { id,nome,idfuncionario,dataAula,horario,
-        status,capacidade,equipamentos,clientes,descricao };
-    data = JSON.stringify(data);
-    if (idParam == null) {
-      await axios
-        .post(baseURL, data, {
-          headers: { 'Content-Type': 'application/json' },
-        })
-        .then(function (response) {
-          mensagemSucesso(`Aula ${nome} cadastrada com sucesso!`);
-          navigate(`/listagem-aulas`);
-        })
-        .catch(function (error) {
-          mensagemErro(error.response.data);
-        });
-    } else {
-      await axios
-        .put(`${baseURL}/${idParam}`, data, {
-          headers: { 'Content-Type': 'application/json' },
-        })
-        .then(function (response) {
-          mensagemSucesso(`Aula ${nome} alterada com sucesso!`);
-          navigate(`/listagem-aulas`);
-        })
-        .catch(function (error) {
-          mensagemErro(error.response.data);
-        });
+    try {
+      let data = { id,nome,idfuncionario,dataAula,horario,
+          status,capacidade,clientes,descricao };
+      let idAulaSalvo = idParam;
+      data = JSON.stringify(data);
+
+      if (idParam == null) {
+        const resp = await axios.post(baseURL, data, {
+            headers: { 'Content-Type': 'application/json' },
+          });
+          idAulaSalvo = resp.data.id;
+      } else {
+        await axios.put(`${baseURL}/${idParam}`, data, {
+            headers: { 'Content-Type': 'application/json' },
+          });
+      }
+
+      for (const item of listaequipamentoaula) {
+        if(item.idequipamento == 0 || item.quantidade === '') continue;
+        if(item.id == null){
+          await axios.post(baseURLlistaEquipamentoAula, {
+            idaula: Number(idAulaSalvo),
+            idequipamento: Number(item.idequipamento),
+            quantidade: Number(item.quantidade)
+          });
+        }else{
+          await axios.put(`${baseURLlistaEquipamentoAula}/${item.id}`, {
+            idaula: Number(idAulaSalvo),
+            idequipamento: Number(item.idequipamento),
+            quantidade: Number(item.quantidade)
+          });
+        }
+      }
+
+      mensagemSucesso(`Aula ${nome} cadastrada com sucesso!`);
+      navigate(`/listagem-aulas`);
+
+    } catch (error) {
+        mensagemErro(error.response.data);
+        console.log(error);
     }
   }
 
@@ -151,7 +175,17 @@ function CadastroAulas() {
       setHorario(dados.horario);
       setStatus(dados.status);
       setCapacidade(dados.capacidade);
-      setIdEquipamentos(dados.equipamentos || [{ idequipamento: 0, quantidade: '' }]);
+      if(dadosListaEquipamentoAula && dadosListaEquipamentoAula.length > 0){
+        setListaEquipamentoAula(
+          dadosListaEquipamentoAula.map((item) => ({
+            id: item.id,
+            idequipamento: item.idequipamento,
+            quantidade: item.quantidade,  
+          }))
+        );
+      }else {
+        setListaEquipamentoAula([{ idequipamento: 0, quantidade: '' }]);
+      }
       setIdCliente(dados.clientes || [{ idcliente: 0}]);
       setDescricao(dados.descricao);
     }
@@ -181,6 +215,14 @@ function CadastroAulas() {
     });
   }, []);
 
+  const[ dadosListaEquipamentoAula, setdadosListaEquipamentoAula] = useState([]);  
+   
+  useEffect(()=> {
+    if(idParam != null){
+      axios.get(`${BASE_URL}4/listaequipamentoaula?idaula=${idParam}`)
+      .then((response) => setdadosListaEquipamentoAula(response.data));
+    }
+  }, [idParam]);
 
   useEffect(() => {
     buscar(); // eslint-disable-next-line
@@ -190,6 +232,7 @@ function CadastroAulas() {
   if (!dadosClientes) return null;
   if (!dadosFuncionarios) return null;
   if (!dadosEquipamentos) return null;
+  if (!dadosListaEquipamentoAula) return null;
 
   return (
     <div className="container">
@@ -263,15 +306,15 @@ function CadastroAulas() {
                 />
               </FormGroup>
               <br></br>
-              <SubCard title='Equipamentos'>
-                {equipamentos.map((item, index) => (
+              <SubCard title='Equipamentos Utilizados'>
+                {listaequipamentoaula.map((item, index) => (
                   <div key={index} className="mb-3">
-                    <FormGroup label={`Equipamento ${index + 1}: *`} htmlFor={`selectEquipamento${index}`}>
+                    <FormGroup label={`Equipamento ${index + 1}: *`} htmlFor={`selectListaEquipamentoAula${index}`}>
                       <select
-                        id={`selectEquipamento${index}`}
+                        id={`selectListaEquipamentoAula${index}`}
                         value={item.idequipamento}
                         className="form-select"
-                        name="idequipamentos"
+                        name="idequipamento"
                         onChange={(e) => atualizarEquipamento(index, 'idequipamento', e.target.value)}
                       >
                         <option key="0" value="0">
@@ -285,12 +328,12 @@ function CadastroAulas() {
                       </select>
                     </FormGroup>
 
-                    <FormGroup label="Quantidade:" htmlFor={`inputQuantidade${index}`}>
+                    <FormGroup label="Quantidade:" htmlFor={`inputQuantidadeEquipamento${index}`}>
                       <input
                         type="number"
-                        id={`inputQuantidade${index}`}
+                        id={`inputQuantidadeEquipamento${index}`}
                         className="form-control"
-                        name="quantidadeEquipamentoUtilizado"
+                        name="quantidade"
                         value={item.quantidade}
                         onChange={(e) => atualizarEquipamento(index, 'quantidade', e.target.value)}
                         placeholder="Informe a quantidade utilizada"

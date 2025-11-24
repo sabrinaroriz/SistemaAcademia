@@ -35,7 +35,6 @@ function ListagemAulas() {
   async function excluir(id) {
     let data = JSON.stringify({ id });
     let url = `${baseURL}/${id}`;
-    console.log(url);
     await axios
       .delete(url, data, {
         headers: { 'Content-Type': 'application/json' },
@@ -64,8 +63,6 @@ function ListagemAulas() {
       setDadosFuncionarios(response.data);
     });
   }, []);
-  console.log(dados)
-  console.log(dadosFuncionarios)
 
   if (!dados) return null;
 
