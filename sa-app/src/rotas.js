@@ -1,5 +1,6 @@
 import React from 'react';
 
+import PaginaInicial from "./views/PaginaInicial";
 
 import ListagemPlanos from './views/listagem-planos';
 import ListagemCargos from './views/listagem-cargos';
@@ -35,6 +36,8 @@ function Rotas(props) {
   return (
     <BrowserRouter>
       <Routes>
+
+        <Route path="/" element={<PaginaInicial />} />
 
         <Route path='/cadastro-planos/:idParam?' element={<CadastroPlanos />} />
         <Route path='/cadastro-exercicios/:idParam?' element={<CadastroExercicios />} />
