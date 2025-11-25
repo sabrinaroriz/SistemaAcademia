@@ -73,10 +73,7 @@ function CadastroTreinos() {
       setIdFuncionario('');
       setDataRegistroFicha('');
       setDescricao('');
-      setIdExercicios('')
-      setSeries('');
-      setRepeticoes('');
-      setCarga('');
+      setListaExercicioTreino([{idexercicio: 0, serie: 0, repeticao: 0, carga: 0}])
     } else {
       setId(dados.id);
       setNome(dados.nome);
@@ -84,41 +81,66 @@ function CadastroTreinos() {
       setIdFuncionario(dados.idfuncionario);
       setDataRegistroFicha(dados.dataregistroficha);
       setDescricao(dados.descricao);
-      setIdExercicios(dados.idexercicios)
-      setSeries(dados.series);
-      setRepeticoes(dados.repeticoes);
-      setCarga(dados.carga);
+      if(dadosListaExercicioTreino && dadosListaExercicioTreino.length > 0){
+        setListaExercicioTreino(
+          dadosListaExercicioTreino.map((item) => ({
+            id: item.id,
+            idexercicio: item.idexercicio,
+            serie: item.serie,
+            repeticao: item.repeticao,
+            carga: item.carga
+          }))
+        );
+      }else {
+        setListaExercicioTreino([{ idexercicio: 0, serie: 0, repeticao: 0, carga: 0 }]);
+      }
     }
   }
 
   async function salvar() {
-    let data = {id, nome, idcliente, idfuncionario, dataregistroficha, descricao, idexercicios, series, repeticoes, carga };
-    data = JSON.stringify(data);
+    try {
+      let data = {id, nome, idcliente, idfuncionario, dataregistroficha, descricao};
+      let idTreinoSalvo = idParam;
+      data = JSON.stringify(data);
 
-     if (idParam == null) {
-      await axios
-        .post(baseURL, data, {
-          headers: { 'Content-Type': 'application/json' },
-        })
-        .then(function (response) {
-          mensagemSucesso(`Treino ${nome} cadastrado com sucesso!`);
-          navigate(`/listagem-treinos`);
-        })
-        .catch(function (error) {
-          mensagemErro(error.response.data);
-        });
-    } else {
-      await axios
-        .put(`${baseURL}/${idParam}`, data, {
-          headers: { 'Content-Type': 'application/json' },
-        })
-        .then(function (response) {
-          mensagemSucesso(`Treino ${nome} alterado com sucesso!`);
-          navigate(`/listagem-treinos`);
-        })
-        .catch(function (error) {
-          mensagemErro(error.response.data);
-        });
+      if (idParam == null) {
+        const resp = await axios.post(baseURL, data, {
+            headers: { 'Content-Type': 'application/json' },
+          });
+          idTreinoSalvo = resp.data.id;
+      } else {
+        await axios.put(`${baseURL}/${idParam}`, data, {
+            headers: { 'Content-Type': 'application/json' },
+          });
+      }
+
+      for (const item of listaexerciciotreino) {
+          if(item.idexercicio == 0 || item.serie === '' || item.repeticao === '' || item.carga === '') continue;
+          if(item.id == null){
+            await axios.post(baseURLlistaExercicioTreino, {
+              idtreino: Number(idTreinoSalvo),
+              idexercicio: Number(item.idexercicio),
+              serie: Number(item.serie),
+              repeticao: Number(item.repeticao),
+              carga: Number(item.carga)
+            });
+          }else{
+            await axios.put(`${baseURLlistaExercicioTreino}/${item.id}`, {
+              idtreino: Number(idTreinoSalvo),
+              idexercicio: Number(item.idexercicio),
+              serie: Number(item.serie),
+              repeticao: Number(item.repeticao),
+              carga: Number(item.carga)
+            });
+          }
+        }
+          
+        mensagemSucesso(`Treino ${nome} alterado com sucesso!`);
+        navigate(`/listagem-treinos`);
+      
+    } catch(error) {
+        mensagemErro(error.response.data);
+        console.log(error);
     }
   }
 
@@ -133,10 +155,19 @@ function CadastroTreinos() {
       setIdFuncionario(dados.idfuncionario);
       setDataRegistroFicha(dados.dataregistroficha);
       setDescricao(dados.descricao);
-      setIdExercicios(dados.idexercicios)
-      setSeries(dados.series);
-      setRepeticoes(dados.repeticoes);
-      setCarga(dados.carga);
+      if(dadosListaExercicioTreino && dadosListaExercicioTreino.length > 0){
+        setListaExercicioTreino(
+          dadosListaExercicioTreino.map((item) => ({
+            id: item.id,
+            idexercicio: item.idexercicio,
+            serie: item.serie,
+            repeticao: item.repeticao,
+            carga: item.carga
+          }))
+        );
+      }else {
+        setListaExercicioTreino([{ idexercicio: 0, serie: 0, repeticao: 0, carga: 0 }]);
+      }
     }
   }
 
@@ -156,13 +187,22 @@ function CadastroTreinos() {
     });
   }, []);
 
-  const [dadosExercicios, setDadosExercicios] = React.useState(null);
-
-  useEffect(() => {
+  const[ dadosExercicios, setDadosExercicios] = React.useState(null);  
+   
+  useEffect(()=> {
     axios.get(`${BASE_URL}3/exercicios`).then((response) => {
-      setDadosExercicios(response.data);
+      setDadosExercicios(response.data);  
     });
   }, []);
+
+  const [dadosListaExercicioTreino, setDadosListaExercicioTreino] = useState([]);
+
+  useEffect(()=> {
+    if(idParam != null){
+      axios.get(`${BASE_URL}4/listaexerciciotreino?idtreino=${idParam}`)
+      .then((response) => setDadosListaExercicioTreino(response.data));
+    }
+  }, [idParam]);
 
   useEffect(() => {
     buscar(); // eslint-disable-next-line
@@ -172,13 +212,7 @@ function CadastroTreinos() {
   if (!dadosClientes) return null;
   if (!dadosFuncionarios) return null;
   if (!dadosExercicios) return null;
-
-
-  function adicionarTreinos() {
-    setIdExercicios([
-      ...idexercicios, { id: '', nome: '' }
-    ]);
-  }
+  if (!dadosListaExercicioTreino) return null;
 
   return (
     <div className='container'>
@@ -249,67 +283,77 @@ function CadastroTreinos() {
               </FormGroup>
               <br></br>
               <SubCard title='Treino'>
-                <FormGroup label='Exercicios: *' htmlFor='selectExercicios'>
-                  <select
-                    id='selectExercicios'
-                    value={idexercicios}
-                    className='form-select'
-                    name='idexercicios'
-                    onChange={(e) => setIdExercicios(e.target.value)}
-                  >
-                  <option key='0' value='0'>
-                    {''}
-                  </option>
-                  {dadosExercicios.map((dado) => (
-                    <option key={dado.id} value={dado.id}>
-                      {dado.nome}
-                    </option>
-                  ))}
-                </select>
-                </FormGroup>
+                {listaexerciciotreino.map((item, index) => (
+                  <div key={index} className="mb-3">
+                    <FormGroup label= {`Exercícios ${index + 1}: *`} htmlFor={'selectListaExercicioTreino${index}'}>
+                      <select
+                        id={`selectListaExercicioTreino${index}`}
+                        value={item.idexercicio}
+                        className='form-select'
+                        name='idexercicios'
+                        onChange={(e) => atualizarExercicio(index, 'idexercicio', e.target.value)}
+                      >
+                        <option key='0' value='0'>
+                          {''}
+                        </option>
+                        {dadosExercicios.map((dado) => (
+                          <option key={dado.id} value={dado.id}>
+                            {dado.nome}
+                          </option>
+                        ))}
+                      </select>
+                    </FormGroup>
+                    <FormGroup label='Séries:' htmlFor={`inputSeries${index}`}>
+                      <input
+                        type='number'
+                        id={`inputSeries${index}`}
+                        value={item.serie}
+                        className='form-control'
+                        name='serie'
+                        placeholder='Ex: 3'
+                        onChange={(e) => atualizarExercicio(index, 'serie', e.target.value)}
+                      />
+                    </FormGroup>
+                    <FormGroup label='Repetições:' htmlFor={`inputRepeticao${index}`}>
+                      <input
+                        type='number'
+                        id={`inputRepeticao${index}`}
+                        value={item.repeticao}
+                        className='form-control'
+                        name='repeticao'
+                        placeholder='Ex: 3'
+                        onChange={(e) => atualizarExercicio(index, 'repeticao', e.target.value)}
+                      />
+                    </FormGroup>
+                    <FormGroup label='Carga (kg):' htmlFor={`inputCarga${index}`}>
+                      <input
+                        type='number'
+                        id={`inputCarga${index}`}
+                        value={item.carga}
+                        className='form-control'
+                        name='carga'
+                        placeholder='Ex: 10'
+                        onChange={(e) => atualizarExercicio(index, 'carga', e.target.value)}
+                      />
+                    </FormGroup>
+                    <button
+                      type="button"
+                      className="btn btn-danger btn-sm mt-1"
+                      onClick={() => removerExercicio(index)}
+                    >
+                      Remover
+                    </button>
+                  </div>
+                ))}
 
-                <FormGroup label='Séries:' htmlFor='inputSeries'>
-                  <input
-                    type='number'
-                    id='inputSeries'
-                    value={series}
-                    className='form-control'
-                    name='series'
-                    placeholder='Ex: 3'
-                    onChange={(e) => setSeries(e.target.value)}
-                  />
-                </FormGroup>
-
-                <FormGroup label='Repetições:' htmlFor='inputRepeticoes'>
-                  <input
-                    type='number'
-                    id='inputRepeticoes'
-                    value={repeticoes}
-                    className='form-control'
-                    name='repeticoes'
-                    placeholder='Ex: 3'
-                    onChange={(e) => setRepeticoes(e.target.value)}
-                  />
-                </FormGroup>
-
-                <FormGroup label='Carga (kg):' htmlFor='inputCarga'>
-                  <input
-                    type='number'
-                    id='inputCarga'
-                    value={carga}
-                    className='form-control'
-                    name='carga'
-                    placeholder='Ex: 10'
-                    onChange={(e) => setCarga(e.target.value)}
-                  />
-                </FormGroup>
                 <button
-                  type='button'
-                  className='btn btn-secondary mb-3'
-                  onClick={adicionarTreinos}
+                  type="button"
+                  className="btn btn-secondary"
+                  onClick={adicionarExercicio}
                 >
-                    + Adicionar Treinos
+                  + Adicionar Exercício
                 </button>
+                 
               </SubCard>
 
               <FormGroup label="Descrição e observações:" htmlFor="inputDescricao">

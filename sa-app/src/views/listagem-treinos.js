@@ -106,10 +106,7 @@ function ListagemTreinos() {
                     <th scope='col'>Data</th>
                     <th scope='col'>Cliente</th>
                     <th scope='col'>Instrutor</th>
-                    <th scope='col'>Exercício</th>
-                    <th scope='col'>Séries</th>
-                    <th scope='col'>Repetições</th>
-                    <th scope='col'>Carga</th>
+                    <th scope='col'>Descrição</th>
                     <th scope='col'>Ações</th>
                   </tr>
                 </thead>
@@ -120,10 +117,7 @@ function ListagemTreinos() {
                       <td>{dado.dataregistroficha}</td>
                       <td>{getNomeCliente(dado.idcliente)}</td>
                       <td>{getNomeFuncionario(dado.idfuncionario)}</td>
-                      <td>{dado.idexercicios.id} - {dado.idexercicios.nome}</td>
-                      <td>{dado.series}</td>
-                      <td>{dado.repeticoes}</td>
-                      <td>{dado.carga}</td>
+                      <td>{dado.descricao}</td>
                       <td>
                         <Stack spacing={1} padding={0} direction='row'>
                           <IconButton
