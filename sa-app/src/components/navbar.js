@@ -112,7 +112,7 @@ function Navbar(props) {
           <ul className='navbar-nav'>
             <NavbarItem
               render='true'
-              href='/listagem-relatorios'
+              href='/relatorio-academia'
               label='Relatório'
             />
           </ul>

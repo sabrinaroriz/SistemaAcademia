@@ -14,7 +14,7 @@ import ListagemFuncionarios from './views/listagem-funcionarios';
 import ListagemTreinos from './views/listagem-treinos';
 import ListagemClientes from './views/listagem-clientes';
 import ListagemExercicios from './views/listagem-exercicios';
-
+import RelatorioAcademia from './views/relatorio-academia';
 
 import CadastroPlanos from './views/cadastro-planos';
 import CadastroExercicios from './views/cadastro-exercicios';
@@ -69,10 +69,10 @@ function Rotas(props) {
         <Route path='/listagem-funcionarios' element={<ListagemFuncionarios />} />
         <Route path='/listagem-treinos' element={<ListagemTreinos />} />
         <Route path='/listagem-exercicios' element={<ListagemExercicios />} />
-
-
+        <Route path='/relatorio-academia' element={<RelatorioAcademia />} />
       </Routes>
-    </BrowserRouter>
+
+    </BrowserRouter >
   );
 }
 
