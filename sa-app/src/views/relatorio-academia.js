@@ -121,6 +121,8 @@ function RelatorioAcademia() {
                 100
               ).toFixed(1)
         ),
+        borderColor: '#fa0505ff',
+        backgroundColor: '#00000066',
         borderWidth: 3,
         tension: 0.3
       }
@@ -224,7 +226,19 @@ function RelatorioAcademia() {
 
         <div className="mt-5" style={{ width: '900px' }}>
           <h4>Evolução de Lucro (%)</h4>
-          <Line data={dadosLinhaLucro} />
+          <Line 
+            data={dadosLinhaLucro}
+            options={{
+              scales: {
+                x: {
+                  grid: { color: 'black' }
+                },
+                y: {
+                  grid: { color: 'black' }
+                }
+              }
+            }}
+          />
         </div>
 
         <div className="mt-5">
