@@ -6,27 +6,7 @@ import Card from '../components/card';
 export default function PaginaInicial() {
   return (
     <div className="min-h-screen flex flex-col bg-gray-900 font-sans">
-
-      {/* HERO MODERNO */}
-      <section
-        className="relative w-full h-[70vh] flex-sh items-center justify-center text-center px-6 bg-cover bg-center"
-        style={{
-          backgroundImage:
-            "url('https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=1400&q=80')",
-        }}
-      >
-        <div className="absolute inset-0 bg-black/75"></div>
-
-        <div className="relative z-10 max-w-3xl text-white">
-          <h1 className="text-5xl md:text-6xl font-extrabold leading-tight drop-shadow-xl">
-            AlphaFit • Sistema Interno
-          </h1>
-          <p className="text-lg md:text-xl mt-4 opacity-90">
-            Controle completo da sua academia em um só lugar.
-          </p>
-          
-        </div>
-
+      <section>
           <div className="card mb-3">
             <h3 className="card-header">AlphaFit - Sistema Interno</h3>
             <div className="card-body">
