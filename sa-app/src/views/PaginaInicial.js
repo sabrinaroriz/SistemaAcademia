@@ -7,45 +7,45 @@ export default function PaginaInicial() {
   return (
     <div className="min-h-screen flex flex-col bg-gray-900 font-sans">
       <section>
-          <div className="card mb-3">
-            <h3 className="card-header">AlphaFit - Sistema Interno</h3>
-            <div className="card-body">
-              <h5 className="card-title">Special title treatment</h5>
-              <h6 className="card-subtitle text-muted">Support card subtitle</h6>
-            </div>
-            <svg xmlns="http://www.w3.org/2000/svg" class="d-block user-select-none" width="100%" height="200" aria-label="Placeholder: Image cap" focusable="false" role="img" preserveAspectRatio="xMidYMid slice" viewBox="0 0 318 180">
-              <rect width="100%" height="100%" fill="#868e96"></rect>
-              <text x="50%" y="50%" fill="#dee2e6" dy=".3em">Image cap</text>
-            </svg>
-            <div className="card-body">
-              <p className="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            </div>
+        <div className="card mb-3">
+          <h3 className="card-header">AlphaFit - Sistema Interno</h3>
+          <div className="card-body">
+            <h5 className="card-title">Special title treatment</h5>
+            <h6 className="card-subtitle text-muted">Support card subtitle</h6>
           </div>
-          <div className="card">
-            <div className="card-body">
-              <h4 className="card-title">Gestão de Alunos</h4>
-              <p className="card-text">Cadastre, edite e acompanhe facilmente todos os alunos ativos.</p>
-            </div>
+          <svg xmlns="http://www.w3.org/2000/svg" class="d-block user-select-none" width="100%" height="200" aria-label="Placeholder: Image cap" focusable="false" role="img" preserveAspectRatio="xMidYMid slice" viewBox="0 0 318 180">
+            <rect width="100%" height="100%" fill="#868e96"></rect>
+            <text x="50%" y="50%" fill="#dee2e6" dy=".3em">Image cap</text>
+          </svg>
+          <div className="card-body">
+            <p className="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
           </div>
+        </div>
+        <div className="card">
+          <div className="card-body">
+            <h4 className="card-title">Gestão de Alunos</h4>
+            <p className="card-text">Cadastre, edite e acompanhe facilmente todos os alunos ativos.</p>
+          </div>
+        </div>
 
-          <br></br>
-          
-          <div className="card">
-            <div className="card-body">
-              <h4 className="card-title">Treinos & Avaliações</h4>
-              <p className="card-text">Monte fichas de treino, planos e avalições físicas completas.</p>
-            </div>
+        <br></br>
+
+        <div className="card">
+          <div className="card-body">
+            <h4 className="card-title">Treinos & Avaliações</h4>
+            <p className="card-text">Monte fichas de treino, planos e avalições físicas completas.</p>
           </div>
-          <br></br>
-          <div className="card">
-            <div className="card-body">
-              <h4 className="card-title">Financeiro</h4>
-              <p className="card-text">Controle mensalidades, pagamentos e situação financeira.</p>
-            </div>
+        </div>
+        <br></br>
+        <div className="card">
+          <div className="card-body">
+            <h4 className="card-title">Financeiro</h4>
+            <p className="card-text">Controle mensalidades, pagamentos e situação financeira.</p>
           </div>
+        </div>
       </section>
 
-      {/* FOOTER */}
+
       <footer className="text-center py-6 opacity-60 text-sm border-t border-white/10">
         © 2025 AlphaFit • Todos os direitos reservados.
       </footer>
