@@ -8,7 +8,7 @@ export default function PaginaInicial() {
     <div className="min-h-screen flex flex-col bg-gray-900 font-sans">
       <section>
         <div className="card mb-3">
-          <h3 className="card-header">AlphaFit - Sistema Interno</h3>
+          <h3 className="card-header text-center">AlphaFit - Sistema Interno</h3>
           <div className="card-body">
             <h5 className="card-title">Special title treatment</h5>
             <h6 className="card-subtitle text-muted">Support card subtitle</h6>
