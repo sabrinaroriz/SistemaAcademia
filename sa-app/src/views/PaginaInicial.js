@@ -1,5 +1,7 @@
 import "bootswatch/dist/brite/bootstrap.css";
 import "bootswatch/dist/brite/bootstrap.min.css";
+import MinhaImagem from "../assets/teste-foto.png";
+
 
 export default function PaginaInicial() {
   return (
@@ -7,13 +9,11 @@ export default function PaginaInicial() {
       <section>
         <div className="card border-primary mb-3">
           <h3 className="card-header border-primary mb-3 text-center">AlphaFit - Sistema Interno</h3>
-          <svg xmlns="http://www.w3.org/2000/svg" class="d-block user-select-none" width="100%" height="200" aria-label="Placeholder: Image cap" focusable="false" role="img" preserveAspectRatio="xMidYMid slice" viewBox="0 0 318 180">
-            <rect width="100%" height="100%" fill="#868e96"></rect>
-            <text x="50%" y="50%" fill="#dee2e6" dy=".3em">Image cap</text>
-          </svg>
-          <div className="card-body">
-            <p className="card-text text-center">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-          </div>
+          <img 
+            src={MinhaImagem} 
+            alt="Imagem AlphaFit"
+            style={{ width: "100%", height: "240px", objectFit: "cover" }}
+          />
         </div>
         <div className="row">
           <div className="col-sm-4">
