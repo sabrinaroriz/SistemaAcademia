@@ -20,7 +20,7 @@ export default function PaginaInicial() {
             <div className="card bg-primary mb-3">
               <div className="card-body">
                 <h4 className="card-header text-center">Gestão de Alunos</h4>
-                <p className="card-text text-center">Cadastre, edite e acompanhe facilmente todos os alunos ativos.</p>
+                <p className="card-text text-center">Cadastre, edite e acompanhe facilmente todos os alunos.</p>
               </div>
             </div>
           </div>
