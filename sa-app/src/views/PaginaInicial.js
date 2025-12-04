@@ -12,7 +12,7 @@ export default function PaginaInicial() {
             <text x="50%" y="50%" fill="#dee2e6" dy=".3em">Image cap</text>
           </svg>
           <div className="card-body">
-            <p className="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            <p className="card-text text-center">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
           </div>
         </div>
         <div className="row">
