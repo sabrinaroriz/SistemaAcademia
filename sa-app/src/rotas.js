@@ -15,6 +15,8 @@ import ListagemTreinos from './views/listagem-treinos';
 import ListagemClientes from './views/listagem-clientes';
 import ListagemExercicios from './views/listagem-exercicios';
 import RelatorioAcademia from './views/relatorio-academia';
+import ResumoDoDia from "./views/resumo-do-dia";
+
 
 import CadastroPlanos from './views/cadastro-planos';
 import CadastroExercicios from './views/cadastro-exercicios';
@@ -39,40 +41,38 @@ function Rotas(props) {
 
         <Route path="/" element={<PaginaInicial />} />
 
-        <Route path='/cadastro-planos/:idParam?' element={<CadastroPlanos />} />
-        <Route path='/cadastro-exercicios/:idParam?' element={<CadastroExercicios />} />
-        <Route path='/cadastro-formas-pagamento/:idParam?' element={<CadastroFormasPagamento />} />
-        <Route path='/cadastro-ajustes-financeiros/:idParam?' element={<CadastroAjustesFinanceiros />} />
-        <Route path='/cadastro-cargos/:idParam?' element={<CadastroCargos />} />
-        <Route path='/cadastro-funcionarios/:idParam?' element={<CadastroFuncionarios />} />
-        <Route path='/cadastro-treinos/:idParam?' element={<CadastroTreinos />} />
-        <Route path='/cadastro-aulas/:idParam?' element={<CadastroAulas />} />
-        <Route path='/cadastro-equipamentos/:idParam?' element={<CadastroEquipamentos />} />
-        <Route path='/cadastro-clientes/:idParam?' element={<CadastroClientes />} />
-        <Route path='/cadastro-faturas/:idParam?' element={<CadastroFaturas />} />
-        <Route path='/cadastro-fichas-avaliacao-fisica/:idParam?' element={<CadastroFichasAvaliacaoFisica />} />
+        <Route path="/cadastro-planos/:idParam?" element={<CadastroPlanos />} />
+        <Route path="/cadastro-exercicios/:idParam?" element={<CadastroExercicios />} />
+        <Route path="/cadastro-formas-pagamento/:idParam?" element={<CadastroFormasPagamento />} />
+        <Route path="/cadastro-ajustes-financeiros/:idParam?" element={<CadastroAjustesFinanceiros />} />
+        <Route path="/cadastro-cargos/:idParam?" element={<CadastroCargos />} />
+        <Route path="/cadastro-funcionarios/:idParam?" element={<CadastroFuncionarios />} />
+        <Route path="/cadastro-treinos/:idParam?" element={<CadastroTreinos />} />
+        <Route path="/cadastro-aulas/:idParam?" element={<CadastroAulas />} />
+        <Route path="/cadastro-equipamentos/:idParam?" element={<CadastroEquipamentos />} />
+        <Route path="/cadastro-clientes/:idParam?" element={<CadastroClientes />} />
+        <Route path="/cadastro-faturas/:idParam?" element={<CadastroFaturas />} />
+        <Route path="/cadastro-fichas-avaliacao-fisica/:idParam?" element={<CadastroFichasAvaliacaoFisica />} />
 
+        <Route path="/listagem-planos" element={<ListagemPlanos />} />
+        <Route path="/listagem-cargos" element={<ListagemCargos />} />
+        <Route path="/listagem-clientes" element={<ListagemClientes />} />
+        <Route path="/listagem-ajustes-financeiros" element={<ListagemAjustesFinanceiros />} />
+        <Route path="/listagem-aulas" element={<ListagemAulas />} />
+        <Route path="/listagem-equipamentos" element={<ListagemEquipamentos />} />
+        <Route path="/listagem-faturas" element={<ListagemFaturas />} />
+        <Route path="/listagem-fichas-avaliacao-fisica" element={<ListagemFichasAvaliacaoFisica />} />
+        <Route path="/listagem-formas-pagamento" element={<ListagemFormasPagamento />} />
+        <Route path="/listagem-funcionarios" element={<ListagemFuncionarios />} />
+        <Route path="/listagem-treinos" element={<ListagemTreinos />} />
+        <Route path="/listagem-exercicios" element={<ListagemExercicios />} />
 
+        <Route path="/relatorio-academia" element={<RelatorioAcademia />} />
 
+        <Route path="/resumo-do-dia" element={<ResumoDoDia />} />
 
-
-
-        <Route path='/listagem-planos' element={<ListagemPlanos />} />
-        <Route path='/listagem-cargos' element={<ListagemCargos />} />
-        <Route path='/listagem-clientes' element={<ListagemClientes />} />
-        <Route path='/listagem-ajustes-financeiros' element={<ListagemAjustesFinanceiros />} />
-        <Route path='/listagem-aulas' element={<ListagemAulas />} />
-        <Route path='/listagem-equipamentos' element={<ListagemEquipamentos />} />
-        <Route path='/listagem-faturas' element={<ListagemFaturas />} />
-        <Route path='/listagem-fichas-avaliacao-fisica' element={<ListagemFichasAvaliacaoFisica />} />
-        <Route path='/listagem-formas-pagamento' element={<ListagemFormasPagamento />} />
-        <Route path='/listagem-funcionarios' element={<ListagemFuncionarios />} />
-        <Route path='/listagem-treinos' element={<ListagemTreinos />} />
-        <Route path='/listagem-exercicios' element={<ListagemExercicios />} />
-        <Route path='/relatorio-academia' element={<RelatorioAcademia />} />
       </Routes>
-
-    </BrowserRouter >
+    </BrowserRouter>
   );
 }
 
