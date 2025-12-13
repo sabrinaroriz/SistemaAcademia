@@ -161,15 +161,15 @@ function CadastroFaturas() {
 
   useEffect(() => {
     if (datavencimento !== '') {
-      const final = 10; // valor que será recebido pelo back-end
+      const final = 0;
       setValorFinal(final);
     }
   }, [datavencimento]);
 
   function getNomePlano(idcliente) {
-  if (!dadosClientes || !dadosPlanos) return 'Sem plano'; // caso dados ainda não carregaram
+  if (!dadosClientes || !dadosPlanos) return 'Sem plano';
 
-  const cliente = dadosClientes.find(c => c.id === Number(idcliente)); // cuidado: value do select é string
+  const cliente = dadosClientes.find(c => c.id === Number(idcliente));
   if (!cliente) return 'Sem plano';
 
   const plano = dadosPlanos.find(c => c.id === cliente.idplano);

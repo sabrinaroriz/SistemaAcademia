@@ -8,11 +8,12 @@ export default function PaginaInicial() {
     <div className="min-h-screen flex flex-col bg-gray-900 font-sans">
       <section>
         <div className="card border-primary mb-3">
-          <h3 className="card-header border-primary mb-3 text-center">AlphaFit - Sistema Interno</h3>
+          <h3 className="card-header border-primary mb-0 text-center">AlphaFit - Sistema Interno</h3>
           <img 
-            src={MinhaImagem} 
+            src={MinhaImagem}
+            className="card-img-top img-fluid" 
             alt="Imagem AlphaFit"
-            style={{ width: "100%", height: "240px", objectFit: "cover" }}
+            style={{ objectFit: "cover" }}
           />
         </div>
         <div className="row">

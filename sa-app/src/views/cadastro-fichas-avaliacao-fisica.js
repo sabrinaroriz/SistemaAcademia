@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import Stack from '@mui/material/Stack';
 
 import Card from '../components/card';
+import SubCard from '../components/sub-card';
 import FormGroup from '../components/form-group';
 
 import { mensagemSucesso, mensagemErro } from '../components/toastr';
@@ -27,6 +28,8 @@ function CadastroFichasAvaliacaoFisica() {
   const [peso, setPeso] = useState('');
   const [altura, setAltura] = useState('');
   const [descricao, setDescricao] = useState('');
+  const [imc, setImc] = useState(null);
+  const [classificacao, setClassificacao] = useState('');
 
   const [dados, setDados] = React.useState([]);
 
@@ -209,6 +212,18 @@ function CadastroFichasAvaliacaoFisica() {
                   onChange={(e) => setAltura(e.target.value)}
                 />
               </FormGroup>
+
+              <br></br>
+              <div className="card">
+                <div className='card-body'>
+                  <p><strong>IMC:</strong> {imc}</p>
+                  <p><strong>Classificação:</strong> {classificacao}</p>
+                  <button type="button" className="btn btn-warning mt-2">
+                    Calcular IMC
+                  </button>
+                </div>
+              </div>
+              
               <FormGroup label='Descrição:' htmlFor='inputDescricao'>
                 <textarea
                   type='text'
