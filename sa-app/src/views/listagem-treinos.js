@@ -86,6 +86,12 @@ function ListagemTreinos() {
     return funcionario ? funcionario.nome : 'Sem funcionario';
   }
 
+  function formatarData(dataIso) {
+    if(!dataIso) return '';
+    const [ano, mes, dia] = dataIso.split('-');
+    return `${dia}/${mes}/${ano}`;
+  }
+
   return (
     <div className='container'>
       <Card title='Listagem de Treinos'>
@@ -114,7 +120,7 @@ function ListagemTreinos() {
                   {dados.map((dado) => (
                     <tr key={dado.id}>
                       <td>{dado.nome}</td>
-                      <td>{dado.dataregistroficha}</td>
+                      <td>{formatarData(dado.dataregistroficha)}</td>
                       <td>{getNomeCliente(dado.idcliente)}</td>
                       <td>{getNomeFuncionario(dado.idfuncionario)}</td>
                       <td>{dado.descricao}</td>

@@ -93,6 +93,12 @@ function ListagemFichasAvaliacaoFisica() {
     return funcionario ? funcionario.nome : 'Sem funcionario';
   }
 
+  function formatarData(dataIso) {
+    if(!dataIso) return '';
+    const [ano, mes, dia] = dataIso.split('-');
+    return `${dia}/${mes}/${ano}`;
+  }
+
   return (
     <div className='container'>
       <Card title='Listagem de Ficha de Avaliação Física'>
@@ -120,7 +126,7 @@ function ListagemFichasAvaliacaoFisica() {
                 <tbody>
                   {dados.map((dado) => (
                     <tr key={dado.id}>
-                      <td>{dado.datafichaavaliacao}</td>
+                      <td>{formatarData(dado.datafichaavaliacao)}</td>
                       <td>{getNomeCliente(dado.idcliente)}</td>
                       <td>{getNomeFuncionario(dado.idfuncionario)}</td>
                       <td>{dado.peso}</td>

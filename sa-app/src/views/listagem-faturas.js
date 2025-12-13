@@ -87,7 +87,11 @@ function ListagemFaturas() {
     return plano ? plano.nome : 'Sem plano';
   }
 
-  
+  function formatarData(dataIso) {
+    if(!dataIso) return '';
+    const [ano, mes, dia] = dataIso.split('-');
+    return `${dia}/${mes}/${ano}`;
+  }
 
   return (
     <div className='container'>
@@ -119,8 +123,8 @@ function ListagemFaturas() {
                   {dados.map((dado) => (
                     <tr key={dado.id}>
                       <td>{getNomeCliente(dado.idcliente)}</td>
-                      <td>{dado.datavencimento}</td>
-                      <td>{dado.datapagamento}</td>
+                      <td>{formatarData(dado.datavencimento)}</td>
+                      <td>{formatarData(dado.datapagamento)}</td>
                       <td>{getNomePlano(dado.idcliente)}</td>
                       <td>{dado.ematraso}</td>
                       <td>{dado.diasatraso}</td>

@@ -66,6 +66,12 @@ function ListagemAulas() {
 
   if (!dados) return null;
 
+  function formatarData(dataIso) {
+    if(!dataIso) return '';
+    const [ano, mes, dia] = dataIso.split('-');
+    return `${dia}/${mes}/${ano}`;
+  }
+
   function getNomeFuncionario(idfuncionario) {
     const funcionario = dadosFuncionarios.find(c => c.id === idfuncionario);
     return funcionario ? funcionario.nome : 'Sem funcionario';
@@ -100,7 +106,7 @@ function ListagemAulas() {
                     <tr key={dado.id}>
                       <td>{dado.nome}</td>
                       <td>{getNomeFuncionario(dado.idfuncionario)}</td>
-                      <td>{dado.dataAula}</td>
+                      <td>{formatarData(dado.dataAula)}</td>
                       <td>{dado.horario}</td>
                       <td>{dado.status}</td>
                       <td>
