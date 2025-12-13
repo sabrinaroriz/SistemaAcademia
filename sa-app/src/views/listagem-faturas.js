@@ -32,6 +32,7 @@ function ListagemFaturas() {
   const [dados, setDados] = React.useState(null);
   const [dadosClientes, setDadosClientes] = React.useState([]);
   const [dadosPlanos, setDadosPlanos] = React.useState([]);
+  const [dadosFormasPagamento, setDadosFormaPagamento] = React.useState([]);
   
 
   async function excluir(id) {
@@ -73,6 +74,12 @@ function ListagemFaturas() {
     });
   }, []);
 
+  React.useEffect(() => {
+    axios.get(`${BASE_URL}3/formaspagamento`).then((response) => {
+      setDadosFormaPagamento(response.data);
+    });
+  }, []);
+
 
   if (!dados) return null;
 
@@ -85,6 +92,11 @@ function ListagemFaturas() {
     const cliente = dadosClientes.find(c => c.id === idcliente);
     const plano = dadosPlanos.find(c => c.id === cliente.idplano);
     return plano ? plano.nome : 'Sem plano';
+  }
+
+  function getFormaPagamento(idformaspagamento) {
+    const formaPagamento = dadosFormasPagamento.find(c => c.id === idformaspagamento);
+    return formaPagamento ? formaPagamento.nome: 'Sem forma de pagamento';
   }
 
   function formatarData(dataIso) {
@@ -113,9 +125,7 @@ function ListagemFaturas() {
                     <th scope='col'>Data de vencimento</th>
                     <th scope='col'>Data de pagamento</th>
                     <th scope='col'>Plano do Cliente</th>
-                    <th scope='col'>Em Atraso</th>
-                    <th scope='col'>Dias de Atraso</th>
-                    <th scope='col'>Multa</th>
+                    <th scope='col'>Forma de Pagamento</th>
                     <th scope='col'>Ações</th>
                   </tr>
                 </thead>
@@ -126,9 +136,7 @@ function ListagemFaturas() {
                       <td>{formatarData(dado.datavencimento)}</td>
                       <td>{formatarData(dado.datapagamento)}</td>
                       <td>{getNomePlano(dado.idcliente)}</td>
-                      <td>{dado.ematraso}</td>
-                      <td>{dado.diasatraso}</td>
-                      <td>{dado.multa}</td>
+                      <td>{getFormaPagamento(dado.idformaspagamento)}</td>
                       <td>
                         <Stack spacing={1} padding={0} direction='row'>
                           <IconButton
