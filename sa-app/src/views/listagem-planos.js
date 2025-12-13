@@ -52,6 +52,15 @@ function ListagemPlanos() {
       });
   }
 
+  function formatarMoeda(valor) {
+    if (valor === null || valor === undefined) return '';
+    return Number(valor).toLocaleString('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+    });
+  }
+
+
   React.useEffect(() => {
     axios.get(baseURL).then((response) => {
       setDados(response.data);
@@ -87,7 +96,7 @@ function ListagemPlanos() {
                     <tr key={dado.id}>
                       <td>{dado.nome}</td>
                       <td>{dado.duracao}</td>
-                      <td>{dado.valor}</td>
+                      <td>{formatarMoeda(dado.valor)}</td>
                       <td>
                         <Stack spacing={1} padding={0} direction='row'>
                           <IconButton
