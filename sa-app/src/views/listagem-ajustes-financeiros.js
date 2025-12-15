@@ -52,6 +52,22 @@ function ListagemAjustesFinanceiros() {
       });
   }
 
+  function formatarValor(valor, unidade) {
+  if (valor === null || valor === undefined) return '';
+  const numero = Number(valor);
+  if (unidade === 'Porcentagem') {
+    return `${numero}%`;
+  }
+  if (unidade === 'Moeda') {
+    return numero.toLocaleString('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+    });
+  }
+  return numero;
+}
+
+
   React.useEffect(() => {
     axios.get(baseURL).then((response) => {
       setDados(response.data);
@@ -87,7 +103,7 @@ function ListagemAjustesFinanceiros() {
                     <tr key={dado.id}>
                       <td>{dado.nome}</td>
                       <td>{dado.tipo}</td>
-                      <td>{dado.valor}</td>
+                      <td>{formatarValor(dado.valor, dado.unidade)}</td>
                       <td>
                         <Stack spacing={1} padding={0} direction='row'>
                           <IconButton
