@@ -16,6 +16,8 @@ import ListagemClientes from './views/listagem-clientes';
 import ListagemExercicios from './views/listagem-exercicios';
 import RelatorioAcademia from './views/relatorio-academia';
 import ResumoDoDia from "./views/resumo-do-dia";
+import ControlePresenca from './views/controle-presenca';
+import RelatorioPresenca from './views/relatorio-presenca';
 
 
 import CadastroPlanos from './views/cadastro-planos';
@@ -67,7 +69,10 @@ function Rotas(props) {
         <Route path="/listagem-treinos" element={<ListagemTreinos />} />
         <Route path="/listagem-exercicios" element={<ListagemExercicios />} />
 
+        <Route path="/controle-presenca" element={<ControlePresenca />} />
+        <Route path="/relatorio-presenca" element={<RelatorioPresenca/>} />
         <Route path="/relatorio-academia" element={<RelatorioAcademia />} />
+
 
         <Route path="/resumo-do-dia" element={<ResumoDoDia />} />
 

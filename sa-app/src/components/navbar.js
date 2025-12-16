@@ -26,12 +26,12 @@ function Navbar(props) {
 
           <ul className='navbar-nav'>
             <li className="nav-item dropdown">
-              <a 
-                className="nav-link dropdown-toggle" 
-                data-bs-toggle="dropdown" 
-                href="#" 
-                role="button" 
-                aria-haspopup="true" 
+              <a
+                className="nav-link dropdown-toggle"
+                data-bs-toggle="dropdown"
+                href="#"
+                role="button"
+                aria-haspopup="true"
                 aria-expanded="false">
                 Atividade
               </a>
@@ -39,23 +39,21 @@ function Navbar(props) {
                 <a className="dropdown-item" href='/listagem-aulas'>Aulas</a>
                 <a className="dropdown-item" href='/listagem-treinos'>Treinos</a>
 
-                <a className="dropdown-item" href='/resumo-do-dia'>Resumo do Dia</a>
-
                 <div className="dropdown-divider"></div>
                 <a className="dropdown-item" href='/listagem-equipamentos'>Equipamentos</a>
                 <a className="dropdown-item" href='/listagem-exercicios'>Exercícios</a>
               </div>
             </li>
-          </ul>  
+          </ul>
 
           <ul className='navbar-nav'>
             <li className="nav-item dropdown">
-              <a 
-                className="nav-link dropdown-toggle" 
-                data-bs-toggle="dropdown" 
-                href="#" 
-                role="button" 
-                aria-haspopup="true" 
+              <a
+                className="nav-link dropdown-toggle"
+                data-bs-toggle="dropdown"
+                href="#"
+                role="button"
+                aria-haspopup="true"
                 aria-expanded="false">
                 Cliente
               </a>
@@ -64,16 +62,16 @@ function Navbar(props) {
                 <a className="dropdown-item" href='/listagem-fichas-avaliacao-fisica'>Ficha de Avaliação Física</a>
               </div>
             </li>
-          </ul> 
+          </ul>
 
           <ul className='navbar-nav'>
             <li className="nav-item dropdown">
-              <a 
-                className="nav-link dropdown-toggle" 
-                data-bs-toggle="dropdown" 
-                href="#" 
-                role="button" 
-                aria-haspopup="true" 
+              <a
+                className="nav-link dropdown-toggle"
+                data-bs-toggle="dropdown"
+                href="#"
+                role="button"
+                aria-haspopup="true"
                 aria-expanded="false">
                 Funcionário
               </a>
@@ -86,20 +84,20 @@ function Navbar(props) {
           </ul>
 
           <ul className='navbar-nav'>
-            <NavbarItem 
-              render='true' 
-              href='/listagem-planos' 
+            <NavbarItem
+              render='true'
+              href='/listagem-planos'
               label='Plano' />
           </ul>
 
           <ul className='navbar-nav'>
             <li className="nav-item dropdown">
-              <a 
-                className="nav-link dropdown-toggle" 
-                data-bs-toggle="dropdown" 
-                href="#" 
-                role="button" 
-                aria-haspopup="true" 
+              <a
+                className="nav-link dropdown-toggle"
+                data-bs-toggle="dropdown"
+                href="#"
+                role="button"
+                aria-haspopup="true"
                 aria-expanded="false">
                 Cobrança
               </a>
@@ -113,12 +111,26 @@ function Navbar(props) {
           </ul>
 
           <ul className='navbar-nav'>
-            <NavbarItem
-              render='true'
-              href='/relatorio-academia'
-              label='Relatório'
-            />
+            <li className="nav-item dropdown">
+              <a
+                className="nav-link dropdown-toggle"
+                data-bs-toggle="dropdown"
+                href="#"
+                role="button"
+                aria-haspopup="true"
+                aria-expanded="false">
+                Relatórios
+              </a>
+              <div className="dropdown-menu">
+                <a className="dropdown-item" href='/relatorio-presenca'>Relatório de Presença</a>
+                <a className="dropdown-item" href='/controle-presenca'>Controle de Presença</a>
+                <div className="dropdown-divider"></div>
+                <a className="dropdown-item" href='/relatorio-academia'>Relatório Academia</a>
+                <a className="dropdown-item" href='/resumo-do-dia'>Resumo do Dia</a>
+              </div>
+            </li>
           </ul>
+
           <ul className='navbar-nav'>
             <NavbarItem render='true' href='/login' label='Entrar' />
           </ul>
