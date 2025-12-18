@@ -125,7 +125,7 @@ function Navbar(props) {
                 <a className="dropdown-item" href='/relatorio-presenca'>Relatório de Presença</a>
                 <a className="dropdown-item" href='/controle-presenca'>Controle de Presença</a>
                 <div className="dropdown-divider"></div>
-                <a className="dropdown-item" href='/relatorio-academia'>Relatório Academia</a>
+                <a className="dropdown-item" href='/relatorio-financeiro-academia'>Relatório Financeiro da Academia</a>
                 <a className="dropdown-item" href='/resumo-do-dia'>Resumo do Dia</a>
               </div>
             </li>

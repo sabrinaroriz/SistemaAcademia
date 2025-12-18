@@ -20,7 +20,7 @@ import {
 } from 'chart.js';
 import { Bar, Doughnut, Line } from 'react-chartjs-2';
 
-const baseURL = `${BASE_URL}4/relatorioacademia`;
+const baseURL = `${BASE_URL}4/relatoriofinanceiroacademia`;
 
 ChartJS.register(
   ArcElement,
@@ -31,9 +31,10 @@ ChartJS.register(
   PointElement,
   Tooltip,
   Legend
+
 );
 
-function RelatorioAcademia() {
+function RelatorioFinanceiroAcademia() {
   const [dados, setDados] = useState(null);
   const [mesSelecionado, setMesSelecionado] = useState('');
   const [dadosMes, setDadosMes] = useState(null);
@@ -154,7 +155,7 @@ function RelatorioAcademia() {
 
   return (
     <div className="container">
-      <Card title="Relatórios da Academia">
+      <Card title="Relatórios Financeiro da Academia">
         <FormGroup label="Mês:" htmlFor="mes">
           <select
             id="mes"
@@ -250,4 +251,4 @@ function RelatorioAcademia() {
   );
 }
 
-export default RelatorioAcademia;
+export default RelatorioFinanceiroAcademia;

@@ -5,24 +5,30 @@ import { BASE_URL } from "../config/axios";
 
 const baseURL = `${BASE_URL}5/controlepresenca`;
 
+function hojeLocal() {
+  const hoje = new Date();
+  const ano = hoje.getFullYear();
+  const mes = String(hoje.getMonth() + 1).padStart(2, "0");
+  const dia = String(hoje.getDate()).padStart(2, "0");
+  return `${ano}-${mes}-${dia}`;
+}
+
 function RelatorioPresenca() {
   const [data, setData] = useState("");
   const [clientes, setClientes] = useState([]);
   const [registros, setRegistros] = useState([]);
 
   useEffect(() => {
-    axios.get(`${BASE_URL}/clientes`).then(res => {
-      setClientes(res.data);
-    });
+    axios.get(`${BASE_URL}/clientes`)
+      .then(res => {
+        setClientes(res.data);
+      });
   }, []);
 
   async function buscar() {
     if (!data) return;
 
-    const res = await axios.get(
-      `${baseURL}?data=${data}`
-    );
-
+    const res = await axios.get(`${baseURL}?data=${data}`);
     setRegistros(res.data);
   }
 
@@ -39,13 +45,16 @@ function RelatorioPresenca() {
             <input
               type="date"
               className="form-control"
-              max={new Date().toISOString().split("T")[0]}
+              max={hojeLocal()}
               value={data}
               onChange={e => setData(e.target.value)}
             />
           </div>
           <div className="col-md-2">
-            <button className="btn btn-primary" onClick={buscar}>
+            <button
+              className="btn btn-primary"
+              onClick={buscar}
+            >
               Buscar
             </button>
           </div>
