@@ -31,7 +31,7 @@ function CadastroAulas() {
   const [descricao, setDescricao] = useState('');
 
   const [listaequipamentoaula , setListaEquipamentoAula] = useState([
-    { id: 0,idequipamento: 0, quantidade: 0, idaula: 0 }
+    { idequipamento: 0, quantidade: 0, idaula: 0 }
   ]);
 
   const [dados, setDados] = React.useState([]);
@@ -125,7 +125,7 @@ function CadastroAulas() {
           status,capacidade,clientes,descricao };
       let idAulaSalvo = idParam;
       data = JSON.stringify(data);
-
+      
       if (idParam == null) {
         const resp = await axios.post(baseURL, data, {
             headers: { 'Content-Type': 'application/json' },
@@ -153,7 +153,6 @@ function CadastroAulas() {
           });
         }
       }
-
       mensagemSucesso(`Aula ${nome} cadastrada com sucesso!`);
       navigate(`/listagem-aulas`);
 

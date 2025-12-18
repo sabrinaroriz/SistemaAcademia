@@ -28,7 +28,7 @@ function CadastroTreinos() {
   const [descricao, setDescricao] = useState('');
 
   const [listaexerciciotreino , setListaExercicioTreino] = useState([
-    { id: 0, idtreino: 0, idexercicio: 0, serie: 0, repeticao: 0, carga: 0 }
+    { idtreino: 0, idexercicio: 0, serie: 0, repeticao: 0, carga: 0 }
   ]);
 
   const [dados, setDados] = React.useState([]);
