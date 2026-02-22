@@ -28,19 +28,21 @@ function CadastroExercicios() {
   const [dados, setDados] = React.useState([]);
 
   function cancelar() {
-    if (idParam != null) {
-    navigate('/listagem-exercicios');
-    return;
-    }
-    const temCamposPreenchidos =
-      nome !== '' || descricao !== '';
-
-    if (temCamposPreenchidos) {
-      if (window.confirm('Deseja realmente limpar o formulário?')) {
-        inicializar();
-      }
-    } else {
+    const confirmar = window.confirm('Deseja realmente voltar?');
+    if (confirmar) {
       navigate('/listagem-exercicios');
+    }
+  }
+
+  function limparFormulario() {
+    const temCamposPreenchidos = nome.trim() !== '' || descricao.trim() !== '';
+    if (!temCamposPreenchidos) {
+      inicializar();
+      return;
+    }
+    const confirmar = window.confirm('Deseja realmente limpar o formulário?');
+    if (confirmar) {
+      inicializar();
     }
   }
 
@@ -150,6 +152,13 @@ function CadastroExercicios() {
                   className='btn btn-primary'
                 >
                   Salvar
+                </button>
+                <button
+                  onClick={limparFormulario}
+                  type='button'
+                  className='btn btn-warning'
+                >
+                  Limpar
                 </button>
                 <button
                   onClick={cancelar}

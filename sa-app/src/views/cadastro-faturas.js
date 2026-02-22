@@ -48,19 +48,22 @@ function CadastroFaturas() {
  }
 
   function cancelar() {
-    if (idParam != null) {
-    navigate('/listagem-faturas');
-    return;
+    const confirmar = window.confirm('Deseja realmente voltar?');
+    if (confirmar) {
+      navigate('/listagem-faturas');
     }
+  }
+
+  function limparFormulario() {
     const temCamposPreenchidos =
       idcliente !== '' || idplano !== '' || datavencimento !== '' || datapagamento !== '' || idformaspagamento !== '' || ajustesfinanceiros.some(aj => aj.idajustefinanceiro !== 0);
-
-    if (temCamposPreenchidos) {
-      if (window.confirm('Deseja realmente limpar o formulário?')) {
-        inicializar();
-      }
-    } else {
-      navigate('/listagem-faturas');
+    if (!temCamposPreenchidos) {
+      inicializar();
+      return;
+    }
+    const confirmar = window.confirm('Deseja realmente limpar o formulário?');
+    if (confirmar) {
+      inicializar();
     }
   }
 
@@ -344,6 +347,13 @@ function CadastroFaturas() {
                   className='btn btn-primary'
                 >
                   Salvar
+                </button>
+                <button
+                  onClick={limparFormulario}
+                  type='button'
+                  className='btn btn-warning'
+                >
+                  Limpar
                 </button>
                 <button
                   onClick={cancelar}

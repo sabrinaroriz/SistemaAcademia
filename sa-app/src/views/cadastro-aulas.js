@@ -66,20 +66,24 @@ function CadastroAulas() {
   setIdCliente(novosClientes);
  }
 
+
   function cancelar() {
-    if (idParam != null) {
+    const confirmar = window.confirm('Deseja realmente voltar?');
+    if (confirmar) {
       navigate('/listagem-aulas');
+    }
+  }
+
+  function limparFormulario() {
+    const temCamposPreenchidos =
+      nome !== '' || idfuncionario !== '' || dataAula !== '' || horario !== '' || capacidade !== '' || clientes.some(cl => cl.idcliente !== 0) || dadosEquipamentos.some(cl => cl.idequipamento !==0) || status !== '';
+    if (!temCamposPreenchidos) {
+      inicializar();
       return;
     }
-    const temCamposPreenchidos =
-      nome !== '' || idfuncionario !== '' || dataAula !== '' || horario !== '' || capacidade !== '' || clientes.some(cl => cl.idcliente !== 0);
-
-    if (temCamposPreenchidos) {
-      if (window.confirm('Deseja realmente limpar o formulário?')) {
-        inicializar();
-      }
-    } else {
-      navigate('/listagem-aulas');
+    const confirmar = window.confirm('Deseja realmente limpar o formulário?');
+    if (confirmar) {
+      inicializar();
     }
   }
   
@@ -487,6 +491,13 @@ function CadastroAulas() {
               <Stack spacing={1} padding={1} direction="row">
                 <button onClick={salvar} type="button" className="btn btn-primary">
                   Salvar
+                </button>
+                <button
+                  onClick={limparFormulario}
+                  type='button'
+                  className='btn btn-warning'
+                >
+                  Limpar
                 </button>
                 <button onClick={cancelar} type="button" className="btn btn-danger">
                   Cancelar

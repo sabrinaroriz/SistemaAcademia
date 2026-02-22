@@ -29,20 +29,24 @@ function CadastroPlanos() {
 
   const [dados, setDados] = React.useState([]);
 
+
   function cancelar() {
-    if (idParam != null) {
-    navigate('/listagem-planos');
-    return;
+    const confirmar = window.confirm('Deseja realmente voltar?');
+    if (confirmar) {
+      navigate('/listagem-planos');
     }
+  }
+
+  function limparFormulario() {
     const temCamposPreenchidos =
       nome !== '' || duracao !== '' || valor !== '' || descricao !== '';
-
-    if (temCamposPreenchidos) {
-      if (window.confirm('Deseja realmente limpar o formulário?')) {
-        inicializar();
-      }
-    } else {
-      navigate('/listagem-planos');
+    if (!temCamposPreenchidos) {
+      inicializar();
+      return;
+    }
+    const confirmar = window.confirm('Deseja realmente limpar o formulário?');
+    if (confirmar) {
+      inicializar();
     }
   }
 
@@ -207,6 +211,13 @@ function CadastroPlanos() {
                   className='btn btn-primary'
                 >
                   Salvar
+                </button>
+                <button
+                  onClick={limparFormulario}
+                  type='button'
+                  className='btn btn-warning'
+                >
+                  Limpar
                 </button>
                 <button
                   onClick={cancelar}

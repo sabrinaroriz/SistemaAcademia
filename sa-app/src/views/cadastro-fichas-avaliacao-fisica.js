@@ -43,6 +43,27 @@ function CadastroFichasAvaliacaoFisica() {
     }
   }
 
+  function cancelar() {
+    const confirmar = window.confirm('Deseja realmente voltar?');
+    if (confirmar) {
+      navigate('/listagem-fichas-avaliacao-fisica');
+    }
+  }
+
+  function limparFormulario() {
+    const temCamposPreenchidos =
+       idcliente !== '' || idfuncionario !== '' || datafichaavaliacao !== ''|| peso !== ''|| altura !== ''|| descricao !== '';
+
+    if (!temCamposPreenchidos) {
+      inicializar();
+      return;
+    }
+    const confirmar = window.confirm('Deseja realmente limpar o formulário?');
+    if (confirmar) {
+      inicializar();
+    }
+  } 
+
   function inicializar() {
     if (idParam == null) {
       setId('');
@@ -262,6 +283,13 @@ function CadastroFichasAvaliacaoFisica() {
                   className='btn btn-primary'
                 >
                   Salvar
+                </button>
+                <button
+                  onClick={limparFormulario}
+                  type='button'
+                  className='btn btn-warning'
+                >
+                  Limpar
                 </button>
                 <button
                   onClick={cancelar}
