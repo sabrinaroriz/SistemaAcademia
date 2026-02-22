@@ -145,7 +145,7 @@ function CadastroAulas() {
       mensagemErro('O campo Status é obrigatório!');
       return false;
     }
-    const clientesValidos = clientes.filter(c => c.idcliente != 0);
+    const clientesValidos = clientes.filter(c => c.idcliente !== 0);
 
     if (clientesValidos.length === 0) {
       mensagemErro('Selecione pelo menos um cliente!');
@@ -180,7 +180,7 @@ function CadastroAulas() {
       }
 
       for (const item of listaequipamentoaula) {
-        if(item.idequipamento == 0 || item.quantidade === '') continue;
+        if(item.idequipamento === 0 || item.quantidade === '') continue;
         if(item.id == null){
           await axios.post(baseURLlistaEquipamentoAula, {
             idaula: Number(idAulaSalvo),

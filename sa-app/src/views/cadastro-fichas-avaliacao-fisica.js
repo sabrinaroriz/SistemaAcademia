@@ -1,16 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-
 import Stack from '@mui/material/Stack';
-
 import Card from '../components/card';
-import SubCard from '../components/sub-card';
 import FormGroup from '../components/form-group';
-
 import { mensagemSucesso, mensagemErro } from '../components/toastr';
-
 import '../custom.css';
-
 import axios from 'axios';
 import { BASE_URL } from '../config/axios';
 
@@ -28,11 +22,10 @@ function CadastroFichasAvaliacaoFisica() {
   const [peso, setPeso] = useState('');
   const [altura, setAltura] = useState('');
   const [descricao, setDescricao] = useState('');
-  const [imc, setImc] = useState(null);
-  const [classificacao, setClassificacao] = useState('');
 
   const [dados, setDados] = React.useState([]);
 
+  
   function cancelar() {
     if (idParam != null) {
       navigate('/listagem-fichas-avaliacao-fisica');
@@ -243,8 +236,8 @@ function CadastroFichasAvaliacaoFisica() {
               <br></br>
               <div className="card">
                 <div className='card-body'>
-                  <p><strong>IMC:</strong> {imc}</p>
-                  <p><strong>Classificação:</strong> {classificacao}</p>
+                  <p><strong>IMC:</strong></p>
+                  <p><strong>Classificação:</strong></p>
                   <button type="button" className="btn btn-warning mt-2">
                     Calcular IMC
                   </button>

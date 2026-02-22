@@ -102,11 +102,11 @@ function CadastroTreinos() {
       mensagemErro('O campo Nome do Treino é obrigatório!');
       return false;
     }
-    if (!idcliente || Number(idcliente) == 0) {
+    if (!idcliente || Number(idcliente) === 0) {
       mensagemErro('O campo Cliente é obrigatório!');
       return false;
     }
-    if (!idfuncionario || Number(idfuncionario) == 0) {
+    if (!idfuncionario || Number(idfuncionario) === 0) {
       mensagemErro('O campo Instrutor é obrigatório!');
       return false;
     }
@@ -114,7 +114,7 @@ function CadastroTreinos() {
       mensagemErro('O campo Data de Registro da Ficha é obrigatório!');
       return false;
     }
-    const exerciciosValidos = listaexerciciotreino.filter(e => e.idexercicio != 0);
+    const exerciciosValidos = listaexerciciotreino.filter(e => e.idexercicio !== 0);
     if (exerciciosValidos.length === 0) {
       mensagemErro('Adicione pelo menos um exercício ao treino!');
       return false;
@@ -158,7 +158,7 @@ function CadastroTreinos() {
       }
 
       for (const item of listaexerciciotreino) {
-          if(item.idexercicio == 0 || item.serie === '' || item.repeticao === '' || item.carga === '') continue;
+          if(item.idexercicio === 0 || item.serie === '' || item.repeticao === '' || item.carga === '') continue;
           if(item.id == null){
             await axios.post(baseURLlistaExercicioTreino, {
               idtreino: Number(idTreinoSalvo),
