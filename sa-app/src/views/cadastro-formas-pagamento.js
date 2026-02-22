@@ -55,7 +55,18 @@ function CadastroFormasPagamento() {
     }
   }
 
+  function validarCampos() {
+    if (!nome || !nome.trim()) {
+      mensagemErro('O campo Nome é obrigatório!');
+      return false;
+    }
+    return true;
+  }
+
   async function salvar() {
+    if (!validarCampos()) {
+      return;
+    }
     let data = { id, nome, descricao};
     data = JSON.stringify(data);
     if (idParam == null) {

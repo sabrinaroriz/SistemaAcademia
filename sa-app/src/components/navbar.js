@@ -1,4 +1,4 @@
-import React from 'react';
+import { Link } from 'react-router-dom';
 import 'bootswatch/dist/brite/bootstrap.css';
 import 'bootswatch/dist/brite/bootstrap.min.css';
 
@@ -8,9 +8,9 @@ function Navbar(props) {
   return (
     <div className='navbar navbar-expand-lg fixed-top navbar-light bg-primary'>
       <div className='container'>
-        <a href='/' className='navbar-brand'>
+        <Link to='/' className='navbar-brand'>
           AlphaFit
-        </a>
+        </Link>
         <button
           className='navbar-toggler'
           type='button'
@@ -26,59 +26,56 @@ function Navbar(props) {
 
           <ul className='navbar-nav'>
             <li className="nav-item dropdown">
-              <a
-                className="nav-link dropdown-toggle"
+              <button
+                className="nav-link dropdown-toggle btn btn-link"
                 data-bs-toggle="dropdown"
-                href="#"
-                role="button"
+                type="button"
                 aria-haspopup="true"
                 aria-expanded="false">
                 Atividade
-              </a>
+              </button>
               <div className="dropdown-menu">
-                <a className="dropdown-item" href='/listagem-aulas'>Aulas</a>
-                <a className="dropdown-item" href='/listagem-treinos'>Treinos</a>
+                <Link className="dropdown-item" to='/listagem-aulas'>Aulas</Link>
+                <Link className="dropdown-item" to='/listagem-treinos'>Treinos</Link>
 
                 <div className="dropdown-divider"></div>
-                <a className="dropdown-item" href='/listagem-equipamentos'>Equipamentos</a>
-                <a className="dropdown-item" href='/listagem-exercicios'>Exercícios</a>
+                <Link className="dropdown-item" to='/listagem-equipamentos'>Equipamentos</Link>
+                <Link className="dropdown-item" to='/listagem-exercicios'>Exercícios</Link>
               </div>
             </li>
           </ul>
 
           <ul className='navbar-nav'>
             <li className="nav-item dropdown">
-              <a
-                className="nav-link dropdown-toggle"
+              <button
+                className="nav-link dropdown-toggle btn btn-link"
                 data-bs-toggle="dropdown"
-                href="#"
-                role="button"
+                type="button"
                 aria-haspopup="true"
                 aria-expanded="false">
                 Cliente
-              </a>
+              </button>
               <div className="dropdown-menu">
-                <a className="dropdown-item" href='/listagem-clientes'>Cliente</a>
-                <a className="dropdown-item" href='/listagem-fichas-avaliacao-fisica'>Ficha de Avaliação Física</a>
+                <Link className="dropdown-item" to='/listagem-clientes'>Cliente</Link>
+                <Link className="dropdown-item" to='/listagem-fichas-avaliacao-fisica'>Ficha de Avaliação Física</Link>
               </div>
             </li>
           </ul>
 
           <ul className='navbar-nav'>
             <li className="nav-item dropdown">
-              <a
-                className="nav-link dropdown-toggle"
+              <button
+                className="nav-link dropdown-toggle btn btn-link"
                 data-bs-toggle="dropdown"
-                href="#"
-                role="button"
+                type='button'
                 aria-haspopup="true"
                 aria-expanded="false">
                 Funcionário
-              </a>
+              </button>
               <div className="dropdown-menu">
-                <a className="dropdown-item" href='/listagem-funcionarios'>Funcionário</a>
+                <Link className="dropdown-item" to='/listagem-funcionarios'>Funcionário</Link>
                 <div className="dropdown-divider"></div>
-                <a className="dropdown-item" href='/listagem-cargos'>Cargos</a>
+                <Link className="dropdown-item" to='/listagem-cargos'>Cargos</Link>
               </div>
             </li>
           </ul>
@@ -92,41 +89,39 @@ function Navbar(props) {
 
           <ul className='navbar-nav'>
             <li className="nav-item dropdown">
-              <a
-                className="nav-link dropdown-toggle"
+              <button
+                className="nav-link dropdown-toggle btn btn-link"
                 data-bs-toggle="dropdown"
-                href="#"
-                role="button"
+                type='button'
                 aria-haspopup="true"
                 aria-expanded="false">
                 Cobrança
-              </a>
+              </button>
               <div className="dropdown-menu">
-                <a className="dropdown-item" href='/listagem-faturas'>Fatura</a>
+                <Link className="dropdown-item" to='/listagem-faturas'>Fatura</Link>
                 <div className="dropdown-divider"></div>
-                <a className="dropdown-item" href='/listagem-ajustes-financeiros'>Ajuste Financeiro</a>
-                <a className="dropdown-item" href='/listagem-formas-pagamento'>Forma de Pagamento</a>
+                <Link className="dropdown-item" to='/listagem-ajustes-financeiros'>Ajuste Financeiro</Link>
+                <Link className="dropdown-item" to='/listagem-formas-pagamento'>Forma de Pagamento</Link>
               </div>
             </li>
           </ul>
 
           <ul className='navbar-nav'>
             <li className="nav-item dropdown">
-              <a
-                className="nav-link dropdown-toggle"
+              <button
+                className="nav-link dropdown-toggle btn btn-link"
                 data-bs-toggle="dropdown"
-                href="#"
-                role="button"
+                type='button'
                 aria-haspopup="true"
                 aria-expanded="false">
                 Relatórios
-              </a>
+              </button>
               <div className="dropdown-menu">
-                <a className="dropdown-item" href='/relatorio-presenca'>Relatório de Presença</a>
-                <a className="dropdown-item" href='/controle-presenca'>Controle de Presença</a>
+                <Link className="dropdown-item" to='/relatorio-presenca'>Relatório de Presença</Link>
+                <Link className="dropdown-item" to='/controle-presenca'>Controle de Presença</Link>
                 <div className="dropdown-divider"></div>
-                <a className="dropdown-item" href='/relatorio-financeiro-academia'>Relatório Financeiro da Academia</a>
-                <a className="dropdown-item" href='/resumo-do-dia'>Resumo do Dia</a>
+                <Link className="dropdown-item" to='/relatorio-financeiro-academia'>Relatório Financeiro da Academia</Link>
+                <Link className="dropdown-item" to='/resumo-do-dia'>Resumo do Dia</Link>
               </div>
             </li>
           </ul>

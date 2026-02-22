@@ -90,7 +90,66 @@ function CadastroClientes() {
     }
   }
 
+  function validarCampos() {
+    if (!nome || !nome.trim()) {
+      mensagemErro('O campo Nome é obrigatório!');
+      return false;
+    }
+    if (!cpf || !cpf.trim()) {
+      mensagemErro('O campo CPF é obrigatório!');
+      return false;
+    }
+    if (cpf.length !== 11) {
+      mensagemErro('O CPF deve conter 11 dígitos!');
+      return false;
+    }
+    if (!telefone || !telefone.trim()) {
+      mensagemErro('O campo Telefone é obrigatório!');
+      return false;
+    }
+    if (!datanascimento) {
+      mensagemErro('O campo Data de Nascimento é obrigatório!');
+      return false;
+    }
+    if (!logradouro || !logradouro.trim()) {
+      mensagemErro('O campo Logradouro é obrigatório!');
+      return false;
+    }
+    if (!numero || !numero.trim()) {
+      mensagemErro('O campo Número é obrigatório!');
+      return false;
+    }
+    if (Number(numero) < 0) {
+      mensagemErro('O Número não pode ser negativo!');
+      return false;
+    }
+    if (!bairro || !bairro.trim()) {
+      mensagemErro('O campo Bairro é obrigatório!');
+      return false;
+    }
+    if (!cidade || !cidade.trim()) {
+      mensagemErro('O campo Cidade é obrigatório!');
+      return false;
+    }
+    if (!estado) {
+      mensagemErro('Selecione Estado!');
+      return false;
+    }
+    if (!idplano || Number(idplano) === 0) {
+      mensagemErro('Selecione um Plano!');
+      return false;
+    }
+    if (!status) {
+      mensagemErro('Selecione o Status do cliente!');
+      return false;
+    }
+    return true;
+  }
+
   async function salvar() {
+    if (!validarCampos()) {
+      return;
+    }
     let data = { id, nome, cpf, telefone, status, datanascimento, idplano, logradouro, numero, complemento ,bairro ,cidade ,estado, cep};
     data = JSON.stringify(data);
     if (idParam == null) {
@@ -163,6 +222,7 @@ function CadastroClientes() {
         <div className='row'>
           <div className='col-lg-12'>
             <div className='bs-component'>
+              <h5 className="mb-3 mt-3">Dados Pessoais</h5>
               <FormGroup label='Nome: *' htmlFor='inputNome'>
                 <input
                   type='text'
@@ -182,8 +242,8 @@ function CadastroClientes() {
                   value={cpf}
                   className='form-control'
                   name='cpf'
-                  placeholder='Digite o numero do CPF'
-                  onChange={(e) => setCpf(e.target.value)}
+                  placeholder="000.000.000-00"
+                  onChange={(e) => setCpf(e.target.value.replace(/\D/g, ''))}
                 />
               </FormGroup>
               <FormGroup label='Telefone: *' htmlFor='inputTelefone'>
@@ -193,8 +253,8 @@ function CadastroClientes() {
                   value={telefone}
                   className='form-control'
                   name='telefone'
-                  placeholder='Digite o numero do telefone'
-                  onChange={(e) => setTelefone(e.target.value)}
+                  placeholder="(00) 00000-0000"
+                  onChange={(e) => setTelefone(e.target.value.replace(/\D/g, ''))}
                 />
               </FormGroup>
 
@@ -208,7 +268,7 @@ function CadastroClientes() {
                   onChange={(e) => setDatanascimento(e.target.value)}
                 />
               </FormGroup>
-
+              <h5 className="mb-3 mt-4">Endereço</h5>
               <FormGroup label='Logradouro: *' htmlFor='inputLogradouro'>
                 <input
                   type='text'
@@ -297,6 +357,8 @@ function CadastroClientes() {
                     <option value='TO'>TO</option>
                 </select>
               </FormGroup>
+              <br></br>
+              <br></br>
 
               <FormGroup label='Plano: *' htmlFor='selectPlano'>
                 <select

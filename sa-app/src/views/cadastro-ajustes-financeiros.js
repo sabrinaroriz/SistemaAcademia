@@ -65,7 +65,40 @@ function CadastroAjustesFinanceiros() {
     }
   }
 
+  function validarCampos() {
+    if (!nome || !nome.trim()) {
+      mensagemErro('O campo Nome é obrigatório!');
+      return false;
+    }
+    if (!tipo) {
+      mensagemErro('O campo Tipo de ajuste');
+      return false;
+    }
+    if (!unidade) {
+      mensagemErro('Selecione a Unidade do ajuste!');
+      return false;
+    }
+    if (!valor || valor === '') {
+      mensagemErro('O campo Valor é obrigatório!');
+      return false;
+    }
+
+    const valorNumerico = Number(valor);
+    if (valorNumerico < 0) {
+      mensagemErro('O valor não pode ser negativo!');
+      return false;
+    }
+    if (unidade === 'Porcentagem' && valorNumerico > 100) {
+      mensagemErro('A porcentagem não pode ser maior que 100%!');
+      return false;
+    }
+    return true;
+  }
+
   async function salvar() {
+    if (!validarCampos()) {
+      return;
+    }
     let data = { id, nome, tipo, unidade, valor, descricao};
     data = JSON.stringify(data);
     if (idParam == null) {

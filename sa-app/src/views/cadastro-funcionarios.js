@@ -92,7 +92,70 @@ function CadastroFuncionarios() {
     }
   }
 
+  function validarCampos() {
+    if (!nome || !nome.trim()) {
+      mensagemErro('O campo Nome é obrigatório!');
+      return false;
+    }
+    if (!cpf || !cpf.trim()) {
+      mensagemErro('O campo CPF é obrigatório!');
+      return false;
+    }
+    if (cpf.length !== 11) {
+      mensagemErro('O CPF deve conter 11 dígitos!');
+      return false;
+    }
+    if (!telefone || !telefone.trim()) {
+      mensagemErro('O campo Telefone é obrigatório!');
+      return false;
+    }
+    if (!email || !email.trim()) {
+      mensagemErro('O campo Email é obrigatório!');
+      return false;
+    }
+    if (!logradouro || !logradouro.trim()) {
+      mensagemErro('O campo Logradouro é obrigatório!');
+      return false;
+    }
+    if (!numero || !numero.trim()) {
+      mensagemErro('O campo Número é obrigatório!');
+      return false;
+    }
+    if (Number(numero) < 0) {
+      mensagemErro('O Número não pode ser negativo!');
+      return false;
+    }
+    if (!bairro || !bairro.trim()) {
+      mensagemErro('O campo Bairro é obrigatório!');
+      return false;
+    }
+    if (!cidade || !cidade.trim()) {
+      mensagemErro('O campo Cidade é obrigatório!');
+      return false;
+    }
+    if (!estado) {
+      mensagemErro('Selecione Estado!');
+      return false;
+    }
+    if (!idcargo || Number(idcargo) === 0) {
+      mensagemErro('Selecione um Cargo!');
+      return false;
+    }
+    if (!dataAdmissao) {
+      mensagemErro('O campo Data de Admissão é obrigatório!');
+      return false;
+    }
+    if (!status) {
+      mensagemErro('Selecione o Status do funcionário!');
+      return false;
+    }
+    return true;
+  }
+
   async function salvar() {
+    if (!validarCampos()) {
+      return;
+    }
     let data = { id, nome, cpf, telefone, email, dataNascimento, idcargo, dataAdmissao, status, observacoes, logradouro, numero, complemento ,bairro ,cidade ,estado, cep};
     data = JSON.stringify(data);
     if (idParam == null) {
@@ -191,7 +254,7 @@ function CadastroFuncionarios() {
                   className="form-control"
                   value={cpf}
                   name='cpf'
-                  onChange={(e) => setCpf(e.target.value)}
+                  onChange={(e) => setCpf(e.target.value.replace(/\D/g, ''))}
                   placeholder="000.000.000-00"
                 />
               </FormGroup>
@@ -203,7 +266,7 @@ function CadastroFuncionarios() {
                   className="form-control"
                   value={telefone}
                   name='telefone'
-                  onChange={(e) => setTelefone(e.target.value)}
+                  onChange={(e) => setTelefone(e.target.value.replace(/\D/g, ''))}
                   placeholder="(00) 00000-0000"
                 />
               </FormGroup>

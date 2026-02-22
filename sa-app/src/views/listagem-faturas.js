@@ -89,8 +89,9 @@ function ListagemFaturas() {
   }
 
   function getNomePlano(idcliente) {
-    const cliente = dadosClientes.find(c => c.id === idcliente);
-    const plano = dadosPlanos.find(c => c.id === cliente.idplano);
+    const cliente = dadosClientes?.find(c => c.id === Number(idcliente));
+    if (!cliente) return 'Sem plano';
+    const plano = dadosPlanos?.find(p => p.id === cliente.idplano);
     return plano ? plano.nome : 'Sem plano';
   }
 

@@ -97,7 +97,50 @@ function CadastroTreinos() {
     }
   }
 
+  function validarCampos() {
+    if (!nome || !nome.trim()) {
+      mensagemErro('O campo Nome do Treino é obrigatório!');
+      return false;
+    }
+    if (!idcliente || Number(idcliente) == 0) {
+      mensagemErro('O campo Cliente é obrigatório!');
+      return false;
+    }
+    if (!idfuncionario || Number(idfuncionario) == 0) {
+      mensagemErro('O campo Instrutor é obrigatório!');
+      return false;
+    }
+    if (!dataregistroficha) {
+      mensagemErro('O campo Data de Registro da Ficha é obrigatório!');
+      return false;
+    }
+    const exerciciosValidos = listaexerciciotreino.filter(e => e.idexercicio != 0);
+    if (exerciciosValidos.length === 0) {
+      mensagemErro('Adicione pelo menos um exercício ao treino!');
+      return false;
+    }
+    for (let i = 0; i < exerciciosValidos.length; i++) {
+      const ex = exerciciosValidos[i];
+      if (ex.serie !== '' &&  Number(ex.serie) < 0) {
+        mensagemErro(`A série do exercício ${i + 1} deve ser um número válido!`);
+        return false;
+      }
+      if (ex.repeticao !== '' && Number(ex.repeticao) < 0) {
+        mensagemErro(`A repetição do exercício ${i + 1} deve ser um número válido!`);
+        return false;
+      }
+      if (ex.carga !== '' && Number(ex.carga) < 0) {
+        mensagemErro(`A carga do exercício ${i + 1} deve ser um número válido!`);
+        return false;
+      }
+    }
+      return true;
+  }
+
   async function salvar() {
+    if (!validarCampos()) {
+      return;
+    }
     try {
       let data = {id, nome, idcliente, idfuncionario, dataregistroficha, descricao};
       let idTreinoSalvo = idParam;
@@ -271,7 +314,7 @@ function CadastroTreinos() {
                 </select>
               </FormGroup>
 
-              <FormGroup label='Data de Registro da Ficha:' htmlFor='inputDataRegistroFicha'>
+              <FormGroup label='Data de Registro da Ficha: *' htmlFor='inputDataRegistroFicha'>
                 <input
                   type='date'
                   id='inputDataRegistroFicha'
@@ -311,7 +354,7 @@ function CadastroTreinos() {
                         className='form-control'
                         name='serie'
                         placeholder='Ex: 3'
-                        onChange={(e) => atualizarExercicio(index, 'serie', e.target.value)}
+                        onChange={(e) => atualizarExercicio(index, 'serie', e.target.value.replace(/[^0-9.]/g, ''))}
                       />
                     </FormGroup>
                     <FormGroup label='Repetições:' htmlFor={`inputRepeticao${index}`}>
@@ -322,7 +365,7 @@ function CadastroTreinos() {
                         className='form-control'
                         name='repeticao'
                         placeholder='Ex: 3'
-                        onChange={(e) => atualizarExercicio(index, 'repeticao', e.target.value)}
+                        onChange={(e) => atualizarExercicio(index, 'repeticao', e.target.value.replace(/[^0-9.]/g, ''))}
                       />
                     </FormGroup>
                     <FormGroup label='Carga (kg):' htmlFor={`inputCarga${index}`}>
@@ -333,7 +376,7 @@ function CadastroTreinos() {
                         className='form-control'
                         name='carga'
                         placeholder='Ex: 10'
-                        onChange={(e) => atualizarExercicio(index, 'carga', e.target.value)}
+                        onChange={(e) => atualizarExercicio(index, 'carga', e.target.value.replace(/[^0-9.]/g, ''))}
                       />
                     </FormGroup>
                     <button

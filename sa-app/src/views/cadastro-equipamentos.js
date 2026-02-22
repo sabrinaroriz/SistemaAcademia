@@ -64,7 +64,34 @@ function CadastroEquipamentos() {
     }
   }
 
+  function validarCampos() {
+    if (!nome || !nome.trim()) {
+      mensagemErro('O campo Nome é obrigatório!');
+      return false;
+    }
+    if (!modelo || !modelo.trim()) {
+      mensagemErro('O campo Modelo é obrigatório!');
+      return false;
+    }
+    if (!quantidade || Number(quantidade) < 0) {
+      mensagemErro('O campo Quantidade é obrigatório e não pode ser negativo!');
+      return false;
+    }
+    if (!disponivel) {
+      mensagemErro('Selecione se o equipamento está disponível!');
+      return false;
+    }
+    if (!local || !local.trim()) {
+      mensagemErro('O campo Local é obrigatório!');
+      return false;
+    }
+    return true;
+  }
+
   async function salvar() {
+    if (!validarCampos()) {
+      return;
+    }
     let data = { id, nome, modelo, ultmanutencao, quantidade, disponivel, local, descricao};
     data = JSON.stringify(data);
     if (idParam == null) {
@@ -164,7 +191,7 @@ function CadastroEquipamentos() {
                   className="form-control"
                   value={quantidade}
                   name='quantidade'
-                  onChange={(e) => setQuantidade(e.target.value)}
+                  onChange={(e) => setQuantidade(e.target.value.replace(/[^0-9.]/g, ''))}
                   placeholder="Ex: 5"
                 />
               </FormGroup>

@@ -119,7 +119,49 @@ function CadastroAulas() {
     }
   }
 
+  function validarCampos() {
+
+    if (!nome || !nome.trim()) {
+      mensagemErro('O campo Nome é obrigatório!');
+      return false;
+    }
+    if (!dataAula) {
+      mensagemErro('O campo Data da Aula é obrigatório!');
+      return false;
+    }
+    if (!horario) {
+      mensagemErro('O campo Horário é obrigatório!');
+      return false;
+    }
+    if (!idfuncionario || idfuncionario === 0) {
+      mensagemErro('O campo Funcionário é obrigatório!');
+      return false;
+    }
+    if (!capacidade || Number(capacidade) <= 0) {
+      mensagemErro('O campo Capacidade deve ser maior que zero!');
+      return false;
+    }
+    if (!status || !status.trim()) {
+      mensagemErro('O campo Status é obrigatório!');
+      return false;
+    }
+    const clientesValidos = clientes.filter(c => c.idcliente != 0);
+
+    if (clientesValidos.length === 0) {
+      mensagemErro('Selecione pelo menos um cliente!');
+      return false;
+    }
+    if (clientesValidos.length > Number(capacidade)) {
+      mensagemErro('A quantidade de clientes não pode ser maior que a capacidade!');
+      return false;
+    }
+    return true;
+  }
+
   async function salvar() {
+    if (!validarCampos()) {
+      return;
+    }
     try {
       let data = { id,nome,idfuncionario,dataAula,horario,
           status,capacidade,clientes,descricao };
@@ -308,7 +350,7 @@ function CadastroAulas() {
               <SubCard title='Equipamentos Utilizados'>
                 {listaequipamentoaula.map((item, index) => (
                   <div key={index} className="mb-3">
-                    <FormGroup label={`Equipamento ${index + 1}: *`} htmlFor={`selectListaEquipamentoAula${index}`}>
+                    <FormGroup label={`Equipamento ${index + 1}:`} htmlFor={`selectListaEquipamentoAula${index}`}>
                       <select
                         id={`selectListaEquipamentoAula${index}`}
                         value={item.idequipamento}
@@ -334,7 +376,7 @@ function CadastroAulas() {
                         className="form-control"
                         name="quantidade"
                         value={item.quantidade}
-                        onChange={(e) => atualizarEquipamento(index, 'quantidade', e.target.value)}
+                        onChange={(e) => atualizarEquipamento(index, 'quantidade', e.target.value.replace(/[^0-9.]/g, ''))}
                         placeholder="Informe a quantidade utilizada"
                       />
                     </FormGroup>

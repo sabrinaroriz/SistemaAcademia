@@ -84,8 +84,32 @@ function CadastroFaturas() {
     }
   }
 
+  function validarCampos() {
+    if (!idcliente || Number(idcliente) === 0) {
+      mensagemErro('Selecione um Cliente!');
+      return false;
+    }
+    if (!idformaspagamento || Number(idformaspagamento) === 0) {
+      mensagemErro('Selecione a Forma de Pagamento!');
+      return false;
+    }
+    if (!datavencimento) {
+      mensagemErro('O campo Data de Vencimento é obrigatório!');
+      return false;
+    }
+    if (!datapagamento) {
+      mensagemErro('O campo Data de Pagamento é obrigatório!');
+      return false;
+    }
+    return true;
+  }
+
   async function salvar() {
-    let data = { id, idcliente, idplano, datavencimento, datapagamento, idformaspagamento, ajustesfinanceiros};
+    if (!validarCampos()) {
+      return;
+    }
+    const ajustesValidos = ajustesfinanceiros.filter(a => Number(a.idajustefinanceiro) !== 0);
+    let data = { id, idcliente, idplano, datavencimento, datapagamento, idformaspagamento, ajustesfinanceiros: ajustesValidos};
     data = JSON.stringify(data);
     if (idParam == null) {
       await axios
@@ -250,7 +274,7 @@ function CadastroFaturas() {
                <SubCard title='Ajustes Financeiros'>
                  {ajustesfinanceiros.map((item, index) => (
                     <div key={index} className="mb-3">
-                      <FormGroup label={`Ajuste ${index + 1}: *`} htmlFor={`selectAjusteFinanceiro${index}`}>
+                      <FormGroup label={`Ajuste ${index + 1}: `} htmlFor={`selectAjusteFinanceiro${index}`}>
                         <select
                           id={`selectAjusteFinanceiro${index}`}
                           value={item.idajustefinanceiro}

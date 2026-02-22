@@ -47,12 +47,6 @@
   word-wrap: break-word;
 }
 
-
-
-
-
-
-
 .App {
   text-align: center;
 }
@@ -90,4 +84,9 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.btn {
+  box-shadow: none !important;
+  background-image: none !important;
 }

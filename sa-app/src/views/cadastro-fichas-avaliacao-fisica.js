@@ -70,7 +70,34 @@ function CadastroFichasAvaliacaoFisica() {
     }
   }
 
+  function validarCampos() {
+    if (!idcliente || Number(idcliente) === 0) {
+      mensagemErro('Selecione um Cliente!');
+      return false;
+    }
+    if (!idfuncionario || Number(idfuncionario) === 0) {
+      mensagemErro('Selecione um Funcionario!');
+      return false;
+    }
+    if (!datafichaavaliacao) {
+      mensagemErro('O campo Data é obrigatório!');
+      return false;
+    }
+    if (!peso || peso.trim() === '') {
+      mensagemErro('O campo Peso é obrigatório!');
+      return false;
+    }
+    if (!altura || altura.trim() === '') {
+      mensagemErro('O campo Altura é obrigatório!');
+      return false;
+    }
+    return true;
+  }
+
   async function salvar() {
+    if (!validarCampos()) {
+      return;
+    }
     let data = { id, idcliente, idfuncionario, datafichaavaliacao, peso, altura, descricao};
     data = JSON.stringify(data);
     if (idParam == null) {
@@ -199,7 +226,7 @@ function CadastroFichasAvaliacaoFisica() {
                   value={peso}
                   className='form-control'
                   name='peso'
-                  onChange={(e) => setPeso(e.target.value)}
+                  onChange={(e) => setPeso(e.target.value.replace(/[^0-9.]/g, ''))}
                 />
               </FormGroup>
               <FormGroup label='Altura: *' htmlFor='inputAltura'>
@@ -209,7 +236,7 @@ function CadastroFichasAvaliacaoFisica() {
                   value={altura}
                   className='form-control'
                   name='altura'
-                  onChange={(e) => setAltura(e.target.value)}
+                  onChange={(e) => setAltura(e.target.value.replace(/[^0-9.]/g, ''))}
                 />
               </FormGroup>
 
