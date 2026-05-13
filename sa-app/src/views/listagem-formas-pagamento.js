@@ -16,7 +16,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import axios from 'axios';
 import { BASE_URL } from '../config/axios';
 
-const baseURL = `${BASE_URL}3/formaspagamento`;
+const baseURL = `${BASE_URL}3/formaspagamentos`;
 
 function ListagemFormasPagamento() {
   const navigate = useNavigate();

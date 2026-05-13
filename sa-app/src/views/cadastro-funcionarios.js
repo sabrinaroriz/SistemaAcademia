@@ -20,9 +20,9 @@ function CadastroFuncionarios() {
   const [telefone, setTelefone] = useState('');
   const [email, setEmail] = useState('');
   const [dataNascimento, setDataNascimento] = useState('');
-  const [idcargo, setIdCargo] = useState('');
+  const [idCargo, setIdCargo] = useState('');
   const [dataAdmissao, setDataAdmissao] = useState('');
-  const [status, setStatus] = useState('');
+  const [status, setStatus] = useState(null);
   const [observacoes, setObservacoes] = useState('');
   const [logradouro, setLogradouro] = useState('');
   const [numero, setNumero] = useState('');
@@ -44,7 +44,7 @@ function CadastroFuncionarios() {
 
   function limparFormulario() {
     const temCamposPreenchidos =
-      nome !== '' || cpf !== '' || telefone !== '' || email !== '' || dataNascimento !== '' || idcargo !== '' || dataAdmissao !== '' || status !== '' || observacoes !== '' || logradouro !== '' || numero !== '' || complemento !== '' || bairro !== '' || cidade !== '' || estado !== '' || cep !== '';
+      nome !== '' || cpf !== '' || telefone !== '' || email !== '' || dataNascimento !== '' || idCargo !== '' || dataAdmissao !== '' || status !== '' || observacoes !== '' || logradouro !== '' || numero !== '' || complemento !== '' || bairro !== '' || cidade !== '' || estado !== '' || cep !== '';
     if (!temCamposPreenchidos) {
       inicializar();
       return;
@@ -65,7 +65,7 @@ function CadastroFuncionarios() {
       setDataNascimento('');
       setIdCargo('');
       setDataAdmissao('');
-      setStatus('');
+      setStatus(null);
       setObservacoes('');
       setLogradouro('');
       setNumero('');
@@ -81,7 +81,7 @@ function CadastroFuncionarios() {
       setTelefone(dados.telefone);
       setEmail(dados.email);
       setDataNascimento(dados.dataNascimento);
-      setIdCargo(dados.idcargo);
+      setIdCargo(dados.idCargo);
       setDataAdmissao(dados.dataAdmissao);
       setStatus(dados.status);
       setObservacoes(dados.observacoes);
@@ -140,7 +140,7 @@ function CadastroFuncionarios() {
       mensagemErro('Selecione Estado!');
       return false;
     }
-    if (!idcargo || Number(idcargo) === 0) {
+    if (idCargo == null) {
       mensagemErro('Selecione um Cargo!');
       return false;
     }
@@ -148,7 +148,7 @@ function CadastroFuncionarios() {
       mensagemErro('O campo Data de Admissão é obrigatório!');
       return false;
     }
-    if (!status) {
+    if (status == null) {
       mensagemErro('Selecione o Status do funcionário!');
       return false;
     }
@@ -159,7 +159,7 @@ function CadastroFuncionarios() {
     if (!validarCampos()) {
       return;
     }
-    let data = { id, nome, cpf, telefone, email, dataNascimento, idcargo, dataAdmissao, status, observacoes, logradouro, numero, complemento ,bairro ,cidade ,estado, cep};
+    let data = { id, nome, cpf, telefone, email, dataNascimento, idCargo, dataAdmissao, status, observacoes, logradouro, numero, complemento ,bairro ,cidade ,estado, cep};
     data = JSON.stringify(data);
     if (idParam == null) {
       await axios
@@ -199,7 +199,7 @@ function CadastroFuncionarios() {
       setTelefone(dados.telefone);
       setEmail(dados.email);
       setDataNascimento(dados.dataNascimento);
-      setIdCargo(dados.idcargo);
+      setIdCargo(dados.idCargo);
       setDataAdmissao(dados.dataAdmissao);
       setStatus(dados.status);
       setObservacoes(dados.observacoes);
@@ -394,8 +394,8 @@ function CadastroFuncionarios() {
                 <select
                   id="selectCargo"
                   className="form-select"
-                  value={idcargo}
-                  name='idcargo'
+                  value={idCargo}
+                  name='idCargo'
                   onChange={(e) => setIdCargo(e.target.value)}
                 >
                   <option key='0' value='0'>
@@ -427,11 +427,10 @@ function CadastroFuncionarios() {
                         <input
                             type="radio"
                             id='statusAtivo'
-                            value="ativo"
                             className="form-check-input"
                             name='status'
-                            checked={status === "ativo"}
-                            onChange={(e) => setStatus(e.target.value)}
+                            checked={status === true}
+                            onChange={() => setStatus(true)}
                         />
                         <label className="form-check-label" htmlFor="statusAtivo">
                             Ativo
@@ -441,11 +440,10 @@ function CadastroFuncionarios() {
                         <input
                             type="radio"
                             id='statusInativo'
-                            value="inativo"
                             className="form-check-input"
                             name='status'
-                            checked={status === "inativo"}
-                            onChange={(e) => setStatus(e.target.value)}
+                            checked={status === false}
+                            onChange={() => setStatus(false)}
                         />
                         <label className="form-check-label" htmlFor="statusInativo">
                             Inativo

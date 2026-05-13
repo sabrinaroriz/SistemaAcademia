@@ -70,19 +70,16 @@ function ListagemTreinos() {
     });
   }, []);
 
-  console.log(dados)
-  console.log(dadosClientes)
-  console.log(dadosFuncionarios)
 
   if (!dados) return null;
 
-  function getNomeCliente(idcliente) {
-    const cliente = dadosClientes.find(c => c.id === idcliente);
+  function getNomeCliente(idCliente) {
+    const cliente = dadosClientes.find(c => c.id === idCliente);
     return cliente ? cliente.nome : 'Sem cliente';
   }
 
-  function getNomeFuncionario(idfuncionario) {
-    const funcionario = dadosFuncionarios.find(c => c.id === idfuncionario);
+  function getNomeFuncionario(idFuncionario) {
+    const funcionario = dadosFuncionarios.find(c => c.id === idFuncionario);
     return funcionario ? funcionario.nome : 'Sem funcionario';
   }
 
@@ -120,9 +117,9 @@ function ListagemTreinos() {
                   {dados.map((dado) => (
                     <tr key={dado.id}>
                       <td>{dado.nome}</td>
-                      <td>{formatarData(dado.dataregistroficha)}</td>
-                      <td>{getNomeCliente(dado.idcliente)}</td>
-                      <td>{getNomeFuncionario(dado.idfuncionario)}</td>
+                      <td>{formatarData(dado.data)}</td>
+                      <td>{getNomeCliente(dado.idCliente)}</td>
+                      <td>{getNomeFuncionario(dado.idFuncionario)}</td>
                       <td>{dado.descricao}</td>
                       <td>
                         <Stack spacing={1} padding={0} direction='row'>

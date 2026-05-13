@@ -17,9 +17,9 @@ function CadastroEquipamentos() {
   const [id, setId] = useState('');
   const [nome, setNome] = useState('');
   const [modelo, setModelo] = useState('');
-  const [ultmanutencao, setUltManutencao] = useState('');
+  const [ultManutencao, setUltManutencao] = useState('');
   const [quantidade, setQuantidade] = useState('');
-  const [disponivel, setDisponivel] = useState('');
+  const [disponivel, setDisponivel] = useState(null);
   const [local, setLocal] = useState('');
   const [descricao, setDescricao] = useState('');
 
@@ -34,7 +34,7 @@ function cancelar() {
   }
 
   function limparFormulario() {
-    const temCamposPreenchidos = nome !== '' || modelo !== '' || ultmanutencao !== '' || quantidade !== '' || disponivel !== '' || local !== '' || descricao !== '';
+    const temCamposPreenchidos = nome !== '' || modelo !== '' || ultManutencao !== '' || quantidade !== '' || disponivel !== '' || local !== '' || descricao !== '';
     if (!temCamposPreenchidos) {
       inicializar();
       return;
@@ -52,14 +52,14 @@ function cancelar() {
       setModelo('');
       setUltManutencao('');
       setQuantidade('');
-      setDisponivel('');
+      setDisponivel(null);
       setLocal('');
       setDescricao('');
     } else {
       setId(dados.id);
       setNome(dados.nome);
       setModelo(dados.modelo);
-      setUltManutencao(dados.ultmanutencao);
+      setUltManutencao(dados.ultManutencao);
       setQuantidade(dados.quantidade);
       setDisponivel(dados.disponivel);
       setLocal(dados.local);
@@ -76,11 +76,11 @@ function cancelar() {
       mensagemErro('O campo Modelo é obrigatório!');
       return false;
     }
-    if (!quantidade || Number(quantidade) < 0) {
+    if (quantidade === '' || Number(quantidade) < 0) {
       mensagemErro('O campo Quantidade é obrigatório e não pode ser negativo!');
       return false;
     }
-    if (!disponivel) {
+    if (disponivel == null) {
       mensagemErro('Selecione se o equipamento está disponível!');
       return false;
     }
@@ -95,7 +95,7 @@ function cancelar() {
     if (!validarCampos()) {
       return;
     }
-    let data = { id, nome, modelo, ultmanutencao, quantidade, disponivel, local, descricao};
+    let data = { id, nome, modelo, ultManutencao, quantidade: Number(quantidade), disponivel, local, descricao};
     data = JSON.stringify(data);
     if (idParam == null) {
       await axios
@@ -132,7 +132,7 @@ function cancelar() {
       setId(dados.id);
       setNome(dados.nome);
       setModelo(dados.modelo);
-      setUltManutencao(dados.ultmanutencao);
+      setUltManutencao(dados.ultManutencao);
       setQuantidade(dados.quantidade);
       setDisponivel(dados.disponivel);
       setLocal(dados.local);
@@ -181,7 +181,7 @@ function cancelar() {
                   type="date"
                   id="inputUltManutencao"
                   className="form-control"
-                  value={ultmanutencao}
+                  value={ultManutencao}
                   name='ultmanutencao'
                   onChange={(e) => setUltManutencao(e.target.value)}
                 />
@@ -205,11 +205,10 @@ function cancelar() {
                         <input
                             type="radio"
                             id='disponivelSim'
-                            value="sim"
                             className="form-check-input"
                             name='disponivel'
-                            checked={disponivel === "sim"}
-                            onChange={(e) => setDisponivel(e.target.value)}
+                            checked={disponivel === true}
+                            onChange={() => setDisponivel(true)}
                         />
                         <label className="form-check-label" htmlFor="disponivelSim">
                             Sim
@@ -219,11 +218,10 @@ function cancelar() {
                         <input
                             type="radio"
                             id='disponivelNao'
-                            value="não"
                             className="form-check-input"
                             name='disponivel'
-                            checked={disponivel === "não"}
-                            onChange={(e) => setDisponivel(e.target.value)}
+                            checked={disponivel === false}
+                            onChange={() => setDisponivel(false)}
                         />
                         <label className="form-check-label" htmlFor="disponivelNao">
                             Não

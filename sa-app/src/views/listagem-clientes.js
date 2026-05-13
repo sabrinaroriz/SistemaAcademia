@@ -67,8 +67,8 @@ function ListagemClientes() {
 
   if (!dados) return null;
 
-  function getNomePlano(idplano) {
-    const plano = dadosPlanos.find(c => c.id === idplano);
+  function getNomePlano(idPlano) {
+    const plano = dadosPlanos.find(c => c.id === idPlano);
     return plano ? plano.nome : 'Sem Plano';
   }
 
@@ -102,8 +102,8 @@ function ListagemClientes() {
                       <td>{dado.nome}</td>
                       <td>{dado.cpf}</td>
                       <td>{dado.telefone}</td>
-                      <td>{getNomePlano(dado.idplano)}</td>
-                      <td>{dado.status}</td>
+                      <td>{getNomePlano(dado.idPlano)}</td>
+                      <td>{dado.status  ? 'Ativo' : 'Inativo'}</td>
                       <td>
                         <Stack spacing={1} padding={0} direction='row'>
                           <IconButton

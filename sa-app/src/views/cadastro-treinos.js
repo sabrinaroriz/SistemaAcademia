@@ -18,23 +18,23 @@ function CadastroTreinos() {
   const { idParam } = useParams();
   const navigate = useNavigate();
   const baseURL = `${BASE_URL}2/treinos`;
-  const baseURLlistaExercicioTreino = `${BASE_URL}4/listaexerciciotreino`;
+  const baseURLlistaExercicioTreino = `${BASE_URL}4/listasexerciciostreinos`;
 
   const [id, setId] = useState('');
   const [nome, setNome] = useState('');
-  const [idcliente, setIdCliente] = useState('');
-  const [idfuncionario, setIdFuncionario] = useState('');
-  const [dataregistroficha, setDataRegistroFicha] = useState('');
+  const [idCliente, setIdCliente] = useState('');
+  const [idFuncionario, setIdFuncionario] = useState('');
+  const [data, setData] = useState('');
   const [descricao, setDescricao] = useState('');
 
   const [listaexerciciotreino , setListaExercicioTreino] = useState([
-    { idtreino: 0, idexercicio: 0, serie: 0, repeticao: 0, carga: 0 }
+    { idTreino: 0, idExercicio: 0, serie: 0, repeticao: 0, carga: 0 }
   ]);
 
   const [dados, setDados] = React.useState([]);
 
   function adicionarExercicio() {
-    setListaExercicioTreino([...listaexerciciotreino, { idexercicio: 0, serie: '', repeticao: '', carga: '' }]);
+    setListaExercicioTreino([...listaexerciciotreino, { idExercicio: 0, serie: '', repeticao: '', carga: '' }]);
   }
 
   function atualizarExercicio(index, campo, valor) {
@@ -58,7 +58,7 @@ function CadastroTreinos() {
 
   function limparFormulario() {
     const temCamposPreenchidos =
-      nome !== '' || idcliente !== '' || idfuncionario !== '' || dataregistroficha !== '' || descricao !== '' || dadosExercicios.some(cl => cl.idexercicio !==0);
+      nome !== '' || idCliente !== '' || idFuncionario !== '' || data !== '' || descricao !== '' || dadosExercicios.some(cl => cl.idExercicio !==0);
     if (!temCamposPreenchidos) {
       inicializar();
       return;
@@ -75,28 +75,28 @@ function CadastroTreinos() {
       setNome('');
       setIdCliente('');
       setIdFuncionario('');
-      setDataRegistroFicha('');
+      setData('');
       setDescricao('');
-      setListaExercicioTreino([{idexercicio: 0, serie: 0, repeticao: 0, carga: 0}])
+      setListaExercicioTreino([{idExercicio: 0, serie: 0, repeticao: 0, carga: 0}])
     } else {
       setId(dados.id);
       setNome(dados.nome);
-      setIdCliente(dados.idcliente);
-      setIdFuncionario(dados.idfuncionario);
-      setDataRegistroFicha(dados.dataregistroficha);
+      setIdCliente(dados.idCliente);
+      setIdFuncionario(dados.idFuncionario);
+      setData(dados.data);
       setDescricao(dados.descricao);
       if(dadosListaExercicioTreino && dadosListaExercicioTreino.length > 0){
         setListaExercicioTreino(
           dadosListaExercicioTreino.map((item) => ({
             id: item.id,
-            idexercicio: item.idexercicio,
+            idExercicio: item.idExercicio,
             serie: item.serie,
             repeticao: item.repeticao,
             carga: item.carga
           }))
         );
       }else {
-        setListaExercicioTreino([{ idexercicio: 0, serie: 0, repeticao: 0, carga: 0 }]);
+        setListaExercicioTreino([{ idExercicio: 0, serie: 0, repeticao: 0, carga: 0 }]);
       }
     }
   }
@@ -106,19 +106,19 @@ function CadastroTreinos() {
       mensagemErro('O campo Nome do Treino é obrigatório!');
       return false;
     }
-    if (!idcliente || Number(idcliente) === 0) {
+    if (idCliente == null) {
       mensagemErro('O campo Cliente é obrigatório!');
       return false;
     }
-    if (!idfuncionario || Number(idfuncionario) === 0) {
+    if (idFuncionario == null) {
       mensagemErro('O campo Instrutor é obrigatório!');
       return false;
     }
-    if (!dataregistroficha) {
+    if (!data) {
       mensagemErro('O campo Data de Registro da Ficha é obrigatório!');
       return false;
     }
-    const exerciciosValidos = listaexerciciotreino.filter(e => e.idexercicio !== 0);
+    const exerciciosValidos = listaexerciciotreino.filter(e => e.idExercicio !== 0);
     if (exerciciosValidos.length === 0) {
       mensagemErro('Adicione pelo menos um exercício ao treino!');
       return false;
@@ -146,35 +146,35 @@ function CadastroTreinos() {
       return;
     }
     try {
-      let data = {id, nome, idcliente, idfuncionario, dataregistroficha, descricao};
+      let treino = {id, nome, idCliente, idFuncionario, data, descricao};
       let idTreinoSalvo = idParam;
-      data = JSON.stringify(data);
+      treino = JSON.stringify(treino);
 
       if (idParam == null) {
-        const resp = await axios.post(baseURL, data, {
+        const resp = await axios.post(baseURL, treino, {
             headers: { 'Content-Type': 'application/json' },
           });
           idTreinoSalvo = resp.data.id;
       } else {
-        await axios.put(`${baseURL}/${idParam}`, data, {
+        await axios.put(`${baseURL}/${idParam}`, treino, {
             headers: { 'Content-Type': 'application/json' },
           });
       }
 
       for (const item of listaexerciciotreino) {
-          if(item.idexercicio === 0 || item.serie === '' || item.repeticao === '' || item.carga === '') continue;
+          if(item.idExercicio === 0 || item.serie === '' || item.repeticao === '' || item.carga === '') continue;
           if(item.id == null){
             await axios.post(baseURLlistaExercicioTreino, {
-              idtreino: Number(idTreinoSalvo),
-              idexercicio: Number(item.idexercicio),
+              idTreino: Number(idTreinoSalvo),
+              idExercicio: Number(item.idExercicio),
               serie: Number(item.serie),
               repeticao: Number(item.repeticao),
               carga: Number(item.carga)
             });
           }else{
             await axios.put(`${baseURLlistaExercicioTreino}/${item.id}`, {
-              idtreino: Number(idTreinoSalvo),
-              idexercicio: Number(item.idexercicio),
+              idTreino: Number(idTreinoSalvo),
+              idExercicio: Number(item.idExercicio),
               serie: Number(item.serie),
               repeticao: Number(item.repeticao),
               carga: Number(item.carga)
@@ -198,22 +198,22 @@ function CadastroTreinos() {
       });
       setId(dados.id);
       setNome(dados.nome);
-      setIdCliente(dados.idcliente);
-      setIdFuncionario(dados.idfuncionario);
-      setDataRegistroFicha(dados.dataregistroficha);
+      setIdCliente(dados.idCliente);
+      setIdFuncionario(dados.idFuncionario);
+      setData(dados.data);
       setDescricao(dados.descricao);
       if(dadosListaExercicioTreino && dadosListaExercicioTreino.length > 0){
         setListaExercicioTreino(
           dadosListaExercicioTreino.map((item) => ({
             id: item.id,
-            idexercicio: item.idexercicio,
+            idExercicio: item.idExercicio,
             serie: item.serie,
             repeticao: item.repeticao,
             carga: item.carga
           }))
         );
       }else {
-        setListaExercicioTreino([{ idexercicio: 0, serie: 0, repeticao: 0, carga: 0 }]);
+        setListaExercicioTreino([{ idExercicio: 0, serie: 0, repeticao: 0, carga: 0 }]);
       }
     }
   }
@@ -246,7 +246,7 @@ function CadastroTreinos() {
 
   useEffect(()=> {
     if(idParam != null){
-      axios.get(`${BASE_URL}4/listaexerciciotreino?idtreino=${idParam}`)
+      axios.get(`${BASE_URL}4/listasexerciciostreinos?idTreino=${idParam}`)
       .then((response) => setDadosListaExercicioTreino(response.data));
     }
   }, [idParam]);
@@ -283,9 +283,9 @@ function CadastroTreinos() {
               <FormGroup label='Cliente: *' htmlFor='selectCliente'>
                   <select
                     id='selectCliente'
-                    value={idcliente}
+                    value={idCliente}
                     className='form-select'
-                    name='idcliente'
+                    name='idCliente'
                     onChange={(e) => setIdCliente(e.target.value)}
                   >
                   <option key='0' value='0'>
@@ -302,9 +302,9 @@ function CadastroTreinos() {
               <FormGroup label='Instrutor: *' htmlFor='selectIdFuncionario'>
                 <select
                   id='selectIdFuncionario'
-                  value={idfuncionario}
+                  value={idFuncionario}
                   className='form-select'
-                  name='idfuncionario'
+                  name='idFuncionario'
                   onChange={(e) => setIdFuncionario(e.target.value)}
                 >
                   <option key='0' value='0'>
@@ -318,27 +318,27 @@ function CadastroTreinos() {
                 </select>
               </FormGroup>
 
-              <FormGroup label='Data de Registro da Ficha: *' htmlFor='inputDataRegistroFicha'>
+              <FormGroup label='Data de Registro da Ficha: *' htmlFor='inputData'>
                 <input
                   type='date'
-                  id='inputDataRegistroFicha'
-                  value={dataregistroficha}
+                  id='inputData'
+                  value={data}
                   className='form-control'
-                  name='dataregistroficha'
-                  onChange={(e) => setDataRegistroFicha(e.target.value)}
+                  name='data'
+                  onChange={(e) => setData(e.target.value)}
                 />
               </FormGroup>
               <br></br>
               <SubCard title='Treino'>
                 {listaexerciciotreino.map((item, index) => (
                   <div key={index} className="mb-3">
-                    <FormGroup label= {`Exercícios ${index + 1}: *`} htmlFor={'selectListaExercicioTreino${index}'}>
+                    <FormGroup label= {`Exercícios ${index + 1}: *`} htmlFor={`selectListaExercicioTreino${index}`}>
                       <select
                         id={`selectListaExercicioTreino${index}`}
-                        value={item.idexercicio}
+                        value={item.idExercicio}
                         className='form-select'
-                        name='idexercicios'
-                        onChange={(e) => atualizarExercicio(index, 'idexercicio', e.target.value)}
+                        name='idExercicio'
+                        onChange={(e) => atualizarExercicio(index, 'idExercicio', e.target.value)}
                       >
                         <option key='0' value='0'>
                           {''}

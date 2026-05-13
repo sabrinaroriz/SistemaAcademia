@@ -75,7 +75,7 @@ function ListagemFaturas() {
   }, []);
 
   React.useEffect(() => {
-    axios.get(`${BASE_URL}3/formaspagamento`).then((response) => {
+    axios.get(`${BASE_URL}3/formaspagamentos`).then((response) => {
       setDadosFormaPagamento(response.data);
     });
   }, []);
@@ -83,20 +83,20 @@ function ListagemFaturas() {
 
   if (!dados) return null;
 
-  function getNomeCliente(idcliente) {
-    const cliente = dadosClientes.find(c => c.id === idcliente);
+  function getNomeCliente(idCliente) {
+    const cliente = dadosClientes.find(c => c.id === idCliente);
     return cliente ? cliente.nome : 'Sem cliente';
   }
 
-  function getNomePlano(idcliente) {
-    const cliente = dadosClientes?.find(c => c.id === Number(idcliente));
+  function getNomePlano(idCliente) {
+    const cliente = dadosClientes?.find(c => c.id === Number(idCliente));
     if (!cliente) return 'Sem plano';
-    const plano = dadosPlanos?.find(p => p.id === cliente.idplano);
+    const plano = dadosPlanos?.find(p => p.id === cliente.idPlano);
     return plano ? plano.nome : 'Sem plano';
   }
 
-  function getFormaPagamento(idformaspagamento) {
-    const formaPagamento = dadosFormasPagamento.find(c => c.id === idformaspagamento);
+  function getFormaPagamento(idFormaPagamento) {
+    const formaPagamento = dadosFormasPagamento.find(c => c.id === idFormaPagamento);
     return formaPagamento ? formaPagamento.nome: 'Sem forma de pagamento';
   }
 
@@ -133,11 +133,11 @@ function ListagemFaturas() {
                 <tbody>
                   {dados.map((dado) => (
                     <tr key={dado.id}>
-                      <td>{getNomeCliente(dado.idcliente)}</td>
-                      <td>{formatarData(dado.datavencimento)}</td>
-                      <td>{formatarData(dado.datapagamento)}</td>
-                      <td>{getNomePlano(dado.idcliente)}</td>
-                      <td>{getFormaPagamento(dado.idformaspagamento)}</td>
+                      <td>{getNomeCliente(dado.idCliente)}</td>
+                      <td>{formatarData(dado.dataVencimento)}</td>
+                      <td>{formatarData(dado.dataPagamento)}</td>
+                      <td>{getNomePlano(dado.idCliente)}</td>
+                      <td>{getFormaPagamento(dado.idFormaPagamento)}</td>
                       <td>
                         <Stack spacing={1} padding={0} direction='row'>
                           <IconButton

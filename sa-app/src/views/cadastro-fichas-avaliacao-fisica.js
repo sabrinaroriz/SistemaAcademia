@@ -16,9 +16,9 @@ function CadastroFichasAvaliacaoFisica() {
   const baseURL = `${BASE_URL}3/fichasavaliacaofisica`;
 
   const [id, setId] = useState('');
-  const [idcliente, setIdCliente] = useState(0);
-  const [idfuncionario, setIdFuncionario] = useState(0);
-  const [datafichaavaliacao, setDataFichaAvaliacao] = useState('');
+  const [idCliente, setIdCliente] = useState(0);
+  const [idFuncionario, setIdFuncionario] = useState(0);
+  const [dataFicha, setDataFicha] = useState('');
   const [peso, setPeso] = useState('');
   const [altura, setAltura] = useState('');
   const [descricao, setDescricao] = useState('');
@@ -26,23 +26,6 @@ function CadastroFichasAvaliacaoFisica() {
   const [dados, setDados] = React.useState([]);
 
   
-  function cancelar() {
-    if (idParam != null) {
-      navigate('/listagem-fichas-avaliacao-fisica');
-      return;
-    }
-    const temCamposPreenchidos =
-       idcliente !== '' || idfuncionario !== '' || datafichaavaliacao !== ''|| peso !== ''|| altura !== ''|| descricao !== '';
-
-    if (temCamposPreenchidos) {
-      if (window.confirm('Deseja realmente limpar o formulário?')) {
-        inicializar();
-      }
-    } else {
-      navigate('/listagem-fichas-avaliacao-fisica');
-    }
-  }
-
   function cancelar() {
     const confirmar = window.confirm('Deseja realmente voltar?');
     if (confirmar) {
@@ -52,7 +35,7 @@ function CadastroFichasAvaliacaoFisica() {
 
   function limparFormulario() {
     const temCamposPreenchidos =
-       idcliente !== '' || idfuncionario !== '' || datafichaavaliacao !== ''|| peso !== ''|| altura !== ''|| descricao !== '';
+       idCliente !== '' || idFuncionario !== '' || dataFicha !== ''|| peso !== ''|| altura !== ''|| descricao !== '';
 
     if (!temCamposPreenchidos) {
       inicializar();
@@ -69,15 +52,15 @@ function CadastroFichasAvaliacaoFisica() {
       setId('');
       setIdCliente('');
       setIdFuncionario('');
-      setDataFichaAvaliacao('');
+      setDataFicha('');
       setPeso('');
       setAltura('');
       setDescricao('');
     } else {
       setId(dados.id);
-      setIdCliente(dados.idcliente);
-      setIdFuncionario(dados.idfuncionario);
-      setDataFichaAvaliacao(dados.datafichaavaliacao);
+      setIdCliente(dados.idCliente);
+      setIdFuncionario(dados.idFuncionario);
+      setDataFicha(dados.dataFicha);
       setPeso(dados.peso);
       setAltura(dados.altura);
       setDescricao(dados.descricao);
@@ -85,15 +68,15 @@ function CadastroFichasAvaliacaoFisica() {
   }
 
   function validarCampos() {
-    if (!idcliente || Number(idcliente) === 0) {
+    if (idCliente == null) {
       mensagemErro('Selecione um Cliente!');
       return false;
     }
-    if (!idfuncionario || Number(idfuncionario) === 0) {
+    if (idFuncionario == null) {
       mensagemErro('Selecione um Funcionario!');
       return false;
     }
-    if (!datafichaavaliacao) {
+    if (!dataFicha) {
       mensagemErro('O campo Data é obrigatório!');
       return false;
     }
@@ -112,7 +95,7 @@ function CadastroFichasAvaliacaoFisica() {
     if (!validarCampos()) {
       return;
     }
-    let data = { id, idcliente, idfuncionario, datafichaavaliacao, peso, altura, descricao};
+    let data = { id, idCliente, idFuncionario, dataFicha, peso, altura, descricao};
     data = JSON.stringify(data);
     if (idParam == null) {
       await axios
@@ -147,9 +130,9 @@ function CadastroFichasAvaliacaoFisica() {
         setDados(response.data);
       });
       setId(dados.id);
-      setIdCliente(dados.idcliente);
-      setIdFuncionario(dados.idfuncionario);
-      setDataFichaAvaliacao(dados.datafichaavaliacao);
+      setIdCliente(dados.idCliente);
+      setIdFuncionario(dados.idFuncionario);
+      setDataFicha(dados.dataFicha);
       setPeso(dados.peso);
       setAltura(dados.altura);
       setDescricao(dados.descricao);
@@ -190,9 +173,9 @@ function CadastroFichasAvaliacaoFisica() {
               <FormGroup label='Cliente: *' htmlFor='selectCliente'>
                 <select
                   id='selectCliente'
-                  value={idcliente}
+                  value={idCliente}
                   className='form-select'
-                  name='idcliente'
+                  name='idCliente'
                   onChange={(e) => setIdCliente(e.target.value)}
                   >
                   <option key='0' value='0'>
@@ -208,9 +191,9 @@ function CadastroFichasAvaliacaoFisica() {
               <FormGroup label='Funcionario: *' htmlFor='selectFuncionario'>
                 <select
                   id='selectFuncionario'
-                  value={idfuncionario}
+                  value={idFuncionario}
                   className='form-select'
-                  name='idfuncionario'
+                  name='idFuncionario'
                   onChange={(e) => setIdFuncionario(e.target.value)}
                   >
                   <option key='0' value='0'>
@@ -223,14 +206,14 @@ function CadastroFichasAvaliacaoFisica() {
                   ))}
                 </select>
               </FormGroup>
-              <FormGroup label="Data Ficha Avaliação:" htmlFor="inputDataFichaAvaliacao">
+              <FormGroup label="Data Ficha Avaliação:" htmlFor="inputDataFicha">
                 <input
                   type="date"
-                  id="inputDataFichaAvaliacao"
+                  id="inputDataFicha"
                   className="form-control"
-                  value={datafichaavaliacao}
-                  name='dataFichaAvaliacao'
-                  onChange={(e) => setDataFichaAvaliacao(e.target.value)}
+                  value={dataFicha}
+                  name='dataFicha'
+                  onChange={(e) => setDataFicha(e.target.value)}
                 />
               </FormGroup>
               <FormGroup label='Peso: *' htmlFor='inputPeso'>

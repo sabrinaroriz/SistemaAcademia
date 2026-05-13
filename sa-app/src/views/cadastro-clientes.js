@@ -26,9 +26,9 @@ function CadastroClientes() {
   const [nome, setNome] = useState('');
   const [cpf, setCpf] = useState('');
   const [telefone, setTelefone] = useState('');
-  const [status, setStatus] = useState('');
+  const [status, setStatus] = useState(null);
   const [datanascimento, setDatanascimento] = useState('');
-  const [idplano, setIdPlano] = useState('');
+  const [idPlano, setIdPlano] = useState('');
   const [logradouro, setLogradouro] = useState('');
   const [numero, setNumero] = useState('');
   const [complemento, setComplemento] = useState('');
@@ -49,7 +49,7 @@ function CadastroClientes() {
 
   function limparFormulario() {
     const temCamposPreenchidos =
-      nome !== '' || cpf !== '' || telefone !== '' || status !== '' || datanascimento !== '' || idplano !== '' || logradouro !== '' || numero !== '' || complemento !== '' || bairro !== '' || cidade !== '' || estado !== '' || cep !== '';
+      nome !== '' || cpf !== '' || telefone !== '' || status !== '' || datanascimento !== '' || idPlano !== '' || logradouro !== '' || numero !== '' || complemento !== '' || bairro !== '' || cidade !== '' || estado !== '' || cep !== '';
 
     if (!temCamposPreenchidos) {
       inicializar();
@@ -67,7 +67,7 @@ function CadastroClientes() {
       setNome('');
       setCpf('');
       setTelefone('');
-      setStatus('');
+      setStatus(null);
       setDatanascimento('');
       setIdPlano('');
       setLogradouro('');
@@ -84,7 +84,7 @@ function CadastroClientes() {
       setTelefone(dados.telefone);
       setStatus(dados.status);
       setDatanascimento(dados.datanascimento);
-      setIdPlano(dados.idplano);
+      setIdPlano(dados.idPlano);
       setLogradouro(dados.logradouro);
       setNumero(dados.numero);
       setComplemento(dados.complemento);
@@ -140,11 +140,11 @@ function CadastroClientes() {
       mensagemErro('Selecione Estado!');
       return false;
     }
-    if (!idplano || Number(idplano) === 0) {
+    if (idPlano == null) {
       mensagemErro('Selecione um Plano!');
       return false;
     }
-    if (!status) {
+    if (status == null) {
       mensagemErro('Selecione o Status do cliente!');
       return false;
     }
@@ -155,7 +155,7 @@ function CadastroClientes() {
     if (!validarCampos()) {
       return;
     }
-    let data = { id, nome, cpf, telefone, status, datanascimento, idplano, logradouro, numero, complemento ,bairro ,cidade ,estado, cep};
+    let data = { id, nome, cpf, telefone, status, datanascimento, idPlano, logradouro, numero, complemento ,bairro ,cidade ,estado, cep};
     data = JSON.stringify(data);
     if (idParam == null) {
       await axios
@@ -195,7 +195,7 @@ function CadastroClientes() {
       setTelefone(dados.telefone);
       setStatus(dados.status);
       setDatanascimento(dados.datanascimento);
-      setIdPlano(dados.idplano);
+      setIdPlano(dados.idPlano);
       setLogradouro(dados.logradouro);
       setNumero(dados.numero);
       setComplemento(dados.complemento);
@@ -368,9 +368,9 @@ function CadastroClientes() {
               <FormGroup label='Plano: *' htmlFor='selectPlano'>
                 <select
                   id='selectPlano'
-                  value={idplano}
+                  value={idPlano}
                   className='form-select'
-                  name='idplano'
+                  name='idPlano'
                   onChange={(e) => setIdPlano(e.target.value)}
                 >
                   <option key='0' value='0'>
@@ -390,11 +390,10 @@ function CadastroClientes() {
                         <input
                             type="radio"
                             id='statusAtivo'
-                            value="ativo"
                             className="form-check-input"
                             name='status'
-                            checked={status === "ativo"}
-                            onChange={(e) => setStatus(e.target.value)}
+                            checked={status === true}
+                            onChange={() => setStatus(true)}
                         />
                         <label className="form-check-label" htmlFor="statusAtivo">
                             Ativo
@@ -404,11 +403,10 @@ function CadastroClientes() {
                         <input
                             type="radio"
                             id='statusInativo'
-                            value="inativo"
                             className="form-check-input"
                             name='status'
-                            checked={status === "inativo"}
-                            onChange={(e) => setStatus(e.target.value)}
+                            checked={status === false}
+                            onChange={() => setStatus(false)}
                         />
                         <label className="form-check-label" htmlFor="statusInativo">
                             Inativo

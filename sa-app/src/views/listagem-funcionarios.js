@@ -68,8 +68,8 @@ function ListagemFuncionarios() {
   console.log(dadosCargos)
   if (!dados) return null;
   
-  function getNomeCargo(idcargo) {
-    const cargo = dadosCargos.find(c => c.id === idcargo);
+  function getNomeCargo(idCargo) {
+    const cargo = dadosCargos.find(c => c.id === idCargo);
     return cargo ? cargo.nome : 'Sem cargo';
   }
 
@@ -104,7 +104,7 @@ function ListagemFuncionarios() {
                       <td>{dado.cpf}</td>
                       <td>{dado.telefone}</td>
                       <td>{dado.email}</td>
-                      <td>{getNomeCargo(dado.idcargo)}</td>
+                      <td>{getNomeCargo(dado.idCargo)}</td>
                       <td>
                         <Stack spacing={1} padding={0} direction='row'>
                           <IconButton

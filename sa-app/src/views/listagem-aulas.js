@@ -72,8 +72,8 @@ function ListagemAulas() {
     return `${dia}/${mes}/${ano}`;
   }
 
-  function getNomeFuncionario(idfuncionario) {
-    const funcionario = dadosFuncionarios.find(c => c.id === idfuncionario);
+  function getNomeFuncionario(idFuncionario) {
+    const funcionario = dadosFuncionarios.find(c => c.id === idFuncionario);
     return funcionario ? funcionario.nome : 'Sem funcionario';
   }
 
@@ -105,10 +105,10 @@ function ListagemAulas() {
                   {dados.map((dado) => (
                     <tr key={dado.id}>
                       <td>{dado.nome}</td>
-                      <td>{getNomeFuncionario(dado.idfuncionario)}</td>
+                      <td>{getNomeFuncionario(dado.idFuncionario)}</td>
                       <td>{formatarData(dado.dataAula)}</td>
-                      <td>{dado.horario}</td>
-                      <td>{dado.status}</td>
+                      <td>{dado.horaAula}</td>
+                      <td>{dado.status ? 'Ativo' : 'Inativo'}</td>
                       <td>
                         <Stack spacing={1} padding={0} direction='row'>
                           <IconButton

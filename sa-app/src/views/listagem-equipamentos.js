@@ -79,7 +79,7 @@ function ListagemEquipamentos() {
                     <th scope='col'>Equipamento</th>
                     <th scope='col'>Modelo</th>
                     <th scope='col'>Última manutenção</th>
-                    <th scope='col'>Disponivel</th>
+                    <th scope='col'>Disponivel</th> 
                     <th scope='col'>Local</th>
                     <th scope='col'>Ações</th>
                   </tr>
@@ -89,8 +89,8 @@ function ListagemEquipamentos() {
                     <tr key={dado.id}>
                       <td>{dado.nome}</td>
                       <td>{dado.modelo}</td>
-                      <td>{dado.ultmanutencao}</td>
-                      <td>{dado.disponivel}</td>
+                      <td>{dado.ultManutencao}</td>
+                      <td>{dado.disponivel ? 'Sim' : 'Não'}</td>
                       <td>{dado.local}</td>
                       <td>
                         <Stack spacing={1} padding={0} direction='row'>
