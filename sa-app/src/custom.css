@@ -246,3 +246,11 @@ pre {
   }
 
 }
+
+.campo-data fieldset {
+  border: 2px solid #000000 !important;
+}
+
+.campo-data .Mui-focused fieldset {
+  border: 3px solid #000000 !important;
+}

@@ -3,6 +3,13 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 import Stack from '@mui/material/Stack';
 
+import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+
+import dayjs from 'dayjs';
+import 'dayjs/locale/pt-br';
+
 import Card from '../components/card';
 import SubCard from '../components/sub-card';
 import FormGroup from '../components/form-group';
@@ -24,7 +31,7 @@ function CadastroTreinos() {
   const [nome, setNome] = useState('');
   const [idCliente, setIdCliente] = useState('');
   const [idFuncionario, setIdFuncionario] = useState('');
-  const [data, setData] = useState('');
+  const [data, setData] = useState(dayjs());
   const [descricao, setDescricao] = useState('');
 
   const [listaexerciciotreino , setListaExercicioTreino] = useState([
@@ -75,7 +82,7 @@ function CadastroTreinos() {
       setNome('');
       setIdCliente('');
       setIdFuncionario('');
-      setData('');
+      setData(dayjs());
       setDescricao('');
       setListaExercicioTreino([{idExercicio: 0, serie: 0, repeticao: 0, carga: 0}])
     } else {
@@ -83,7 +90,7 @@ function CadastroTreinos() {
       setNome(dados.nome);
       setIdCliente(dados.idCliente);
       setIdFuncionario(dados.idFuncionario);
-      setData(dados.data);
+      setData(dayjs(dados.data));
       setDescricao(dados.descricao);
       if(dadosListaExercicioTreino && dadosListaExercicioTreino.length > 0){
         setListaExercicioTreino(
@@ -200,7 +207,7 @@ function CadastroTreinos() {
       setNome(dados.nome);
       setIdCliente(dados.idCliente);
       setIdFuncionario(dados.idFuncionario);
-      setData(dados.data);
+      setData(dayjs(dados.data));
       setDescricao(dados.descricao);
       if(dadosListaExercicioTreino && dadosListaExercicioTreino.length > 0){
         setListaExercicioTreino(
@@ -319,14 +326,25 @@ function CadastroTreinos() {
               </FormGroup>
 
               <FormGroup label='Data de Registro da Ficha: *' htmlFor='inputData'>
-                <input
-                  type='date'
-                  id='inputData'
-                  value={data}
-                  className='form-control'
-                  name='data'
-                  onChange={(e) => setData(e.target.value)}
-                />
+                <LocalizationProvider
+                  dateAdapter={AdapterDayjs}
+                  adapterLocale='pt-br'
+                >
+                  <Stack spacing={1}>
+                    <DesktopDatePicker
+                      value={data}
+                      inputFormat='DD/MM/YYYY'
+                      onChange={(e) => setData(e)}
+                      slotProps={{
+                        textField: {
+                          fullWidth: true,
+                          size: 'small',
+                          className: 'campo-data'
+                        }
+                      }}
+                    />
+                  </Stack>
+                </LocalizationProvider>
               </FormGroup>
               <br></br>
               <SubCard title='Treino'>

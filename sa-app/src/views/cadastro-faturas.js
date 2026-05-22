@@ -3,6 +3,13 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 import Stack from '@mui/material/Stack';
 
+import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+
+import dayjs from 'dayjs';
+import 'dayjs/locale/pt-br';
+
 import Card from '../components/card';
 import SubCard from '../components/sub-card';
 import FormGroup from '../components/form-group';
@@ -20,31 +27,35 @@ function CadastroFaturas() {
   const navigate = useNavigate();
 
   const baseURL = `${BASE_URL}2/faturas`;
+  const baseURLlistaAjusteFinanceiroFatura = `${BASE_URL}5/listasajustesfinanceirosfaturas`;
 
   const [id, setId] = useState('');
-  const [idcliente, setIdCliente] = useState('');
-  const [idplano, setIdPlano] = useState('');
-  const [datavencimento, setDataVencimento] = useState('');
-  const [datapagamento, setDataPagamento] = useState('');
-  const [idformaspagamento, setIdFormasPagamento] = useState('');
-  const [ajustesfinanceiros, setIdAjustesFinanceiros] = useState([{idajustefinanceiro: 0}]);
+  const [idCliente, setIdCliente] = useState('');
+  const [idPlano, setIdPlano] = useState('');
+  const [dataVencimento, setDataVencimento] = useState(dayjs());
+  const [dataPagamento, setDataPagamento] = useState(dayjs());
+  const [idFormaPagamento, setIdFormasPagamento] = useState('');
   const [valorFinal, setValorFinal] = useState(0);
+
+  const [listaAjusteFinanceiroFatura, setListaAjusteFinanceiroFatura] = useState([
+    { idAjusteFinanceiro: 0, idFatura: 0}
+  ])
 
   const [dados, setDados] = React.useState([]);
 
   function adicionarAjusteFinanceiro() {
-  setIdAjustesFinanceiros([...ajustesfinanceiros, { idajustefinanceiro: 0}]);
+    setListaAjusteFinanceiroFatura([...listaAjusteFinanceiroFatura, { idAjusteFinanceiro: 0}]);
   }
 
   function atualizarAjusteFinanceiro(index, campo, valor) {
-    const novosAjustesFinanceiros = [...ajustesfinanceiros];
+    const novosAjustesFinanceiros = [...listaAjusteFinanceiroFatura];
     novosAjustesFinanceiros[index][campo] = valor;
-    setIdAjustesFinanceiros(novosAjustesFinanceiros);  
+    setListaAjusteFinanceiroFatura(novosAjustesFinanceiros);  
   }
 
   function removeAjusteFinanceiro(index) {
-  const novosAjustesFinanceiros = ajustesfinanceiros.filter((_, i) => i !== index);
-  setIdAjustesFinanceiros(novosAjustesFinanceiros);
+  const novosAjustesFinanceiros = listaAjusteFinanceiroFatura.filter((_, i) => i !== index);
+  setListaAjusteFinanceiroFatura(novosAjustesFinanceiros);
  }
 
   function cancelar() {
@@ -56,7 +67,7 @@ function CadastroFaturas() {
 
   function limparFormulario() {
     const temCamposPreenchidos =
-      idcliente !== '' || idplano !== '' || datavencimento !== '' || datapagamento !== '' || idformaspagamento !== '' || ajustesfinanceiros.some(aj => aj.idajustefinanceiro !== 0);
+      idCliente !== '' || idPlano !== '' || dataVencimento !== '' || dataPagamento !== '' || idFormaPagamento !== '' || dadosAjustesFinanceiros.some(cl => cl.idAjusteFinanceiro !== 0);
     if (!temCamposPreenchidos) {
       inicializar();
       return;
@@ -72,35 +83,44 @@ function CadastroFaturas() {
       setId('');
       setIdCliente('');
       setIdPlano('');
-      setDataVencimento('');
-      setDataPagamento('');
+      setDataVencimento(dayjs());
+      setDataPagamento(dayjs());
       setIdFormasPagamento('');
-      setIdAjustesFinanceiros([{idajustefinanceiro:0}]);
+      setListaAjusteFinanceiroFatura([{idAjusteFinanceiro:0}]);
     } else {
       setId(dados.id);
-      setIdCliente(dados.idcliente);
-      setIdPlano(dados.idplano);
-      setDataVencimento(dados.datavencimento);
-      setDataPagamento(dados.datapagamento);
-      setIdFormasPagamento(dados.idformaspagamento);
-      setIdAjustesFinanceiros(dados.ajustesfinanceiros || [{idajustefinanceiro: 0}]);
+      setIdCliente(dados.idCliente);
+      setIdPlano(dados.idPlano);
+      setDataVencimento(dayjs(dados.dataVencimento));
+      setDataPagamento(dayjs(dados.dataPagamento));
+      setIdFormasPagamento(dados.idFormaPagamento);
+      if(dadosListaAjustesFinanceirosFatura && dadosListaAjustesFinanceirosFatura.length > 0){
+        setListaAjusteFinanceiroFatura(
+          dadosListaAjustesFinanceirosFatura.map((item) => ({
+            id: item.id,
+            idAjusteFinanceiro: item.idAjusteFinanceiro
+          }))
+        );
+      }else {
+        setListaAjusteFinanceiroFatura([{ idAjusteFinanceiro: 0 }]);
+      }
     }
   }
 
   function validarCampos() {
-    if (!idcliente || Number(idcliente) === 0) {
+    if (!idCliente || Number(idCliente) === 0) {
       mensagemErro('Selecione um Cliente!');
       return false;
     }
-    if (!idformaspagamento || Number(idformaspagamento) === 0) {
+    if (!idFormaPagamento || Number(idFormaPagamento) === 0) {
       mensagemErro('Selecione a Forma de Pagamento!');
       return false;
     }
-    if (!datavencimento) {
+    if (!dataVencimento) {
       mensagemErro('O campo Data de Vencimento é obrigatório!');
       return false;
     }
-    if (!datapagamento) {
+    if (!dataPagamento) {
       mensagemErro('O campo Data de Pagamento é obrigatório!');
       return false;
     }
@@ -111,33 +131,43 @@ function CadastroFaturas() {
     if (!validarCampos()) {
       return;
     }
-    const ajustesValidos = ajustesfinanceiros.filter(a => Number(a.idajustefinanceiro) !== 0);
-    let data = { id, idcliente, idplano, datavencimento, datapagamento, idformaspagamento, ajustesfinanceiros: ajustesValidos};
-    data = JSON.stringify(data);
-    if (idParam == null) {
-      await axios
-        .post(baseURL, data, {
-          headers: { 'Content-Type': 'application/json' },
-        })
-        .then(function (response) {
-          mensagemSucesso(`Fatura cadastrado com sucesso!`);
-          navigate(`/listagem-faturas`);
-        })
-        .catch(function (error) {
-          mensagemErro(error.response.data);
-        });
-    } else {
-      await axios
-        .put(`${baseURL}/${idParam}`, data, {
-          headers: { 'Content-Type': 'application/json' },
-        })
-        .then(function (response) {
-          mensagemSucesso(`Fatura alterado com sucesso!`);
-          navigate(`/listagem-faturas`);
-        })
-        .catch(function (error) {
-          mensagemErro(error.response.data);
-        });
+    try {
+      let data = { id, idCliente, idPlano, dataVencimento, dataPagamento, idFormaPagamento};
+      let idFaturaSalvo = idParam;
+      data = JSON.stringify(data);
+
+      if (idParam == null) {
+        const resp = await axios.post(baseURL, data, {
+            headers: { 'Content-Type': 'application/json' },
+          });
+          idFaturaSalvo = resp.data.id;
+      } else {
+          await axios.put(`${baseURL}/${idParam}`, data, {
+            headers: { 'Content-Type': 'application/json' },
+          });
+      }
+
+      for(const item of listaAjusteFinanceiroFatura) {
+        if(item.idAjusteFinanceiro === 0 ) continue;
+        if(item.id == null){
+          await axios.post(baseURLlistaAjusteFinanceiroFatura, {
+            idFatura: Number(idFaturaSalvo),
+            idAjusteFinanceiro: Number(item.idAjusteFinanceiro)
+          });
+        }else{
+          await axios.put(`${baseURLlistaAjusteFinanceiroFatura}/${item.id}`, {
+            idFatura: Number(idFaturaSalvo),
+            idAjusteFinanceiro: Number(item.idAjusteFinanceiro)
+          });
+        }
+      }
+         
+      mensagemSucesso(`Fatura cadastrado com sucesso!`);
+      navigate(`/listagem-faturas`);
+      
+    } catch(error) {
+        mensagemErro(error.response.data);
+        console.log(error);
     }
   }
 
@@ -147,12 +177,21 @@ function CadastroFaturas() {
         setDados(response.data);
       });
       setId(dados.id);
-      setIdCliente(dados.idcliente);
-      setIdPlano(dados.idplano);
-      setDataVencimento(dados.datavencimento);
-      setDataPagamento(dados.datapagamento);
-      setIdFormasPagamento(dados.idformaspagamento);
-      setIdAjustesFinanceiros(dados.ajustesfinanceiros || [{idajustefinanceiro:0}]);
+      setIdCliente(dados.idCliente);
+      setIdPlano(dados.idPlano);
+      setDataVencimento(dayjs(dados.dataVencimento));
+      setDataPagamento(dayjs(dados.dataPagamento));
+      setIdFormasPagamento(dados.idFormaPagamento);
+      if(dadosListaAjustesFinanceirosFatura && dadosListaAjustesFinanceirosFatura.length > 0){
+        setListaAjusteFinanceiroFatura(
+          dadosListaAjustesFinanceirosFatura.map((item) => ({
+            id: item.id,
+            idAjusteFinanceiro: item.idAjusteFinanceiro  
+          }))
+        );
+      }else {
+        setListaAjusteFinanceiroFatura([{ idAjusteFinanceiro: 0}]);
+      }
     }
   }
 
@@ -160,6 +199,7 @@ function CadastroFaturas() {
   const [dadosPlanos, setDadosPlanos] = React.useState(null);
   const [dadosFormasPagamento, setDadosFormasPagamento] = React.useState(null);
   const [dadosAjustesFinanceiros, setDadosAjustesFinanceiros] = React.useState(null);
+  const [dadosListaAjustesFinanceirosFatura, setDadosListaAjustesFinanceirosFatura] = useState([]);
 
 
   useEffect(() => {
@@ -175,7 +215,7 @@ function CadastroFaturas() {
   }, []);
 
   useEffect(() => {
-    axios.get(`${BASE_URL}3/formaspagamento`).then((response) => {
+    axios.get(`${BASE_URL}3/formaspagamentos`).then((response) => {
       setDadosFormasPagamento(response.data);
     });
   }, []);
@@ -187,20 +227,39 @@ function CadastroFaturas() {
   }, []);
 
   useEffect(() => {
-    if (datavencimento !== '') {
+    if(idParam != null){
+      axios.get(`${BASE_URL}5/listasajustesfinanceirosfaturas?idFatura=${idParam}`)
+      .then((response) => setDadosListaAjustesFinanceirosFatura(response.data));
+    }
+  }, [idParam]);
+
+  useEffect(() => {
+    if (dataVencimento !== '') {
       const final = 0;
       setValorFinal(final);
     }
-  }, [datavencimento]);
+  }, [dataVencimento]);
 
-  function getNomePlano(idcliente) {
-  if (!dadosClientes || !dadosPlanos) return 'Sem plano';
+  function getNomePlano(idCliente) {
+    if (!dadosClientes || !dadosPlanos) return 'Sem plano';
+    const cliente = dadosClientes.find(c => c.id === Number(idCliente));
+    if (!cliente) return 'Sem plano';
+    const plano = dadosPlanos.find(c => c.id === cliente.idPlano);
+    return plano ? plano.nome : 'Sem plano';
+  }
 
-  const cliente = dadosClientes.find(c => c.id === Number(idcliente));
-  if (!cliente) return 'Sem plano';
+  function getValorPlano(idCliente) {
+    if (!dadosClientes || !dadosPlanos) return 0;
+    const cliente = dadosClientes.find(c => c.id === Number(idCliente));
+    if (!cliente) return 0;
+    const plano = dadosPlanos.find(p => p.id === cliente.idPlano);
+    return plano ? plano.valor : 0;
+  }
 
-  const plano = dadosPlanos.find(c => c.id === cliente.idplano);
-  return plano ? plano.nome : 'Sem plano';
+  function getValorAjuste(idAjusteFinanceiro) {
+    if (!dadosAjustesFinanceiros) return 0;
+    const ajuste = dadosAjustesFinanceiros.find(a => a.id === Number(idAjusteFinanceiro));
+    return ajuste ? ajuste.valor : 0;
   }
 
 
@@ -213,6 +272,7 @@ function CadastroFaturas() {
   if (!dadosClientes) return null;
   if (!dadosFormasPagamento) return null;
   if (!dadosAjustesFinanceiros) return null;
+  if (!dadosListaAjustesFinanceirosFatura) return null;
 
   const currency = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
 
@@ -226,9 +286,9 @@ function CadastroFaturas() {
               <FormGroup label='Cliente: *' htmlFor='selectCliente'>
                 <select
                   id='selectCliente'
-                  value={idcliente}
+                  value={idCliente}
                   className='form-select'
-                  name='idcliente'
+                  name='idCliente'
                   onChange={(e) => setIdCliente(e.target.value)
                     
                   }
@@ -248,18 +308,28 @@ function CadastroFaturas() {
                 <input
                   id='inputPlano'
                   type='text'
-                  value={getNomePlano(idcliente)}
-                 className='form-control'
-                  name='idplano'
+                  value={getNomePlano(idCliente)}
+                 className='form-control form-control-sm'
+                  name='idPlano'
+                />
+              </FormGroup>
+
+              <FormGroup label='Valor do Plano: ' htmlFor='inputValorPlano'>
+                <input
+                  id='inputValorPlano'
+                  type='text'
+                  value={currency.format(getValorPlano(idCliente))}
+                  className='form-control form-control-sm'
+                  name='inputValorPlano'
                 />
               </FormGroup>
 
               <FormGroup label='Forma de Pagamento: *' htmlFor='selectFormaPagamento'>
                 <select
                   id='selectFormaPagamento'
-                  value={idformaspagamento}
+                  value={idFormaPagamento}
                   className='form-select'
-                  name='idformaspagamento'
+                  name='idFormaPagamento'
                   onChange={(e) => setIdFormasPagamento(e.target.value)}
                 >
                   <option key='0' value='0'>
@@ -275,15 +345,15 @@ function CadastroFaturas() {
               </FormGroup>
               <br></br>
                <SubCard title='Ajustes Financeiros'>
-                 {ajustesfinanceiros.map((item, index) => (
+                 {listaAjusteFinanceiroFatura.map((item, index) => (
                     <div key={index} className="mb-3">
-                      <FormGroup label={`Ajuste ${index + 1}: `} htmlFor={`selectAjusteFinanceiro${index}`}>
+                      <FormGroup label={`Ajuste ${index + 1}: `} htmlFor={`selectListaAjusteFinanceiroFatura${index}`}>
                         <select
-                          id={`selectAjusteFinanceiro${index}`}
-                          value={item.idajustefinanceiro}
+                          id={`selectListaAjusteFinanceiroFatura${index}`}
+                          value={item.idAjusteFinanceiro}
                           className='form-select'
-                          name='idajustefinanceiro'
-                          onChange={(e) => atualizarAjusteFinanceiro(index, 'idajustefinanceiro', e.target.value)}
+                          name='idAjusteFinanceiro'
+                          onChange={(e) => atualizarAjusteFinanceiro(index, 'idAjusteFinanceiro', e.target.value)}
                         >
                           <option key='0' value='0'>
                             {' '}
@@ -294,6 +364,15 @@ function CadastroFaturas() {
                             </option>
                           ))}
                         </select> 
+                      </FormGroup>
+                      <FormGroup label='Valor do Ajuste: ' htmlFor='inputValorAjuste'>
+                        <input
+                          id='inputValorAjuste'
+                          type='text'
+                          value={currency.format(getValorAjuste(item.idAjusteFinanceiro))}
+                          className='form-control form-control-sm'
+                          name='inputValorAjuste'
+                        />
                       </FormGroup>
                       <button
                         type="button"
@@ -314,30 +393,60 @@ function CadastroFaturas() {
               </SubCard>
 
               <FormGroup label="Data de Vencimento: *" htmlFor="inputDataVencimento">
-                <input
-                  type="date"
-                  id="inputDataVencimento"
-                  className="form-control"
-                  value={datavencimento}
-                  name='data'
-                  onChange={(e) => setDataVencimento(e.target.value)}
-                />
+                <LocalizationProvider
+                  dateAdapter={AdapterDayjs}
+                  adapterLocale='pt-br'
+                >
+                  <Stack spacing={1}>
+                    <DesktopDatePicker
+                      value={dataVencimento}
+                      inputFormat='DD/MM/YYYY'
+                      onChange={(e) => setDataVencimento(e)}
+                      slotProps={{
+                        textField: {
+                          fullWidth: true,
+                          size: 'small',
+                          className: 'campo-data'
+                        }
+                      }}
+                    />
+                  </Stack>
+                </LocalizationProvider>
               </FormGroup>
 
               <FormGroup label="Data de Pagamento: *" htmlFor="inputDataPagamento">
-                <input
-                  type="date"
-                  id="inputDataPagamento"
-                  className="form-control"
-                  value={datapagamento}
-                  name='data'
-                  onChange={(e) => setDataPagamento(e.target.value)}
-                />
+                <LocalizationProvider
+                  dateAdapter={AdapterDayjs}
+                  adapterLocale='pt-br'
+                >
+                  <Stack spacing={1}>
+                    <DesktopDatePicker
+                      value={dataPagamento}
+                      inputFormat='DD/MM/YYYY'
+                      onChange={(e) => setDataPagamento(e)}
+                      slotProps={{
+                        textField: {
+                          fullWidth: true,
+                          size: 'small',
+                          className: 'campo-data'
+                        }
+                      }}
+                    />
+                  </Stack>
+                </LocalizationProvider>
               </FormGroup>
                <div className="small">Se preencher data, fatura será marcada como paga.</div>
 
               <br></br>
-              <div className="small">Valor final: {currency.format(valorFinal)}</div>
+              <FormGroup label='Valor Total da Fatura: ' htmlFor='inputValorTotalFatura'>
+                <input
+                  id='inputValorTotalFatura'
+                  type='text'
+                  value={currency.format(valorFinal)}
+                  className='form-control form-control-lg'
+                  name='inputValorTotalFatura'
+                />
+              </FormGroup>
               <br></br>
 
               <Stack spacing={1} padding={1} direction='row'>

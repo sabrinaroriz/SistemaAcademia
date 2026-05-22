@@ -1,6 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import Stack from '@mui/material/Stack';
+
+import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+
+import dayjs from 'dayjs';
+import 'dayjs/locale/pt-br';
+
 import Card from '../components/card';
 import FormGroup from '../components/form-group';
 import { mensagemSucesso, mensagemErro } from '../components/toastr';
@@ -18,7 +26,7 @@ function CadastroFichasAvaliacaoFisica() {
   const [id, setId] = useState('');
   const [idCliente, setIdCliente] = useState(0);
   const [idFuncionario, setIdFuncionario] = useState(0);
-  const [dataFicha, setDataFicha] = useState('');
+  const [dataFicha, setDataFicha] = useState(dayjs());
   const [peso, setPeso] = useState('');
   const [altura, setAltura] = useState('');
   const [descricao, setDescricao] = useState('');
@@ -52,7 +60,7 @@ function CadastroFichasAvaliacaoFisica() {
       setId('');
       setIdCliente('');
       setIdFuncionario('');
-      setDataFicha('');
+      setDataFicha(dayjs());
       setPeso('');
       setAltura('');
       setDescricao('');
@@ -60,7 +68,7 @@ function CadastroFichasAvaliacaoFisica() {
       setId(dados.id);
       setIdCliente(dados.idCliente);
       setIdFuncionario(dados.idFuncionario);
-      setDataFicha(dados.dataFicha);
+      setDataFicha(dayjs(dados.dataFicha));
       setPeso(dados.peso);
       setAltura(dados.altura);
       setDescricao(dados.descricao);
@@ -132,7 +140,7 @@ function CadastroFichasAvaliacaoFisica() {
       setId(dados.id);
       setIdCliente(dados.idCliente);
       setIdFuncionario(dados.idFuncionario);
-      setDataFicha(dados.dataFicha);
+      setDataFicha(dayjs(dados.dataFicha));
       setPeso(dados.peso);
       setAltura(dados.altura);
       setDescricao(dados.descricao);
@@ -207,14 +215,25 @@ function CadastroFichasAvaliacaoFisica() {
                 </select>
               </FormGroup>
               <FormGroup label="Data Ficha Avaliação:" htmlFor="inputDataFicha">
-                <input
-                  type="date"
-                  id="inputDataFicha"
-                  className="form-control"
-                  value={dataFicha}
-                  name='dataFicha'
-                  onChange={(e) => setDataFicha(e.target.value)}
-                />
+                <LocalizationProvider
+                  dateAdapter={AdapterDayjs}
+                  adapterLocale='pt-br'
+                >
+                  <Stack spacing={1}>
+                    <DesktopDatePicker
+                      value={dataFicha}
+                      inputFormat='DD/MM/YYYY'
+                      onChange={(e) => setDataFicha(e)}
+                      slotProps={{
+                        textField: {
+                          fullWidth: true,
+                          size: 'small',
+                          className: 'campo-data'
+                        }
+                      }}
+                    />
+                  </Stack>
+                </LocalizationProvider>
               </FormGroup>
               <FormGroup label='Peso: *' htmlFor='inputPeso'>
                 <input

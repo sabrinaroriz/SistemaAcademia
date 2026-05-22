@@ -3,6 +3,13 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 import Stack from '@mui/material/Stack';
 
+import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+
+import dayjs from 'dayjs';
+import 'dayjs/locale/pt-br';
+
 import Card from '../components/card';
 import SubCard from '../components/sub-card';
 import FormGroup from '../components/form-group';
@@ -18,26 +25,34 @@ function CadastroAulas() {
   const { idParam } = useParams();
   const navigate = useNavigate();
   const baseURL = `${BASE_URL}2/aulas`;
-  const baseURLlistaEquipamentoAula = `${BASE_URL}4/listaequipamentoaula`;
+  const baseURLlistaEquipamentoAula = `${BASE_URL}4/listasequipamentosaulas`;
+  const baseURLlistaClienteAula = `${BASE_URL}5/listasclientesaulas`;
 
   const [id, setId] = useState('');
   const [nome, setNome] = useState('');
-  const [idfuncionario, setIdFuncionario] = useState(0);
-  const [dataAula, setDataAula] = useState('');
-  const [horario, setHorario] = useState('');
+  const [idFuncionario, setIdFuncionario] = useState(0);
+  const [dataAula, setDataAula] = useState(dayjs());
+  const [horaAula, setHoraAula] = useState('');
   const [status, setStatus] = useState('');
   const [capacidade, setCapacidade] = useState('');
-  const [clientes, setIdCliente] = useState([{idcliente: 0}]);
   const [descricao, setDescricao] = useState('');
 
   const [listaequipamentoaula , setListaEquipamentoAula] = useState([
-    { idequipamento: 0, quantidade: 0, idaula: 0 }
+    { idEquipamento: 0, quantidade: 0, idAula: 0 }
   ]);
+
+  const [listaclienteaula, setListaClienteAula] = useState([
+    { idCliente: 0, idAula: 0}
+  ])
 
   const [dados, setDados] = React.useState([]);
 
   function adicionarEquipamento() {
-    setListaEquipamentoAula([...listaequipamentoaula, { idequipamento: 0, quantidade: '' }]);
+    setListaEquipamentoAula([...listaequipamentoaula, { idEquipamento: 0, quantidade: '' }]);
+  }
+
+  function adicionarCliente() {
+    setListaClienteAula([...listaclienteaula, {idCliente: 0}]);
   }
 
   function atualizarEquipamento(index, campo, valor) {
@@ -46,26 +61,21 @@ function CadastroAulas() {
     setListaEquipamentoAula(novos);
   }
 
+  function atualizarCliente(index, campo, valor) {
+    const novos = [...listaclienteaula];
+    novos[index][campo] = valor;
+    setListaClienteAula(novos);
+  }  
+
   function removerEquipamento(index) {
     const novos = listaequipamentoaula.filter((_, i) => i !== index);
     setListaEquipamentoAula(novos);
   }
 
-  function adicionarCliente() {
-  setIdCliente([...clientes, { idcliente: 0}]);
-  }
-
-  function atualizarCliente(index, campo, valor) {
-    const novosClientes = [...clientes];
-    novosClientes[index][campo] = valor;
-    setIdCliente(novosClientes);  
-  }
-
   function removerCliente(index) {
-  const novosClientes = clientes.filter((_, i) => i !== index);
-  setIdCliente(novosClientes);
- }
-
+    const novos = listaclienteaula.filter((_, i) => i !== index);
+    setListaClienteAula(novos);
+  }
 
   function cancelar() {
     const confirmar = window.confirm('Deseja realmente voltar?');
@@ -76,7 +86,7 @@ function CadastroAulas() {
 
   function limparFormulario() {
     const temCamposPreenchidos =
-      nome !== '' || idfuncionario !== '' || dataAula !== '' || horario !== '' || capacidade !== '' || clientes.some(cl => cl.idcliente !== 0) || dadosEquipamentos.some(cl => cl.idequipamento !==0) || status !== '';
+      nome !== '' || idFuncionario !== '' || dataAula !== '' || horaAula !== '' || capacidade !== '' || dadosClientes.some(cl => cl.idCliente !== 0) || dadosEquipamentos.some(cl => cl.idEquipamento !==0) || status !== '';
     if (!temCamposPreenchidos) {
       inicializar();
       return;
@@ -92,33 +102,44 @@ function CadastroAulas() {
       setId('');
       setNome('');
       setIdFuncionario('');
-      setDataAula('');
-      setHorario('');
+      setDataAula(dayjs());
+      setHoraAula('');
       setStatus('');
       setCapacidade('');
-      setListaEquipamentoAula([{ idequipamento: 0, quantidade: 0 }]);
-      setIdCliente([{ idcliente: 0 }]);
+      setListaEquipamentoAula([{ idEquipamento: 0, quantidade: 0 }]);
+      setListaClienteAula([{ idCliente: 0 }]);
       setDescricao('');
     } else {
       setId(dados.id);
       setNome(dados.nome);
-      setIdFuncionario(dados.idfuncionario);
-      setDataAula(dados.dataAula);
-      setHorario(dados.horario);
+      setIdFuncionario(dados.idFuncionario);
+      setDataAula(dayjs(dados.dataAula));
+      setHoraAula(dados.horaAula);
       setStatus(dados.status);
       setCapacidade(dados.capacidade);
       if(dadosListaEquipamentoAula && dadosListaEquipamentoAula.length > 0){
         setListaEquipamentoAula(
           dadosListaEquipamentoAula.map((item) => ({
             id: item.id,
-            idequipamento: item.idequipamento,
+            idEquipamento: item.idEquipamento,
             quantidade: item.quantidade
           }))
         );
       }else {
-        setListaEquipamentoAula([{ idequipamento: 0, quantidade: 0 }]);
+        setListaEquipamentoAula([{ idEquipamento: 0, quantidade: 0 }]);
       }
-      setIdCliente(dados.clientes || [{ idcliente: 0 }]);
+      
+      if(dadosListaClienteAula && dadosListaClienteAula.length > 0){
+        setListaClienteAula(
+          dadosListaClienteAula.map((item) => ({
+            id: item.id,
+            idCliente: item.idCliente
+          }))
+        );
+      }else {
+        setListaClienteAula([{ idCliente: 0 }]);
+      }
+
       setDescricao(dados.descricao);
     }
   }
@@ -133,11 +154,11 @@ function CadastroAulas() {
       mensagemErro('O campo Data da Aula é obrigatório!');
       return false;
     }
-    if (!horario) {
+    if (!horaAula) {
       mensagemErro('O campo Horário é obrigatório!');
       return false;
     }
-    if (!idfuncionario || idfuncionario === 0) {
+    if (!idFuncionario || idFuncionario === 0) {
       mensagemErro('O campo Funcionário é obrigatório!');
       return false;
     }
@@ -145,11 +166,11 @@ function CadastroAulas() {
       mensagemErro('O campo Capacidade deve ser maior que zero!');
       return false;
     }
-    if (!status || !status.trim()) {
+    if (!status == null) {
       mensagemErro('O campo Status é obrigatório!');
       return false;
     }
-    const clientesValidos = clientes.filter(c => c.idcliente !== 0);
+    const clientesValidos = listaclienteaula.filter(c => Number(c.idCliente) !== 0);
 
     if (clientesValidos.length === 0) {
       mensagemErro('Selecione pelo menos um cliente!');
@@ -167,8 +188,8 @@ function CadastroAulas() {
       return;
     }
     try {
-      let data = { id,nome,idfuncionario,dataAula,horario,
-          status,capacidade,clientes,descricao };
+      let data = { id,nome,idFuncionario,dataAula,horaAula,
+          status,capacidade,descricao };
       let idAulaSalvo = idParam;
       data = JSON.stringify(data);
       
@@ -184,21 +205,37 @@ function CadastroAulas() {
       }
 
       for (const item of listaequipamentoaula) {
-        if(item.idequipamento === 0 || item.quantidade === '') continue;
+        if(item.idEquipamento === 0 || item.quantidade === '') continue;
         if(item.id == null){
           await axios.post(baseURLlistaEquipamentoAula, {
-            idaula: Number(idAulaSalvo),
-            idequipamento: Number(item.idequipamento),
+            idAula: Number(idAulaSalvo),
+            idEquipamento: Number(item.idEquipamento),
             quantidade: Number(item.quantidade)
           });
         }else{
           await axios.put(`${baseURLlistaEquipamentoAula}/${item.id}`, {
-            idaula: Number(idAulaSalvo),
-            idequipamento: Number(item.idequipamento),
+            idAula: Number(idAulaSalvo),
+            idEquipamento: Number(item.idEquipamento),
             quantidade: Number(item.quantidade)
           });
         }
       }
+
+      for (const item of listaclienteaula) {
+        if(item.idCliente === 0 ) continue;
+        if(item.id == null){
+          await axios.post(baseURLlistaClienteAula, {
+            idAula: Number(idAulaSalvo),
+            idCliente: Number(item.idCliente)
+          });
+        }else{
+          await axios.put(`${baseURLlistaClienteAula}/${item.id}`, {
+            idAula: Number(idAulaSalvo),
+            idCliente: Number(item.idCliente)
+          });
+        }
+      }
+
       mensagemSucesso(`Aula ${nome} cadastrada com sucesso!`);
       navigate(`/listagem-aulas`);
 
@@ -215,23 +252,34 @@ function CadastroAulas() {
       });
       setId(dados.id);
       setNome(dados.nome);
-      setIdFuncionario(dados.idfuncionario);
-      setDataAula(dados.dataAula);
-      setHorario(dados.horario);
+      setIdFuncionario(dados.idFuncionario);
+      setDataAula(dayjs(dados.dataAula));
+      setHoraAula(dados.horaAula);
       setStatus(dados.status);
       setCapacidade(dados.capacidade);
       if(dadosListaEquipamentoAula && dadosListaEquipamentoAula.length > 0){
         setListaEquipamentoAula(
           dadosListaEquipamentoAula.map((item) => ({
             id: item.id,
-            idequipamento: item.idequipamento,
+            idEquipamento: item.idEquipamento,
             quantidade: item.quantidade,  
           }))
         );
       }else {
-        setListaEquipamentoAula([{ idequipamento: 0, quantidade: '' }]);
+        setListaEquipamentoAula([{ idEquipamento: 0, quantidade: '' }]);
       }
-      setIdCliente(dados.clientes || [{ idcliente: 0}]);
+
+      if(dadosListaClienteAula && dadosListaClienteAula.length > 0){
+        setListaClienteAula(
+          dadosListaClienteAula.map((item) => ({
+            id: item.id,
+            idCliente: item.idCliente  
+          }))
+        );
+      }else {
+        setListaClienteAula([{ idCliente: 0}]);
+      }
+
       setDescricao(dados.descricao);
     }
   }
@@ -260,14 +308,24 @@ function CadastroAulas() {
     });
   }, []);
 
-  const[ dadosListaEquipamentoAula, setdadosListaEquipamentoAula] = useState([]);  
+  const[ dadosListaEquipamentoAula, setDadosListaEquipamentoAula] = useState([]);  
    
   useEffect(()=> {
     if(idParam != null){
-      axios.get(`${BASE_URL}4/listaequipamentoaula?idaula=${idParam}`)
-      .then((response) => setdadosListaEquipamentoAula(response.data));
+      axios.get(`${BASE_URL}4/listasequipamentosaulas?idAula=${idParam}`)
+      .then((response) => setDadosListaEquipamentoAula(response.data));
     }
   }, [idParam]);
+
+  const[dadosListaClienteAula, setDadosListaClienteAula] = useState([]);
+
+  useEffect(()=> {
+    if(idParam != null){
+      axios.get(`${BASE_URL}5/listasclientesaulas?idAula=${idParam}`)
+      .then((response) => setDadosListaClienteAula(response.data));
+    }
+  }, [idParam]);
+
 
   useEffect(() => {
     buscar(); // eslint-disable-next-line
@@ -278,6 +336,7 @@ function CadastroAulas() {
   if (!dadosFuncionarios) return null;
   if (!dadosEquipamentos) return null;
   if (!dadosListaEquipamentoAula) return null;
+  if (!dadosListaClienteAula) return null;
 
   return (
     <div className="container">
@@ -299,33 +358,44 @@ function CadastroAulas() {
               </FormGroup>
 
               <FormGroup label="Data da Aula: *" htmlFor="inputData">
-                <input
-                  type="date"
-                  id="inputData"
-                  className="form-control"
-                  value={dataAula}
-                  name='data'
-                  onChange={(e) => setDataAula(e.target.value)}
-                />
+                <LocalizationProvider
+                  dateAdapter={AdapterDayjs}
+                  adapterLocale='pt-br'
+                >
+                  <Stack spacing={1}>
+                    <DesktopDatePicker
+                      value={dataAula}
+                      inputFormat='DD/MM/YYYY'
+                      onChange={(e) => setDataAula(e)}
+                      slotProps={{
+                        textField: {
+                          fullWidth: true,
+                          size: 'small',
+                          className: 'campo-data'
+                        }
+                      }}
+                    />
+                  </Stack>
+                </LocalizationProvider>
               </FormGroup>
 
-              <FormGroup label="Horário: *" htmlFor="inputHorario">
+              <FormGroup label="Horário: *" htmlFor="inputHoraAula">
                 <input
                   type="time"
-                  id="inputHorario"
+                  id="inputHoraAula"
                   className="form-control"
-                  name='horario'
-                  value={horario}
-                  onChange={(e) => setHorario(e.target.value)}
+                  name='horaAula'
+                  value={horaAula}
+                  onChange={(e) => setHoraAula(e.target.value)}
                 />
               </FormGroup>
 
               <FormGroup label='Instrutor: *' htmlFor='selectFuncionario'>
                 <select
                   id='selectFuncionario'
-                  value={idfuncionario}
+                  value={idFuncionario}
                   className='form-select'
-                  name='idfuncionario'
+                  name='idFuncionario'
                   onChange={(e) => setIdFuncionario(e.target.value)}
                 >
                   <option key='0' value='0'>
@@ -357,10 +427,10 @@ function CadastroAulas() {
                     <FormGroup label={`Equipamento ${index + 1}:`} htmlFor={`selectListaEquipamentoAula${index}`}>
                       <select
                         id={`selectListaEquipamentoAula${index}`}
-                        value={item.idequipamento}
+                        value={item.idEquipamento}
                         className="form-select"
-                        name="idequipamento"
-                        onChange={(e) => atualizarEquipamento(index, 'idequipamento', e.target.value)}
+                        name="idEquipamento"
+                        onChange={(e) => atualizarEquipamento(index, 'idEquipamento', e.target.value)}
                       >
                         <option key="0" value="0">
                           {' '}
@@ -406,15 +476,15 @@ function CadastroAulas() {
               </SubCard>
 
               <SubCard title='Clientes'>
-                 {clientes.map((item, index) => (
+                 {listaclienteaula.map((item, index) => (
                     <div key={index} className="mb-3">
-                      <FormGroup label={`Cliente participante ${index + 1}: *`} htmlFor={`selectCliente${index}`}>
+                      <FormGroup label={`Cliente participante ${index + 1}: *`} htmlFor={`selectListaClienteAula${index}`}>
                         <select
-                          id={`selectCliente${index}`}
-                          value={item.idcliente}
+                          id={`selectListaClienteAula${index}`}
+                          value={item.idCliente}
                           className='form-select'
-                          name='idcliente'
-                          onChange={(e) => atualizarCliente(index, 'idcliente', e.target.value)}
+                          name='idCliente'
+                          onChange={(e) => atualizarCliente(index, 'idCliente', e.target.value)}
                         >
                           <option key='0' value='0'>
                             {' '}
@@ -450,11 +520,10 @@ function CadastroAulas() {
                         <input
                             type="radio"
                             id='statusAtivo'
-                            value="Ativo"
                             className="form-check-input"
                             name='status'
-                            checked={status === "Ativo"}
-                            onChange={(e) => setStatus(e.target.value)}
+                            checked={status === true}
+                            onChange={(e) => setStatus(true)}
                         />
                         <label className="form-check-label" htmlFor="statusAtivo">
                             Ativo
@@ -464,11 +533,10 @@ function CadastroAulas() {
                         <input
                             type="radio"
                             id='statusInativo'
-                            value="Inativo"
                             className="form-check-input"
                             name='status'
-                            checked={status === "Inativo"}
-                            onChange={(e) => setStatus(e.target.value)}
+                            checked={status === false}
+                            onChange={(e) => setStatus(false)}
                         />
                         <label className="form-check-label" htmlFor="statusInativo">
                             Inativo

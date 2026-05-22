@@ -100,10 +100,10 @@ function ListagemFaturas() {
     return formaPagamento ? formaPagamento.nome: 'Sem forma de pagamento';
   }
 
-  function formatarData(dataIso) {
-    if(!dataIso) return '';
-    const [ano, mes, dia] = dataIso.split('-');
-    return `${dia}/${mes}/${ano}`;
+  function formatarData(dataCalendario) {
+    const partesData = dataCalendario.substr(0, 10).split('-');
+
+    return partesData[2] + '/' + partesData[1] + '/' + partesData[0];
   }
 
   return (
