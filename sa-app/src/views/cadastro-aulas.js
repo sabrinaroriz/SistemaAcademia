@@ -24,9 +24,9 @@ import { BASE_URL } from '../config/axios';
 function CadastroAulas() {
   const { idParam } = useParams();
   const navigate = useNavigate();
-  const baseURL = `${BASE_URL}2/aulas`;
-  const baseURLlistaEquipamentoAula = `${BASE_URL}4/listasequipamentosaulas`;
-  const baseURLlistaClienteAula = `${BASE_URL}5/listasclientesaulas`;
+  const baseURL = `${BASE_URL}/aulas`;
+  const baseURLlistaEquipamentoAula = `${BASE_URL}/listasequipamentosaulas`;
+  const baseURLlistaClienteAula = `${BASE_URL}/listasclientesaulas`;
 
   const [id, setId] = useState('');
   const [nome, setNome] = useState('');
@@ -303,7 +303,7 @@ function CadastroAulas() {
   const[ dadosEquipamentos, setDadosEquipamentos] = React.useState(null);  
    
   useEffect(()=> {
-    axios.get(`${BASE_URL}2/equipamentos`).then((response) => {
+    axios.get(`${BASE_URL}/equipamentos`).then((response) => {
       setDadosEquipamentos(response.data);  
     });
   }, []);
@@ -312,7 +312,7 @@ function CadastroAulas() {
    
   useEffect(()=> {
     if(idParam != null){
-      axios.get(`${BASE_URL}4/listasequipamentosaulas?idAula=${idParam}`)
+      axios.get(`${BASE_URL}/listasequipamentosaulas?idAula=${idParam}`)
       .then((response) => setDadosListaEquipamentoAula(response.data));
     }
   }, [idParam]);
@@ -321,7 +321,7 @@ function CadastroAulas() {
 
   useEffect(()=> {
     if(idParam != null){
-      axios.get(`${BASE_URL}5/listasclientesaulas?idAula=${idParam}`)
+      axios.get(`${BASE_URL}/listasclientesaulas?idAula=${idParam}`)
       .then((response) => setDadosListaClienteAula(response.data));
     }
   }, [idParam]);

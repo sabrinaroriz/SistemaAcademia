@@ -26,8 +26,8 @@ function CadastroFaturas() {
 
   const navigate = useNavigate();
 
-  const baseURL = `${BASE_URL}2/faturas`;
-  const baseURLlistaAjusteFinanceiroFatura = `${BASE_URL}5/listasajustesfinanceirosfaturas`;
+  const baseURL = `${BASE_URL}/faturas`;
+  const baseURLlistaAjusteFinanceiroFatura = `${BASE_URL}/listasajustesfinanceirosfaturas`;
 
   const [id, setId] = useState('');
   const [idCliente, setIdCliente] = useState('');
@@ -215,20 +215,20 @@ function CadastroFaturas() {
   }, []);
 
   useEffect(() => {
-    axios.get(`${BASE_URL}3/formaspagamentos`).then((response) => {
+    axios.get(`${BASE_URL}/formaspagamentos`).then((response) => {
       setDadosFormasPagamento(response.data);
     });
   }, []);
 
   useEffect(() => {
-    axios.get(`${BASE_URL}3/ajustesfinanceiros`).then((response) => {
+    axios.get(`${BASE_URL}/ajustesfinanceiros`).then((response) => {
       setDadosAjustesFinanceiros(response.data);
     });
   }, []);
 
   useEffect(() => {
     if(idParam != null){
-      axios.get(`${BASE_URL}5/listasajustesfinanceirosfaturas?idFatura=${idParam}`)
+      axios.get(`${BASE_URL}/listasajustesfinanceirosfaturas?idFatura=${idParam}`)
       .then((response) => setDadosListaAjustesFinanceirosFatura(response.data));
     }
   }, [idParam]);

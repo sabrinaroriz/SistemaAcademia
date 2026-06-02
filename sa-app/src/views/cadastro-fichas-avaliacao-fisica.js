@@ -21,7 +21,7 @@ function CadastroFichasAvaliacaoFisica() {
 
   const navigate = useNavigate();
 
-  const baseURL = `${BASE_URL}3/fichasavaliacaofisica`;
+  const baseURL = `${BASE_URL}/fichasavaliacaofisica`;
 
   const [id, setId] = useState('');
   const [idCliente, setIdCliente] = useState(0);

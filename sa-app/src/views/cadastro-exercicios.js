@@ -19,7 +19,7 @@ function CadastroExercicios() {
 
   const navigate = useNavigate();
 
-  const baseURL = `${BASE_URL}3/exercicios`;
+  const baseURL = `${BASE_URL}/exercicios`;
 
   const [id, setId] = useState('');
   const [nome, setNome] = useState('');

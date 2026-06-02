@@ -16,7 +16,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import axios from 'axios';
 import { BASE_URL } from '../config/axios';
 
-const baseURL = `${BASE_URL}3/ajustesfinanceiros`;
+const baseURL = `${BASE_URL}/ajustesfinanceiros`;
 
 function ListagemAjustesFinanceiros() {
   const navigate = useNavigate();

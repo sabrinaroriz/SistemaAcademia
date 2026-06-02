@@ -19,7 +19,7 @@ function CadastroAjustesFinanceiros() {
 
   const navigate = useNavigate();
 
-  const baseURL = `${BASE_URL}3/ajustesfinanceiros`;
+  const baseURL = `${BASE_URL}/ajustesfinanceiros`;
 
   const [id, setId] = useState('');
   const [nome, setNome] = useState('');

@@ -16,7 +16,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import axios from 'axios';
 import { BASE_URL } from '../config/axios';
 
-const baseURL = `${BASE_URL}2/faturas`;
+const baseURL = `${BASE_URL}/faturas`;
 
 function ListagemFaturas() {
   const navigate = useNavigate();
@@ -75,7 +75,7 @@ function ListagemFaturas() {
   }, []);
 
   React.useEffect(() => {
-    axios.get(`${BASE_URL}3/formaspagamentos`).then((response) => {
+    axios.get(`${BASE_URL}/formaspagamentos`).then((response) => {
       setDadosFormaPagamento(response.data);
     });
   }, []);

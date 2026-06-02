@@ -18,7 +18,7 @@ function CadastroFormasPagamento() {
 
   const navigate = useNavigate();
 
-  const baseURL = `${BASE_URL}3/formaspagamentos`;
+  const baseURL = `${BASE_URL}/formaspagamentos`;
 
   const [id, setId] = useState('');
   const [nome, setNome] = useState('');

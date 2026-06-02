@@ -24,8 +24,8 @@ import { BASE_URL } from '../config/axios';
 function CadastroTreinos() {
   const { idParam } = useParams();
   const navigate = useNavigate();
-  const baseURL = `${BASE_URL}2/treinos`;
-  const baseURLlistaExercicioTreino = `${BASE_URL}4/listasexerciciostreinos`;
+  const baseURL = `${BASE_URL}/treinos`;
+  const baseURLlistaExercicioTreino = `${BASE_URL}/listasexerciciostreinos`;
 
   const [id, setId] = useState('');
   const [nome, setNome] = useState('');
@@ -244,7 +244,7 @@ function CadastroTreinos() {
   const[ dadosExercicios, setDadosExercicios] = React.useState(null);  
    
   useEffect(()=> {
-    axios.get(`${BASE_URL}3/exercicios`).then((response) => {
+    axios.get(`${BASE_URL}/exercicios`).then((response) => {
       setDadosExercicios(response.data);  
     });
   }, []);
@@ -253,7 +253,7 @@ function CadastroTreinos() {
 
   useEffect(()=> {
     if(idParam != null){
-      axios.get(`${BASE_URL}4/listasexerciciostreinos?idTreino=${idParam}`)
+      axios.get(`${BASE_URL}/listasexerciciostreinos?idTreino=${idParam}`)
       .then((response) => setDadosListaExercicioTreino(response.data));
     }
   }, [idParam]);
