@@ -88,11 +88,11 @@ function CadastroFichasAvaliacaoFisica() {
       mensagemErro('O campo Data é obrigatório!');
       return false;
     }
-    if (!peso || peso.trim() === '') {
+    if (peso == null || peso === '' || Number(peso) <= 0) {
       mensagemErro('O campo Peso é obrigatório!');
       return false;
     }
-    if (!altura || altura.trim() === '') {
+    if (altura == null || altura === '' || Number(altura) <= 0) {
       mensagemErro('O campo Altura é obrigatório!');
       return false;
     }
