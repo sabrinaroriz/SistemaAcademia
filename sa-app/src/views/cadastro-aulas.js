@@ -312,7 +312,7 @@ function CadastroAulas() {
    
   useEffect(()=> {
     if(idParam != null){
-      axios.get(`${BASE_URL}/listasequipamentosaulas?idAula=${idParam}`)
+      axios.get(`${BASE_URL}/listasequipamentosaulas/aula/${idParam}`)
       .then((response) => setDadosListaEquipamentoAula(response.data));
     }
   }, [idParam]);
@@ -321,7 +321,7 @@ function CadastroAulas() {
 
   useEffect(()=> {
     if(idParam != null){
-      axios.get(`${BASE_URL}/listasclientesaulas?idAula=${idParam}`)
+      axios.get(`${BASE_URL}/listasclientesaulas/aula/${idParam}`)
       .then((response) => setDadosListaClienteAula(response.data));
     }
   }, [idParam]);

@@ -253,7 +253,7 @@ function CadastroTreinos() {
 
   useEffect(()=> {
     if(idParam != null){
-      axios.get(`${BASE_URL}/listasexerciciostreinos?idTreino=${idParam}`)
+      axios.get(`${BASE_URL}/listasexerciciostreinos/treino/${idParam}`)
       .then((response) => setDadosListaExercicioTreino(response.data));
     }
   }, [idParam]);

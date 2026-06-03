@@ -228,7 +228,7 @@ function CadastroFaturas() {
 
   useEffect(() => {
     if(idParam != null){
-      axios.get(`${BASE_URL}/listasajustesfinanceirosfaturas?idFatura=${idParam}`)
+      axios.get(`${BASE_URL}/listasajustesfinanceirosfaturas/fatura/${idParam}`)
       .then((response) => setDadosListaAjustesFinanceirosFatura(response.data));
     }
   }, [idParam]);
