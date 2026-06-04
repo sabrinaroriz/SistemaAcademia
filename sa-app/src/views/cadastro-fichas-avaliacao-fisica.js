@@ -30,6 +30,8 @@ function CadastroFichasAvaliacaoFisica() {
   const [peso, setPeso] = useState('');
   const [altura, setAltura] = useState('');
   const [descricao, setDescricao] = useState('');
+  const [imc, setImc] = useState('');
+  const [classificacaoImc, setClassificacaoImc] = useState(''); 
 
   const [dados, setDados] = React.useState([]);
 
@@ -147,6 +149,31 @@ function CadastroFichasAvaliacaoFisica() {
     }
   }
 
+  async function calcularIMC() {
+    if (!peso || Number(peso) <= 0) {
+      mensagemErro('Informe um peso válido!');
+      return;
+    }
+    if (!altura || Number(altura) <= 0) {
+      mensagemErro('Informe uma altura válida!');
+      return;
+    }
+    try {
+      const response = await axios.post(`${baseURL}/calcular-imc`,
+        {
+          peso: Number(peso),
+          altura: Number(altura)
+        });
+      const resultado = response.data;
+      const partes = resultado.split(' - ');
+      setImc(partes[0].replace('IMC: ', ''));
+      setClassificacaoImc(partes[1]);
+    } catch (error) {
+      mensagemErro(error.response?.data || 'Erro ao calcular IMC');
+      console.log(error);
+    }
+  }
+
   const [dadosClientes, setDadosClientes] = React.useState(null);
 
   useEffect(() => {
@@ -214,7 +241,7 @@ function CadastroFichasAvaliacaoFisica() {
                   ))}
                 </select>
               </FormGroup>
-              <FormGroup label="Data Ficha Avaliação:" htmlFor="inputDataFicha">
+              <FormGroup label="Data Ficha Avaliação: *" htmlFor="inputDataFicha">
                 <LocalizationProvider
                   dateAdapter={AdapterDayjs}
                   adapterLocale='pt-br'
@@ -259,9 +286,9 @@ function CadastroFichasAvaliacaoFisica() {
               <br></br>
               <div className="card">
                 <div className='card-body'>
-                  <p><strong>IMC:</strong></p>
-                  <p><strong>Classificação:</strong></p>
-                  <button type="button" className="btn btn-warning mt-2">
+                  <p><strong>IMC:</strong> {imc || '-'}</p>
+                  <p><strong>Classificação:</strong> {classificacaoImc || '-'}</p>
+                  <button type="button" className="btn btn-warning mt-2" onClick={calcularIMC}>
                     Calcular IMC
                   </button>
                 </div>
