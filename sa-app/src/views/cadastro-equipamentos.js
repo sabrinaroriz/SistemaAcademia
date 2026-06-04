@@ -199,7 +199,7 @@ function cancelar() {
                 />
               </FormGroup>
 
-              <FormGroup label='Disponível: *' htmlFor='inputDisponivel'>
+              <FormGroup label='Disponível: *'>
                 <div>
                     <div className="form-check form-check-inline">
                         <input
