@@ -53,19 +53,19 @@ function ListagemAjustesFinanceiros() {
   }
 
   function formatarValor(valor, unidade) {
-  if (valor === null || valor === undefined) return '';
-  const numero = Number(valor);
-  if (unidade === 'Porcentagem') {
-    return `${numero}%`;
+    if (valor === null || valor === undefined) return 'R$ 0,00';
+    const numero = Number(valor);
+    if (unidade === 'Porcentagem') {
+      return `${numero}%`;
+    }
+    if (unidade === 'Moeda') {
+      return numero.toLocaleString('pt-BR', {
+        style: 'currency',
+        currency: 'BRL',
+      });
+    }
+    return numero;
   }
-  if (unidade === 'Moeda') {
-    return numero.toLocaleString('pt-BR', {
-      style: 'currency',
-      currency: 'BRL',
-    });
-  }
-  return numero;
-}
 
 
   React.useEffect(() => {
