@@ -106,6 +106,14 @@ function ListagemFaturas() {
     return partesData[2] + '/' + partesData[1] + '/' + partesData[0];
   }
 
+  function formatarMoeda(valor) {
+    if (valor === null || valor === undefined) return 'R$ 0,00';
+    return Number(valor).toLocaleString('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+    });
+  }
+
   return (
     <div className='container'>
       <Card title='Listagem de Faturas'>
@@ -127,6 +135,7 @@ function ListagemFaturas() {
                     <th scope='col'>Data de pagamento</th>
                     <th scope='col'>Plano do Cliente</th>
                     <th scope='col'>Forma de Pagamento</th>
+                    <th scope='col'>Valor</th>
                     <th scope='col'>Ações</th>
                   </tr>
                 </thead>
@@ -138,6 +147,7 @@ function ListagemFaturas() {
                       <td>{formatarData(dado.dataPagamento)}</td>
                       <td>{getNomePlano(dado.idCliente)}</td>
                       <td>{getFormaPagamento(dado.idFormaPagamento)}</td>
+                      <td>{formatarMoeda(dado.valor)}</td>
                       <td>
                         <Stack spacing={1} padding={0} direction='row'>
                           <IconButton
