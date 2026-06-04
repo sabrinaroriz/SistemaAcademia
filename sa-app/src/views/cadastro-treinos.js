@@ -50,9 +50,18 @@ function CadastroTreinos() {
     setListaExercicioTreino(novos);
   }
 
-  function removerExercicio(index) {
-    const novos = listaexerciciotreino.filter((_, i) => i !== index);
-    setListaExercicioTreino(novos);
+  async function removerExercicio(index) {
+    const itemRemovido = listaexerciciotreino[index];
+    const confirmar = window.confirm('Deseja realmente remover este exercício do treino?');
+    if (!confirmar) return;
+    try {
+      if (itemRemovido.id) {await axios.delete(`${baseURLlistaExercicioTreino}/${itemRemovido.id}`);}
+      const novos = listaexerciciotreino.filter((_, i) => i !== index);
+      setListaExercicioTreino(novos);
+      mensagemSucesso('Exercício removido com sucesso!');
+    } catch (error) {console.log(error);
+      mensagemErro('Erro ao remover exercício!');
+    }
   }
 
 
@@ -169,28 +178,30 @@ function CadastroTreinos() {
       }
 
       for (const item of listaexerciciotreino) {
-          if(item.idExercicio === 0 || item.serie === '' || item.repeticao === '' || item.carga === '') continue;
-          if(item.id == null){
-            await axios.post(baseURLlistaExercicioTreino, {
-              idTreino: Number(idTreinoSalvo),
-              idExercicio: Number(item.idExercicio),
-              serie: Number(item.serie),
-              repeticao: Number(item.repeticao),
-              carga: Number(item.carga)
-            });
-          }else{
-            await axios.put(`${baseURLlistaExercicioTreino}/${item.id}`, {
-              idTreino: Number(idTreinoSalvo),
-              idExercicio: Number(item.idExercicio),
-              serie: Number(item.serie),
-              repeticao: Number(item.repeticao),
-              carga: Number(item.carga)
-            });
-          }
-        }
-          
-        mensagemSucesso(`Treino ${nome} alterado com sucesso!`);
-        navigate(`/listagem-treinos`);
+        if (Number(item.idExercicio) === 0) continue;
+        const payload = {
+          idTreino: Number(idTreinoSalvo),
+          idExercicio: Number(item.idExercicio),
+          serie:
+            item.serie === ''
+              ? 0
+              : Number(item.serie),
+          repeticao:
+            item.repeticao === ''
+              ? 0
+              : Number(item.repeticao),
+          carga:
+            item.carga === ''
+              ? 0
+              : Number(item.carga)
+        };
+        if (item.id == null) {await axios.post(baseURLlistaExercicioTreino, payload);
+        } else {
+          await axios.put(`${baseURLlistaExercicioTreino}/${item.id}`,payload);}
+      }
+
+      mensagemSucesso(`Treino ${nome} alterado com sucesso!`);
+      navigate(`/listagem-treinos`);
       
     } catch(error) {
         mensagemErro(error.response.data);

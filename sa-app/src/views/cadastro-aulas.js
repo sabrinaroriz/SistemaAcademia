@@ -67,14 +67,33 @@ function CadastroAulas() {
     setListaClienteAula(novos);
   }  
 
-  function removerEquipamento(index) {
-    const novos = listaequipamentoaula.filter((_, i) => i !== index);
-    setListaEquipamentoAula(novos);
+  async function removerEquipamento(index) {
+    const itemRemovido = listaequipamentoaula[index];
+    const confirmar = window.confirm('Deseja realmente remover este equipamento da aula?');
+    if (!confirmar) return;
+    try {
+      if (itemRemovido.id) {await axios.delete(`${baseURLlistaEquipamentoAula}/${itemRemovido.id}`);
+      }
+      const novos = listaequipamentoaula.filter((_, i) => i !== index);
+      setListaEquipamentoAula(novos);
+      mensagemSucesso('Equipamento removido com sucesso!');
+    } catch (error) {console.log(error);
+      mensagemErro('Erro ao remover equipamento!');
+    }
   }
 
-  function removerCliente(index) {
-    const novos = listaclienteaula.filter((_, i) => i !== index);
-    setListaClienteAula(novos);
+  async function removerCliente(index) {
+    const itemRemovido = listaclienteaula[index];
+    const confirmar = window.confirm('Deseja realmente remover este cliente da aula?');
+    if (!confirmar) return;
+    try {
+      if (itemRemovido.id) {await axios.delete(`${baseURLlistaClienteAula}/${itemRemovido.id}`);}
+      const novos = listaclienteaula.filter((_, i) => i !== index);
+      setListaClienteAula(novos);
+      mensagemSucesso('Cliente removido com sucesso!');
+    } catch (error) {console.log(error);
+      mensagemErro('Erro ao remover cliente!');
+    }
   }
 
   function cancelar() {
@@ -205,21 +224,18 @@ function CadastroAulas() {
       }
 
       for (const item of listaequipamentoaula) {
-        if(item.idEquipamento === 0 || item.quantidade === '') continue;
-        if(item.id == null){
-          await axios.post(baseURLlistaEquipamentoAula, {
-            idAula: Number(idAulaSalvo),
-            idEquipamento: Number(item.idEquipamento),
-            quantidade: Number(item.quantidade)
-          });
-        }else{
-          await axios.put(`${baseURLlistaEquipamentoAula}/${item.id}`, {
-            idAula: Number(idAulaSalvo),
-            idEquipamento: Number(item.idEquipamento),
-            quantidade: Number(item.quantidade)
-          });
-        }
-      }
+        if (Number(item.idEquipamento) === 0) continue;
+        const payload = {
+          idAula: Number(idAulaSalvo),
+          idEquipamento: Number(item.idEquipamento),
+          quantidade:
+            item.quantidade === ''
+              ? 0
+              : Number(item.quantidade)
+        };
+        if (item.id == null) {await axios.post(baseURLlistaEquipamentoAula, payload);
+        } else {
+          await axios.put(`${baseURLlistaEquipamentoAula}/${item.id}`,payload);}}
 
       for (const item of listaclienteaula) {
         if(item.idCliente === 0 ) continue;
@@ -345,7 +361,7 @@ function CadastroAulas() {
           <div className="col-lg-12">
             <div className="bs-component">
 
-              <FormGroup label='Nome da Aula: *' htmlFor='inputAula'>
+              <FormGroup label='Nome da Aula: *' htmlFor='inputNome'>
                 <input
                   type='text'
                   id='inputNome'
@@ -357,7 +373,7 @@ function CadastroAulas() {
                 />
               </FormGroup>
 
-              <FormGroup label="Data da Aula: *" htmlFor="inputData">
+              <FormGroup label="Data da Aula: *" htmlFor='inputData'>
                 <LocalizationProvider
                   dateAdapter={AdapterDayjs}
                   adapterLocale='pt-br'
@@ -369,6 +385,7 @@ function CadastroAulas() {
                       onChange={(e) => setDataAula(e)}
                       slotProps={{
                         textField: {
+                          id: 'inputData',
                           fullWidth: true,
                           size: 'small',
                           className: 'campo-data'
@@ -514,7 +531,7 @@ function CadastroAulas() {
                   </button>
               </SubCard>
 
-              <FormGroup label='Status: *' htmlFor='inputStatus'>
+              <FormGroup label='Status: *'>
                 <div>
                     <div className="form-check form-check-inline">
                         <input

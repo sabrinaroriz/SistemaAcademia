@@ -20,6 +20,7 @@ import '../custom.css';
 
 import axios from 'axios';
 import { BASE_URL } from '../config/axios';
+//import { error } from 'toastr';
 
 function CadastroFaturas() {
   const { idParam } = useParams();
@@ -53,10 +54,21 @@ function CadastroFaturas() {
     setListaAjusteFinanceiroFatura(novosAjustesFinanceiros);  
   }
 
-  function removeAjusteFinanceiro(index) {
-  const novosAjustesFinanceiros = listaAjusteFinanceiroFatura.filter((_, i) => i !== index);
-  setListaAjusteFinanceiroFatura(novosAjustesFinanceiros);
- }
+  async function removeAjusteFinanceiro(index) {
+    const itemRemovido = listaAjusteFinanceiroFatura[index];
+    const confirmar = window.confirm('Deseja realmente remover este ajuste financeiro?');
+    if (!confirmar) return;
+    try {
+      if (itemRemovido.id) {await axios.delete(`${baseURLlistaAjusteFinanceiroFatura}/${itemRemovido.id}`);
+      }
+      const novosAjustesFinanceiros = listaAjusteFinanceiroFatura.filter((_, i) => i !== index);
+      setListaAjusteFinanceiroFatura(novosAjustesFinanceiros);
+      mensagemSucesso('Ajuste removido com sucesso!');
+    } catch (error) {
+      console.log(error);
+      mensagemErro('Erro ao remover ajuste financeiro!');
+    }
+  }
 
   function cancelar() {
     const confirmar = window.confirm('Deseja realmente voltar?');
@@ -132,7 +144,7 @@ function CadastroFaturas() {
       return;
     }
     try {
-      let data = { id, idCliente, idPlano, dataVencimento, dataPagamento, idFormaPagamento};
+      let data = { id, idCliente, idPlano, dataVencimento, dataPagamento, idFormaPagamento, valor: valorFinal};
       let idFaturaSalvo = idParam;
       data = JSON.stringify(data);
 
@@ -234,11 +246,20 @@ function CadastroFaturas() {
   }, [idParam]);
 
   useEffect(() => {
-    if (dataVencimento !== '') {
-      const final = 0;
-      setValorFinal(final);
+    if(!idCliente || Number(idCliente) === 0) {
+      setValorFinal(0);
+      return;
     }
-  }, [dataVencimento]);
+    const idsAjustes = listaAjusteFinanceiroFatura.filter(item => Number(item.idAjusteFinanceiro) > 0
+    ).map(item => Number(item.idAjusteFinanceiro));
+    const URL_CALCULO =`${BASE_URL}/faturas/calcular`;
+    axios.post(URL_CALCULO, {idCliente: Number(idCliente), idsAjustesFinanceiros:idsAjustes}
+    ).then(response => {setValorFinal(response.data);
+    }).catch(error => {console.error ('Erro ao calcular valor da fatura:', error);
+      setValorFinal(0);
+    });
+  }, [idCliente, listaAjusteFinanceiroFatura]);
+
 
   function getNomePlano(idCliente) {
     if (!dadosClientes || !dadosPlanos) return 'Sem plano';
@@ -414,7 +435,7 @@ function CadastroFaturas() {
                 </LocalizationProvider>
               </FormGroup>
 
-              <FormGroup label="Data de Pagamento: *" htmlFor="inputDataPagamento">
+              <FormGroup label="Data de Pagamento: " htmlFor="inputDataPagamento">
                 <LocalizationProvider
                   dateAdapter={AdapterDayjs}
                   adapterLocale='pt-br'
