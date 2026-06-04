@@ -1,11 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+
 import Stack from '@mui/material/Stack';
+
+import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+
+import dayjs from 'dayjs';
+import 'dayjs/locale/pt-br';
 
 import Card from '../components/card';
 import FormGroup from '../components/form-group';
+
 import { mensagemSucesso, mensagemErro } from '../components/toastr';
+
 import '../custom.css';
+
 import axios from 'axios';
 import { BASE_URL } from '../config/axios';
 
@@ -19,9 +30,9 @@ function CadastroFuncionarios() {
   const [cpf, setCpf] = useState('');
   const [telefone, setTelefone] = useState('');
   const [email, setEmail] = useState('');
-  const [dataNascimento, setDataNascimento] = useState('');
+  const [dataNascimento, setDataNascimento] = useState(null);
   const [idCargo, setIdCargo] = useState('');
-  const [dataAdmissao, setDataAdmissao] = useState('');
+  const [dataAdmissao, setDataAdmissao] = useState(dayjs());
   const [status, setStatus] = useState(null);
   const [observacoes, setObservacoes] = useState('');
   const [logradouro, setLogradouro] = useState('');
@@ -62,9 +73,9 @@ function CadastroFuncionarios() {
       setCpf('');
       setTelefone('');
       setEmail('');
-      setDataNascimento('');
+      setDataNascimento(null);
       setIdCargo('');
-      setDataAdmissao('');
+      setDataAdmissao(dayjs());
       setStatus(null);
       setObservacoes('');
       setLogradouro('');
@@ -80,9 +91,9 @@ function CadastroFuncionarios() {
       setCpf(dados.cpf);
       setTelefone(dados.telefone);
       setEmail(dados.email);
-      setDataNascimento(dados.dataNascimento);
+      setDataNascimento(dayjs(dados.dataNascimento));
       setIdCargo(dados.idCargo);
-      setDataAdmissao(dados.dataAdmissao);
+      setDataAdmissao(dayjs(dados.dataAdmissao));
       setStatus(dados.status);
       setObservacoes(dados.observacoes);
       setLogradouro(dados.logradouro);
@@ -116,11 +127,15 @@ function CadastroFuncionarios() {
       mensagemErro('O campo Email é obrigatório!');
       return false;
     }
+    if (!dataNascimento) {
+      mensagemErro('O campo Data de Nascimento é obrigatório!');
+      return false;
+    }
     if (!logradouro || !logradouro.trim()) {
       mensagemErro('O campo Logradouro é obrigatório!');
       return false;
     }
-    if (!numero || !numero.trim()) {
+    if (!numero) {
       mensagemErro('O campo Número é obrigatório!');
       return false;
     }
@@ -140,6 +155,16 @@ function CadastroFuncionarios() {
       mensagemErro('Selecione Estado!');
       return false;
     }
+    if (!cep || !cep.trim()) {
+      mensagemErro('O campo CEP é obrigatório!');
+      return false;
+    }
+
+    if (cep.length !== 8) {
+      mensagemErro('O CEP deve conter 8 dígitos!');
+      return false;
+    }
+
     if (idCargo == null) {
       mensagemErro('Selecione um Cargo!');
       return false;
@@ -198,9 +223,9 @@ function CadastroFuncionarios() {
       setCpf(dados.cpf);
       setTelefone(dados.telefone);
       setEmail(dados.email);
-      setDataNascimento(dados.dataNascimento);
+      setDataNascimento(dayjs(dados.dataNascimento));
       setIdCargo(dados.idCargo);
-      setDataAdmissao(dados.dataAdmissao);
+      setDataAdmissao(dayjs(dados.dataAdmissao));
       setStatus(dados.status);
       setObservacoes(dados.observacoes);
       setLogradouro(dados.logradouro);
@@ -268,6 +293,7 @@ function CadastroFuncionarios() {
                   id="inputTelefone"
                   className="form-control"
                   value={telefone}
+                  maxLength='11'
                   name='telefone'
                   onChange={(e) => setTelefone(e.target.value.replace(/\D/g, ''))}
                   placeholder="(00) 00000-0000"
@@ -286,15 +312,26 @@ function CadastroFuncionarios() {
                 />
               </FormGroup>
 
-              <FormGroup label="Data de Nascimento:" htmlFor="inputDataNascimento">
-                <input
-                  type="date"
-                  id="inputDataNascimento"
-                  className="form-control"
-                  value={dataNascimento}
-                  name='dataNascimento'
-                  onChange={(e) => setDataNascimento(e.target.value)}
-                />
+              <FormGroup label="Data de Nascimento: *" htmlFor="inputDataNascimento">
+                <LocalizationProvider
+                  dateAdapter={AdapterDayjs}
+                  adapterLocale='pt-br'
+                >
+                  <Stack spacing={1}>
+                    <DesktopDatePicker
+                      value={dataNascimento}
+                      inputFormat='DD/MM/YYYY'
+                      onChange={(e) => setDataNascimento(e)}
+                      slotProps={{
+                        textField: {
+                          fullWidth: true,
+                          size: 'small',
+                          className: 'campo-data'
+                        }
+                      }}
+                    />
+                  </Stack>
+                </LocalizationProvider>
               </FormGroup>
 
               <h5 className="mb-3 mt-4">Endereço</h5>
@@ -311,7 +348,8 @@ function CadastroFuncionarios() {
               </FormGroup>
               <FormGroup label='Número: *' htmlFor='inputNumero'>
                 <input
-                  type='text'
+                  type='number'
+                  min='0'
                   id='inputNumero'
                   value={numero}
                   className='form-control'
@@ -387,6 +425,20 @@ function CadastroFuncionarios() {
                     <option value='TO'>TO</option>
                 </select>
               </FormGroup>
+              <FormGroup label='CEP: *' htmlFor='inputCep'>
+                <input
+                  type='text'
+                  id='inputCep'
+                  value={cep}
+                  className='form-control'
+                  name='cep'
+                  placeholder='00000-000'
+                  maxLength='8'
+                  onChange={(e) =>
+                    setCep(e.target.value.replace(/\D/g, ''))
+                  }
+                />
+              </FormGroup>
 
               <h5 className="mb-3 mt-4">Dados Profissionais</h5>
 
@@ -411,14 +463,25 @@ function CadastroFuncionarios() {
               </FormGroup>
 
               <FormGroup label="Data de Admissão: *" htmlFor="inputDataAdmissao">
-                <input
-                  type="date"
-                  id="inputDataAdmissao"
-                  className="form-control"
-                  value={dataAdmissao}
-                  name='dataAdmissao'
-                  onChange={(e) => setDataAdmissao(e.target.value)}
-                />
+                <LocalizationProvider
+                  dateAdapter={AdapterDayjs}
+                  adapterLocale='pt-br'
+                >
+                  <Stack spacing={1}>
+                    <DesktopDatePicker
+                      value={dataAdmissao}
+                      inputFormat='DD/MM/YYYY'
+                      onChange={(e) => setDataAdmissao(e)}
+                      slotProps={{
+                        textField: {
+                          fullWidth: true,
+                          size: 'small',
+                          className: 'campo-data'
+                        }
+                      }}
+                    />
+                  </Stack>
+                </LocalizationProvider>
               </FormGroup>
 
               <FormGroup label='Status: *' htmlFor='inputStatus'>
