@@ -3,6 +3,13 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 import Stack from '@mui/material/Stack';
 
+import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+
+import dayjs from 'dayjs';
+import 'dayjs/locale/pt-br';
+
 import Card from '../components/card';
 import FormGroup from '../components/form-group';
 
@@ -12,7 +19,6 @@ import '../custom.css';
 
 import axios from 'axios';
 import { BASE_URL } from '../config/axios';
-
 
 
 function CadastroClientes() {
@@ -27,7 +33,7 @@ function CadastroClientes() {
   const [cpf, setCpf] = useState('');
   const [telefone, setTelefone] = useState('');
   const [status, setStatus] = useState(null);
-  const [datanascimento, setDatanascimento] = useState('');
+  const [dataNascimento, setDataNascimento] = useState(null);
   const [idPlano, setIdPlano] = useState('');
   const [logradouro, setLogradouro] = useState('');
   const [numero, setNumero] = useState('');
@@ -49,7 +55,7 @@ function CadastroClientes() {
 
   function limparFormulario() {
     const temCamposPreenchidos =
-      nome !== '' || cpf !== '' || telefone !== '' || status !== '' || datanascimento !== '' || idPlano !== '' || logradouro !== '' || numero !== '' || complemento !== '' || bairro !== '' || cidade !== '' || estado !== '' || cep !== '';
+      nome !== '' || cpf !== '' || telefone !== '' || status !== '' || dataNascimento !== '' || idPlano !== '' || logradouro !== '' || numero !== '' || complemento !== '' || bairro !== '' || cidade !== '' || estado !== '' || cep !== '';
 
     if (!temCamposPreenchidos) {
       inicializar();
@@ -68,7 +74,7 @@ function CadastroClientes() {
       setCpf('');
       setTelefone('');
       setStatus(null);
-      setDatanascimento('');
+      setDataNascimento(null);
       setIdPlano('');
       setLogradouro('');
       setNumero('');
@@ -83,7 +89,7 @@ function CadastroClientes() {
       setCpf(dados.cpf);
       setTelefone(dados.telefone);
       setStatus(dados.status);
-      setDatanascimento(dados.datanascimento);
+      setDataNascimento(dayjs(dados.dataNascimento));
       setIdPlano(dados.idPlano);
       setLogradouro(dados.logradouro);
       setNumero(dados.numero);
@@ -112,7 +118,7 @@ function CadastroClientes() {
       mensagemErro('O campo Telefone é obrigatório!');
       return false;
     }
-    if (!datanascimento) {
+    if (!dataNascimento) {
       mensagemErro('O campo Data de Nascimento é obrigatório!');
       return false;
     }
@@ -140,6 +146,16 @@ function CadastroClientes() {
       mensagemErro('Selecione Estado!');
       return false;
     }
+
+    if (!cep || !cep.trim()) {
+      mensagemErro('O campo CEP é obrigatório!');
+      return false;
+    }
+
+    if (cep.length !== 8) {
+      mensagemErro('O CEP deve conter 8 dígitos!');
+      return false;
+    }
     if (idPlano == null) {
       mensagemErro('Selecione um Plano!');
       return false;
@@ -155,7 +171,7 @@ function CadastroClientes() {
     if (!validarCampos()) {
       return;
     }
-    let data = { id, nome, cpf, telefone, status, datanascimento, idPlano, logradouro, numero, complemento ,bairro ,cidade ,estado, cep};
+    let data = { id, nome, cpf, telefone, status, dataNascimento, idPlano, logradouro, numero, complemento ,bairro ,cidade ,estado, cep};
     data = JSON.stringify(data);
     if (idParam == null) {
       await axios
@@ -194,7 +210,7 @@ function CadastroClientes() {
       setCpf(dados.cpf);
       setTelefone(dados.telefone);
       setStatus(dados.status);
-      setDatanascimento(dados.datanascimento);
+      setDataNascimento(dayjs(dados.dataNascimento));
       setIdPlano(dados.idPlano);
       setLogradouro(dados.logradouro);
       setNumero(dados.numero);
@@ -239,7 +255,7 @@ function CadastroClientes() {
                   onChange={(e) => setNome(e.target.value)}
                 />
               </FormGroup>
-              <FormGroup label='CPF:' htmlFor='imputCpf'>
+              <FormGroup label='CPF: *' htmlFor='imputCpf'>
                 <input
                   type='text'
                   maxLength='11'
@@ -256,6 +272,7 @@ function CadastroClientes() {
                   type='text'
                   id='inputTelefone'
                   value={telefone}
+                  maxLength='11'
                   className='form-control'
                   name='telefone'
                   placeholder="(00) 00000-0000"
@@ -263,16 +280,28 @@ function CadastroClientes() {
                 />
               </FormGroup>
 
-              <FormGroup label='Data de Nascimento: *' htmlFor='inputDatanascimento'>
-                <input
-                  type='date'
-                  id='inputDatanascimento'
-                  value={datanascimento}
-                  className='form-control'
-                  name='datanascimento'
-                  onChange={(e) => setDatanascimento(e.target.value)}
-                />
+              <FormGroup label='Data de Nascimento: *' htmlFor='inputDataNascimento'>
+                <LocalizationProvider
+                  dateAdapter={AdapterDayjs}
+                  adapterLocale='pt-br'
+                >
+                  <Stack spacing={1}>
+                    <DesktopDatePicker
+                      value={dataNascimento}
+                      inputFormat='DD/MM/YYYY'
+                      onChange={(e) => setDataNascimento(e)}
+                      slotProps={{
+                        textField: {
+                          fullWidth: true,
+                          size: 'small',
+                          className: 'campo-data'
+                        }
+                      }}
+                    />
+                  </Stack>
+                </LocalizationProvider>
               </FormGroup>
+
               <h5 className="mb-3 mt-4">Endereço</h5>
               <FormGroup label='Logradouro: *' htmlFor='inputLogradouro'>
                 <input
@@ -286,7 +315,8 @@ function CadastroClientes() {
               </FormGroup>
               <FormGroup label='Número: *' htmlFor='inputNumero'>
                 <input
-                  type='text'
+                  type='number'
+                  min='0'
                   id='inputNumero'
                   value={numero}
                   className='form-control'
@@ -361,6 +391,20 @@ function CadastroClientes() {
                     <option value='SE'>SE</option>
                     <option value='TO'>TO</option>
                 </select>
+              </FormGroup>
+              <FormGroup label='CEP: *' htmlFor='inputCep'>
+                <input
+                  type='text'
+                  id='inputCep'
+                  value={cep}
+                  className='form-control'
+                  name='cep'
+                  placeholder='00000-000'
+                  maxLength='8'
+                  onChange={(e) =>
+                    setCep(e.target.value.replace(/\D/g, ''))
+                  }
+                />
               </FormGroup>
               <br></br>
               <br></br>
