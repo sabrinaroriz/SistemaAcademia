@@ -126,7 +126,7 @@ function CadastroClientes() {
       mensagemErro('O campo Logradouro é obrigatório!');
       return false;
     }
-    if (!numero || !numero.trim()) {
+    if (numero === '' || !numero == null) {
       mensagemErro('O campo Número é obrigatório!');
       return false;
     }
