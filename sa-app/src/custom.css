@@ -254,3 +254,21 @@ pre {
 .campo-data .Mui-focused fieldset {
   border: 3px solid #000000 !important;
 }
+
+.login-page {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f4f6f8;
+  overflow: hidden;
+}
+
+.login-page .card {
+  width: 350px;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+

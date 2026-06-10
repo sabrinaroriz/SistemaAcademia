@@ -20,7 +20,7 @@ import RelatorioPessoasAulas from './views/relatorio-pessoas-aulas';
 import RelatorioMensalAcademia from './views/relatorio-mensal-academia';
 
 
-
+import Login from './views/login';
 
 import CadastroPlanos from './views/cadastro-planos';
 import CadastroExercicios from './views/cadastro-exercicios';
@@ -74,6 +74,9 @@ function Rotas(props) {
       <Route path="/relatorio-pessoas-aulas" element={<RelatorioPessoasAulas/>} />
       <Route path="/relatorio-financeiro-operacional" element={<RelatorioFinanceiroOperacional />} />
       <Route path="/relatorio-mensal-academia" element={<RelatorioMensalAcademia />} />
+
+      <Route path="/login" element={<Login />} />
+
 
     </Routes>
     
