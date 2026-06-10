@@ -117,11 +117,9 @@ function Navbar(props) {
                 Relatórios
               </button>
               <div className="dropdown-menu">
-                <Link className="dropdown-item" to='/relatorio-presenca'>Relatório de Presença</Link>
-                <Link className="dropdown-item" to='/controle-presenca'>Controle de Presença</Link>
-                <div className="dropdown-divider"></div>
-                <Link className="dropdown-item" to='/relatorio-financeiro-academia'>Relatório Financeiro da Academia</Link>
-                <Link className="dropdown-item" to='/resumo-do-dia'>Resumo do Dia</Link>
+                <Link className="dropdown-item" to='/relatorio-pessoas-aulas'>Relatório de Pessoas e Aulas</Link>
+                <Link className="dropdown-item" to='/relatorio-financeiro-operacional'>Relatório Financeiro e Operacional</Link>
+                <Link className="dropdown-item" to='/relatorio-mensal-academia'>Relatório Mensal Academia</Link>
               </div>
             </li>
           </ul>

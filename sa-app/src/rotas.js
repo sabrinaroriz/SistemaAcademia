@@ -14,10 +14,12 @@ import ListagemFuncionarios from './views/listagem-funcionarios';
 import ListagemTreinos from './views/listagem-treinos';
 import ListagemClientes from './views/listagem-clientes';
 import ListagemExercicios from './views/listagem-exercicios';
-import RelatorioFinanceiroAcademia from './views/relatorio-financeiro-academia';
-import ResumoDoDia from "./views/resumo-do-dia";
-import ControlePresenca from './views/controle-presenca';
-import RelatorioPresenca from './views/relatorio-presenca';
+
+import RelatorioFinanceiroOperacional from './views/relatorio-financeiro-operacional';
+import RelatorioPessoasAulas from './views/relatorio-pessoas-aulas';
+import RelatorioMensalAcademia from './views/relatorio-mensal-academia';
+
+
 
 
 import CadastroPlanos from './views/cadastro-planos';
@@ -69,12 +71,9 @@ function Rotas(props) {
       <Route path="/listagem-treinos" element={<ListagemTreinos />} />
       <Route path="/listagem-exercicios" element={<ListagemExercicios />} />
 
-      <Route path="/controle-presenca" element={<ControlePresenca />} />
-      <Route path="/relatorio-presenca" element={<RelatorioPresenca/>} />
-      <Route path="/relatorio-financeiro-academia" element={<RelatorioFinanceiroAcademia />} />
-
-
-      <Route path="/resumo-do-dia" element={<ResumoDoDia />} />
+      <Route path="/relatorio-pessoas-aulas" element={<RelatorioPessoasAulas/>} />
+      <Route path="/relatorio-financeiro-operacional" element={<RelatorioFinanceiroOperacional />} />
+      <Route path="/relatorio-mensal-academia" element={<RelatorioMensalAcademia />} />
 
     </Routes>
     
