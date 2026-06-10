@@ -16,7 +16,7 @@ import {
   Legend
 } from 'chart.js';
 
-import { Doughnut, Bar } from 'react-chartjs-2';
+import { Doughnut} from 'react-chartjs-2';
 
 const baseURL = `${BASE_URL}/relatorioacademia`;
 
@@ -77,34 +77,47 @@ function RelatorioAcademiaFinanceiroOperacional() {
     ]
   };
 
-  const dadosBarra = {
-    labels: [
-      'Faturas',
-      'Equipamentos'
-    ],
-    datasets: [
-      {
-        label: 'Ativos/Disponíveis',
-        data: [
-          dados.faturasPagas,
-          dados.equipamentosDisponiveis
-        ],
-        backgroundColor: '#4caf50'
-      },
-      {
-        label: 'Inativos/Indisponíveis',
-        data: [
-          dados.faturasNaoPagas,
-          dados.equipamentosIndisponiveis
-        ],
-        backgroundColor: '#f44336'
-      }
-    ]
-  };
-
   return (
     <div className="container">
       <Card title="Relatório Financeiro e Operacional">
+        <div className="row">
+          
+          <div className="col-lg-3">
+              <div className="card text-white bg-primary mb-3">
+                  <div className="card-body">
+                      <h5>Faturas pagas</h5>
+                      <h2>{dados.faturasPagas}</h2>
+                  </div>
+              </div>
+          </div>
+
+          <div className="col-lg-3">
+              <div className="card text-white bg-success mb-3">
+                  <div className="card-body">
+                      <h5>Faturas não pagas</h5>
+                      <h2>{dados.faturasNaoPagas}</h2>
+                  </div>
+              </div>
+          </div>
+
+          <div className="col-lg-3">
+              <div className="card text-white bg-warning mb-3">
+                  <div className="card-body">
+                      <h5>Equipamentos disponíveis</h5>
+                      <h2>{dados.equipamentosDisponiveis}</h2>
+                  </div>
+              </div>
+          </div>
+
+          <div className="col-lg-3">
+              <div className="card text-white bg-danger mb-3">
+                  <div className="card-body">
+                      <h5>Equipamentos indisponíveis</h5>
+                      <h2>{dados.equipamentosIndisponiveis}</h2>
+                  </div>
+              </div>
+          </div>
+        </div>
 
         <div className="row mt-4">
 
@@ -117,38 +130,7 @@ function RelatorioAcademiaFinanceiroOperacional() {
             <h5>Equipamentos</h5>
             <Doughnut data={dadosEquipamentos} />
           </div>
-
         </div>
-
-        <div className="mt-5">
-          <h4>Comparativo Geral</h4>
-
-          <div style={{ width: '900px' }}>
-            <Bar data={dadosBarra} />
-          </div>
-        </div>
-
-        <div className="mt-5">
-          <h4>Resumo</h4>
-
-          <h6>
-            Faturas pagas: {dados.faturasPagas}
-          </h6>
-
-          <h6>
-            Faturas não pagas: {dados.faturasNaoPagas}
-          </h6>
-
-          <h6>
-            Equipamentos disponíveis: {dados.equipamentosDisponiveis}
-          </h6>
-
-          <h6>
-            Equipamentos indisponíveis: {dados.equipamentosIndisponiveis}
-          </h6>
-
-        </div>
-
       </Card>
     </div>
   );

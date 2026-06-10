@@ -16,7 +16,7 @@ import {
   Legend
 } from 'chart.js';
 
-import { Bar, Doughnut} from 'react-chartjs-2';
+import { Bar} from 'react-chartjs-2';
 
 const baseURL = `${BASE_URL}/relatorioacademia`;
 
@@ -43,36 +43,6 @@ function RelatorioAcademiaPessoas() {
     }, []);
 
     if (!dados) return null;
-
-    const dadosClientes = {
-        labels: ['Ativos', 'Inativos'],
-        datasets: [
-            {
-                data: [dados.clientesAtivos, dados.clientesInativos],
-                backgroundColor: ['#4caf50','#f44336']
-            }
-        ]
-    };
-
-    const dadosFuncionarios = {
-        labels: ['Ativos', 'Inativos'],
-        datasets: [
-            {
-                data: [dados.funcionariosAtivos, dados.funcionariosInativos],
-                backgroundColor: ['#2196f3','#ff9800']
-            }
-        ]
-    };
-
-    const dadosAulas = {
-        labels: ['Ativas', 'Inativas'],
-        datasets: [
-            {
-                data: [dados.aulasAtivas,dados.aulasInativas],
-                backgroundColor: ['#9c27b0','#607d8b']
-            }
-        ]
-    };
 
     const dadosBarra = {
         labels: [
@@ -105,20 +75,62 @@ function RelatorioAcademiaPessoas() {
     return (
         <div className="container">
             <Card title="Relatórios de Pessoas e Aulas">
-                <div className='row mt-4'>
-                    <div className='col-lg-4'>
-                        <h5>Clientes</h5>
-                        <Doughnut data={dadosClientes}/>
+                <div className="row">
+                    <div className="col-lg-4">
+                        <div className="card text-white bg-primary mb-3">
+                            <div className="card-body">
+                                <h5>Clientes</h5>
+                                <div className='row'>
+                                    <div className="col-lg-6">
+                                        <h6>Ativos</h6>
+                                        <h2>{dados.clientesAtivos}</h2>
+                                    </div>
+
+                                    <div className="col-lg-6">
+                                        <h6>Inativos</h6>
+                                        <h2>{dados.clientesInativos}</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
-                    <div className='col-lg-4'>
-                        <h5>Funcionários</h5>
-                        <Doughnut data={dadosFuncionarios}/>
+                    <div className="col-lg-4">
+                        <div className="card text-white bg-success mb-3">
+                            <div className="card-body">
+                                <h5>Funcionários</h5>
+                                <div className='row'>
+                                    <div className="col-lg-6">
+                                        <h6>Ativos</h6>
+                                        <h2>{dados.funcionariosAtivos}</h2>
+                                    </div>
+
+                                    <div className="col-lg-6">
+                                        <h6>Inativos</h6>
+                                        <h2>{dados.funcionariosInativos}</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
-                    <div className='col-lg-4'>
-                        <h5>Aulas</h5>
-                        <Doughnut data={dadosAulas}/>
+                    <div className="col-lg-4">
+                        <div className="card text-white bg-warning mb-3">
+                            <div className="card-body">
+                                <h5>Aulas</h5>
+                                <div className='row'>
+                                    <div className="col-lg-6">
+                                        <h6>Ativos</h6>
+                                        <h2>{dados.aulasAtivas}</h2>
+                                    </div>
+
+                                    <div className="col-lg-6">
+                                        <h6>Inativos</h6>
+                                        <h2>{dados.aulasInativas}</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -127,16 +139,6 @@ function RelatorioAcademiaPessoas() {
                     <div style={{ width: '900px' }}>
                         <Bar data={dadosBarra} />
                     </div>
-                </div>
-
-                <div className="mt-5">
-                    <h4>Resumo</h4>
-                    <h6>Clientes ativos: {dados.clientesAtivos}</h6>
-                    <h6> Clientes inativos: {dados.clientesInativos}</h6>
-                    <h6>Funcionários ativos: {dados.funcionariosAtivos}</h6>
-                    <h6>Funcionários inativos: {dados.funcionariosInativos}</h6>
-                    <h6>Aulas ativas: {dados.aulasAtivas}</h6>
-                    <h6>Aulas inativas: {dados.aulasInativas}</h6>
                 </div>
             </Card>
         </div>
