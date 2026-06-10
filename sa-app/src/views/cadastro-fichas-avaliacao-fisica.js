@@ -177,7 +177,7 @@ function CadastroFichasAvaliacaoFisica() {
   const [dadosClientes, setDadosClientes] = React.useState(null);
 
   useEffect(() => {
-    axios.get(`${BASE_URL}/clientes`).then((response) => {
+    axios.get(`${BASE_URL}/clientes/ativos`).then((response) => {
       setDadosClientes(response.data);
     });
   }, []);
@@ -185,7 +185,7 @@ function CadastroFichasAvaliacaoFisica() {
   const [dadosFuncionarios, setDadosFuncionarios] = React.useState(null);
 
   useEffect(() => {
-    axios.get(`${BASE_URL}/funcionarios`).then((response) => {
+    axios.get(`${BASE_URL}/funcionarios/ativos`).then((response) => {
       setDadosFuncionarios(response.data);
     });
   }, []);

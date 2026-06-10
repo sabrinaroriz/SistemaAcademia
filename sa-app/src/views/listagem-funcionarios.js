@@ -90,10 +90,10 @@ function ListagemFuncionarios() {
                 <thead>
                   <tr>
                     <th scope='col'>Nome</th>
-                    <th scope='col'>CPF</th>
                     <th scope='col'>Telefone</th>
                     <th scope='col'>Email</th>
                     <th scope='col'>Cargo</th>
+                    <th scope='col'>Status</th>
                     <th scope='col'>Ações</th>
                   </tr>
                 </thead>
@@ -101,10 +101,10 @@ function ListagemFuncionarios() {
                   {dados.map((dado) => (
                     <tr key={dado.id}>
                       <td>{dado.nome}</td>
-                      <td>{dado.cpf}</td>
                       <td>{dado.telefone}</td>
                       <td>{dado.email}</td>
                       <td>{getNomeCargo(dado.idCargo)}</td>
+                      <td>{dado.status  ? 'Ativo' : 'Inativo'}</td>
                       <td>
                         <Stack spacing={1} padding={0} direction='row'>
                           <IconButton
