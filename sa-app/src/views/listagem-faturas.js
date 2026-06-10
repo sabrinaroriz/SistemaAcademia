@@ -101,6 +101,9 @@ function ListagemFaturas() {
   }
 
   function formatarData(dataCalendario) {
+    if(dataCalendario == null || dataCalendario === '') {
+      return 'Pendente';
+    }
     const partesData = dataCalendario.substr(0, 10).split('-');
 
     return partesData[2] + '/' + partesData[1] + '/' + partesData[0];

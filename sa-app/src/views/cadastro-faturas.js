@@ -34,7 +34,7 @@ function CadastroFaturas() {
   const [idCliente, setIdCliente] = useState('');
   const [idPlano, setIdPlano] = useState('');
   const [dataVencimento, setDataVencimento] = useState(dayjs());
-  const [dataPagamento, setDataPagamento] = useState(dayjs());
+  const [dataPagamento, setDataPagamento] = useState(null);
   const [idFormaPagamento, setIdFormasPagamento] = useState('');
   const [valorFinal, setValorFinal] = useState(0);
 
@@ -96,7 +96,7 @@ function CadastroFaturas() {
       setIdCliente('');
       setIdPlano('');
       setDataVencimento(dayjs());
-      setDataPagamento(dayjs());
+      setDataPagamento(null);
       setIdFormasPagamento('');
       setListaAjusteFinanceiroFatura([{idAjusteFinanceiro:0}]);
     } else {
@@ -130,10 +130,6 @@ function CadastroFaturas() {
     }
     if (!dataVencimento) {
       mensagemErro('O campo Data de Vencimento é obrigatório!');
-      return false;
-    }
-    if (!dataPagamento) {
-      mensagemErro('O campo Data de Pagamento é obrigatório!');
       return false;
     }
     return true;
