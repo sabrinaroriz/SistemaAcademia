@@ -17,7 +17,8 @@ import { mensagemSucesso, mensagemErro } from '../components/toastr';
 
 import '../custom.css';
 
-import axios from 'axios';
+import api from '../app/api';
+import formatarMoeda from '../config/util';
 import { BASE_URL } from '../config/axios';
 
 
@@ -174,7 +175,7 @@ function CadastroClientes() {
     let data = { id, nome, cpf, telefone, status, dataNascimento, idPlano, logradouro, numero, complemento ,bairro ,cidade ,estado, cep};
     data = JSON.stringify(data);
     if (idParam == null) {
-      await axios
+      await api
         .post(baseURL, data, {
           headers: { 'Content-Type': 'application/json' },
         })
@@ -186,7 +187,7 @@ function CadastroClientes() {
           mensagemErro(error.response.data);
         });
     } else {
-      await axios
+      await api
         .put(`${baseURL}/${idParam}`, data, {
           headers: { 'Content-Type': 'application/json' },
         })
@@ -202,7 +203,7 @@ function CadastroClientes() {
 
   async function buscar() {
     if (idParam != null) {
-      await axios.get(`${baseURL}/${idParam}`).then((response) => {
+      await api.get(`${baseURL}/${idParam}`).then((response) => {
         setDados(response.data);
       });
       setId(dados.id);
@@ -225,7 +226,7 @@ function CadastroClientes() {
   const [dadosPlanos, setDadosPlanos] = React.useState(null);
 
   useEffect(() => {
-    axios.get(`${BASE_URL}/planos`).then((response) => {
+    api.get(`${BASE_URL}/planos`).then((response) => { console.log(response.data);
       setDadosPlanos(response.data);
     });
   }, []);
@@ -422,7 +423,7 @@ function CadastroClientes() {
                   </option>
                   {dadosPlanos.map((dado) => (
                     <option key={dado.id} value={dado.id}>
-                      {dado.nome}
+                      {`${formatarMoeda(dado.valor)} - ${dado.nome} - ${dado.descricao?.trim() || 'Sem descrição'}`}
                     </option>
                   ))}
                 </select>

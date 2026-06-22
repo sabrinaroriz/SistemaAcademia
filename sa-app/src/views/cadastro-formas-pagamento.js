@@ -10,7 +10,7 @@ import { mensagemSucesso, mensagemErro } from '../components/toastr';
 
 import '../custom.css';
 
-import axios from 'axios';
+import api from '../app/api';
 import { BASE_URL } from '../config/axios';
 
 function CadastroFormasPagamento() {
@@ -74,7 +74,7 @@ function cancelar() {
     let data = { id, nome, descricao};
     data = JSON.stringify(data);
     if (idParam == null) {
-      await axios
+      await api
         .post(baseURL, data, {
           headers: { 'Content-Type': 'application/json' },
         })
@@ -86,7 +86,7 @@ function cancelar() {
           mensagemErro(error.response.data);
         });
     } else {
-      await axios
+      await api
         .put(`${baseURL}/${idParam}`, data, {
           headers: { 'Content-Type': 'application/json' },
         })
@@ -102,7 +102,7 @@ function cancelar() {
 
   async function buscar() {
     if (idParam != null) {
-      await axios.get(`${baseURL}/${idParam}`).then((response) => {
+      await api.get(`${baseURL}/${idParam}`).then((response) => {
         setDados(response.data);
       });
       setId(dados.id);

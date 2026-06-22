@@ -13,7 +13,7 @@ import { IconButton } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 
-import axios from 'axios';
+import api from '../app/api';
 import { BASE_URL } from '../config/axios';
 
 const baseURL = `${BASE_URL}/aulas`;
@@ -35,7 +35,7 @@ function ListagemAulas() {
   async function excluir(id) {
     let data = JSON.stringify({ id });
     let url = `${baseURL}/${id}`;
-    await axios
+    await api
       .delete(url, data, {
         headers: { 'Content-Type': 'application/json' },
       })
@@ -53,13 +53,13 @@ function ListagemAulas() {
   }
 
   React.useEffect(() => {
-    axios.get(baseURL).then((response) => {
+    api.get(baseURL).then((response) => {
       setDados(response.data);
     });
   }, []);
 
   React.useEffect(() => {
-    axios.get(`${BASE_URL}/funcionarios`).then((response) => {
+    api.get(`${BASE_URL}/funcionarios`).then((response) => {
       setDadosFuncionarios(response.data);
     });
   }, []);

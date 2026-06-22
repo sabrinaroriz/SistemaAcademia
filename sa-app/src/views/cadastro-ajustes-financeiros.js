@@ -11,7 +11,7 @@ import { mensagemSucesso, mensagemErro } from '../components/toastr';
 
 import '../custom.css';
 
-import axios from 'axios';
+import api from '../app/api';
 import { BASE_URL } from '../config/axios';
 
 function CadastroAjustesFinanceiros() {
@@ -106,7 +106,7 @@ function CadastroAjustesFinanceiros() {
     let data = { id, nome, tipo, unidade, valor, descricao};
     data = JSON.stringify(data);
     if (idParam == null) {
-      await axios
+      await api
         .post(baseURL, data, {
           headers: { 'Content-Type': 'application/json' },
         })
@@ -118,7 +118,7 @@ function CadastroAjustesFinanceiros() {
           mensagemErro(error.response.data);
         });
     } else {
-      await axios
+      await api
         .put(`${baseURL}/${idParam}`, data, {
           headers: { 'Content-Type': 'application/json' },
         })
@@ -134,7 +134,7 @@ function CadastroAjustesFinanceiros() {
 
   async function buscar() {
     if (idParam != null) {
-      await axios.get(`${baseURL}/${idParam}`).then((response) => {
+      await api.get(`${baseURL}/${idParam}`).then((response) => {
         setDados(response.data);
       });
       setId(dados.id);

@@ -18,7 +18,7 @@ import { mensagemSucesso, mensagemErro } from '../components/toastr';
 
 import '../custom.css';
 
-import axios from 'axios';
+import api from '../app/api';
 import { BASE_URL } from '../config/axios';
 
 function CadastroTreinos() {
@@ -55,7 +55,7 @@ function CadastroTreinos() {
     const confirmar = window.confirm('Deseja realmente remover este exercício do treino?');
     if (!confirmar) return;
     try {
-      if (itemRemovido.id) {await axios.delete(`${baseURLlistaExercicioTreino}/${itemRemovido.id}`);}
+      if (itemRemovido.id) {await api.delete(`${baseURLlistaExercicioTreino}/${itemRemovido.id}`);}
       const novos = listaexerciciotreino.filter((_, i) => i !== index);
       setListaExercicioTreino(novos);
       mensagemSucesso('Exercício removido com sucesso!');
@@ -167,12 +167,12 @@ function CadastroTreinos() {
       treino = JSON.stringify(treino);
 
       if (idParam == null) {
-        const resp = await axios.post(baseURL, treino, {
+        const resp = await api.post(baseURL, treino, {
             headers: { 'Content-Type': 'application/json' },
           });
           idTreinoSalvo = resp.data.id;
       } else {
-        await axios.put(`${baseURL}/${idParam}`, treino, {
+        await api.put(`${baseURL}/${idParam}`, treino, {
             headers: { 'Content-Type': 'application/json' },
           });
       }
@@ -195,9 +195,9 @@ function CadastroTreinos() {
               ? 0
               : Number(item.carga)
         };
-        if (item.id == null) {await axios.post(baseURLlistaExercicioTreino, payload);
+        if (item.id == null) {await api.post(baseURLlistaExercicioTreino, payload);
         } else {
-          await axios.put(`${baseURLlistaExercicioTreino}/${item.id}`,payload);}
+          await api.put(`${baseURLlistaExercicioTreino}/${item.id}`,payload);}
       }
 
       mensagemSucesso(`Treino ${nome} alterado com sucesso!`);
@@ -211,7 +211,7 @@ function CadastroTreinos() {
 
   async function buscar() {
     if (idParam != null) {
-      await axios.get(`${baseURL}/${idParam}`).then((response) => {
+      await api.get(`${baseURL}/${idParam}`).then((response) => {
         setDados(response.data);
       });
       setId(dados.id);
@@ -239,7 +239,7 @@ function CadastroTreinos() {
   const [dadosClientes, setDadosClientes] = React.useState(null);
 
   useEffect(() => {
-    axios.get(`${BASE_URL}/clientes/ativos`).then((response) => {
+    api.get(`${BASE_URL}/clientes/ativos`).then((response) => {
       setDadosClientes(response.data);
     });
   }, []);
@@ -247,7 +247,7 @@ function CadastroTreinos() {
   const [dadosFuncionarios, setDadosFuncionarios] = React.useState(null);
 
   useEffect(() => {
-    axios.get(`${BASE_URL}/funcionarios/ativos`).then((response) => {
+    api.get(`${BASE_URL}/funcionarios/ativos`).then((response) => {
       setDadosFuncionarios(response.data);
     });
   }, []);
@@ -255,7 +255,7 @@ function CadastroTreinos() {
   const[ dadosExercicios, setDadosExercicios] = React.useState(null);  
    
   useEffect(()=> {
-    axios.get(`${BASE_URL}/exercicios`).then((response) => {
+    api.get(`${BASE_URL}/exercicios`).then((response) => {
       setDadosExercicios(response.data);  
     });
   }, []);
@@ -264,7 +264,7 @@ function CadastroTreinos() {
 
   useEffect(()=> {
     if(idParam != null){
-      axios.get(`${BASE_URL}/listasexerciciostreinos/treino/${idParam}`)
+      api.get(`${BASE_URL}/listasexerciciostreinos/treino/${idParam}`)
       .then((response) => setDadosListaExercicioTreino(response.data));
     }
   }, [idParam]);

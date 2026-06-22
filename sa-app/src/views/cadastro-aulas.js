@@ -18,7 +18,7 @@ import { mensagemSucesso, mensagemErro } from '../components/toastr';
 
 import '../custom.css';
 
-import axios from 'axios';
+import api from '../app/api';
 import { BASE_URL } from '../config/axios';
 
 function CadastroAulas() {
@@ -72,7 +72,7 @@ function CadastroAulas() {
     const confirmar = window.confirm('Deseja realmente remover este equipamento da aula?');
     if (!confirmar) return;
     try {
-      if (itemRemovido.id) {await axios.delete(`${baseURLlistaEquipamentoAula}/${itemRemovido.id}`);
+      if (itemRemovido.id) {await api.delete(`${baseURLlistaEquipamentoAula}/${itemRemovido.id}`);
       }
       const novos = listaequipamentoaula.filter((_, i) => i !== index);
       setListaEquipamentoAula(novos);
@@ -87,7 +87,7 @@ function CadastroAulas() {
     const confirmar = window.confirm('Deseja realmente remover este cliente da aula?');
     if (!confirmar) return;
     try {
-      if (itemRemovido.id) {await axios.delete(`${baseURLlistaClienteAula}/${itemRemovido.id}`);}
+      if (itemRemovido.id) {await api.delete(`${baseURLlistaClienteAula}/${itemRemovido.id}`);}
       const novos = listaclienteaula.filter((_, i) => i !== index);
       setListaClienteAula(novos);
       mensagemSucesso('Cliente removido com sucesso!');
@@ -213,12 +213,12 @@ function CadastroAulas() {
       data = JSON.stringify(data);
       
       if (idParam == null) {
-        const resp = await axios.post(baseURL, data, {
+        const resp = await api.post(baseURL, data, {
             headers: { 'Content-Type': 'application/json' },
           });
           idAulaSalvo = resp.data.id;
       } else {
-        await axios.put(`${baseURL}/${idParam}`, data, {
+        await api.put(`${baseURL}/${idParam}`, data, {
             headers: { 'Content-Type': 'application/json' },
           });
       }
@@ -233,19 +233,19 @@ function CadastroAulas() {
               ? 0
               : Number(item.quantidade)
         };
-        if (item.id == null) {await axios.post(baseURLlistaEquipamentoAula, payload);
+        if (item.id == null) {await api.post(baseURLlistaEquipamentoAula, payload);
         } else {
-          await axios.put(`${baseURLlistaEquipamentoAula}/${item.id}`,payload);}}
+          await api.put(`${baseURLlistaEquipamentoAula}/${item.id}`,payload);}}
 
       for (const item of listaclienteaula) {
         if(item.idCliente === 0 ) continue;
         if(item.id == null){
-          await axios.post(baseURLlistaClienteAula, {
+          await api.post(baseURLlistaClienteAula, {
             idAula: Number(idAulaSalvo),
             idCliente: Number(item.idCliente)
           });
         }else{
-          await axios.put(`${baseURLlistaClienteAula}/${item.id}`, {
+          await api.put(`${baseURLlistaClienteAula}/${item.id}`, {
             idAula: Number(idAulaSalvo),
             idCliente: Number(item.idCliente)
           });
@@ -263,7 +263,7 @@ function CadastroAulas() {
 
   async function buscar() {
     if (idParam != null) {
-      await axios.get(`${baseURL}/${idParam}`).then((response) => {
+      await api.get(`${baseURL}/${idParam}`).then((response) => {
         setDados(response.data);
       });
       setId(dados.id);
@@ -303,7 +303,7 @@ function CadastroAulas() {
   const[ dadosClientes, setDadosClientes] = React.useState(null);  
    
   useEffect(()=> {
-    axios.get(`${BASE_URL}/clientes/ativos`).then((response) => {
+    api.get(`${BASE_URL}/clientes/ativos`).then((response) => {
       setDadosClientes(response.data);  
     });
   }, []);
@@ -311,7 +311,7 @@ function CadastroAulas() {
   const[ dadosFuncionarios, setDadosFuncionarios] = React.useState(null);  
    
   useEffect(()=> {
-    axios.get(`${BASE_URL}/funcionarios/ativos`).then((response) => {
+    api.get(`${BASE_URL}/funcionarios/ativos`).then((response) => {
       setDadosFuncionarios(response.data);  
     });
   }, []);
@@ -319,7 +319,7 @@ function CadastroAulas() {
   const[ dadosEquipamentos, setDadosEquipamentos] = React.useState(null);  
    
   useEffect(()=> {
-    axios.get(`${BASE_URL}/equipamentos/ativos`).then((response) => {
+    api.get(`${BASE_URL}/equipamentos/ativos`).then((response) => {
       setDadosEquipamentos(response.data);  
     });
   }, []);
@@ -328,7 +328,7 @@ function CadastroAulas() {
    
   useEffect(()=> {
     if(idParam != null){
-      axios.get(`${BASE_URL}/listasequipamentosaulas/aula/${idParam}`)
+      api.get(`${BASE_URL}/listasequipamentosaulas/aula/${idParam}`)
       .then((response) => setDadosListaEquipamentoAula(response.data));
     }
   }, [idParam]);
@@ -337,7 +337,7 @@ function CadastroAulas() {
 
   useEffect(()=> {
     if(idParam != null){
-      axios.get(`${BASE_URL}/listasclientesaulas/aula/${idParam}`)
+      api.get(`${BASE_URL}/listasclientesaulas/aula/${idParam}`)
       .then((response) => setDadosListaClienteAula(response.data));
     }
   }, [idParam]);

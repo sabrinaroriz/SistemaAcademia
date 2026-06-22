@@ -13,7 +13,7 @@ import Card from '../components/card';
 import FormGroup from '../components/form-group';
 import { mensagemSucesso, mensagemErro } from '../components/toastr';
 import '../custom.css';
-import axios from 'axios';
+import api from '../app/api';
 import { BASE_URL } from '../config/axios';
 
 function CadastroFichasAvaliacaoFisica() {
@@ -108,7 +108,7 @@ function CadastroFichasAvaliacaoFisica() {
     let data = { id, idCliente, idFuncionario, dataFicha, peso, altura, descricao};
     data = JSON.stringify(data);
     if (idParam == null) {
-      await axios
+      await api
         .post(baseURL, data, {
           headers: { 'Content-Type': 'application/json' },
         })
@@ -120,7 +120,7 @@ function CadastroFichasAvaliacaoFisica() {
           mensagemErro(error.response.data);
         });
     } else {
-      await axios
+      await api
         .put(`${baseURL}/${idParam}`, data, {
           headers: { 'Content-Type': 'application/json' },
         })
@@ -136,7 +136,7 @@ function CadastroFichasAvaliacaoFisica() {
 
   async function buscar() {
     if (idParam != null) {
-      await axios.get(`${baseURL}/${idParam}`).then((response) => {
+      await api.get(`${baseURL}/${idParam}`).then((response) => {
         setDados(response.data);
       });
       setId(dados.id);
@@ -159,7 +159,7 @@ function CadastroFichasAvaliacaoFisica() {
       return;
     }
     try {
-      const response = await axios.post(`${baseURL}/calcular-imc`,
+      const response = await api.post(`${baseURL}/calcular-imc`,
         {
           peso: Number(peso),
           altura: Number(altura)
@@ -177,7 +177,7 @@ function CadastroFichasAvaliacaoFisica() {
   const [dadosClientes, setDadosClientes] = React.useState(null);
 
   useEffect(() => {
-    axios.get(`${BASE_URL}/clientes/ativos`).then((response) => {
+    api.get(`${BASE_URL}/clientes/ativos`).then((response) => {
       setDadosClientes(response.data);
     });
   }, []);
@@ -185,7 +185,7 @@ function CadastroFichasAvaliacaoFisica() {
   const [dadosFuncionarios, setDadosFuncionarios] = React.useState(null);
 
   useEffect(() => {
-    axios.get(`${BASE_URL}/funcionarios/ativos`).then((response) => {
+    api.get(`${BASE_URL}/funcionarios/ativos`).then((response) => {
       setDadosFuncionarios(response.data);
     });
   }, []);

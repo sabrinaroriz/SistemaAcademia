@@ -13,7 +13,7 @@ import { IconButton } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 
-import axios from 'axios';
+import api from '../app/api';
 import { BASE_URL } from '../config/axios';
 
 const baseURL = `${BASE_URL}/faturas`;
@@ -39,7 +39,7 @@ function ListagemFaturas() {
     let data = JSON.stringify({ id });
     let url = `${baseURL}/${id}`;
     console.log(url);
-    await axios
+    await api
       .delete(url, data, {
         headers: { 'Content-Type': 'application/json' },
       })
@@ -57,25 +57,25 @@ function ListagemFaturas() {
   }
 
   React.useEffect(() => {
-    axios.get(baseURL).then((response) => {
+    api.get(baseURL).then((response) => {
       setDados(response.data);
     });
   }, []);
 
   React.useEffect(() => {
-    axios.get(`${BASE_URL}/clientes`).then((response) => {
+    api.get(`${BASE_URL}/clientes`).then((response) => {
       setDadosClientes(response.data);
     });
   }, []);
 
   React.useEffect(() => {
-    axios.get(`${BASE_URL}/planos`).then((response) => {
+    api.get(`${BASE_URL}/planos`).then((response) => {
       setDadosPlanos(response.data);
     });
   }, []);
 
   React.useEffect(() => {
-    axios.get(`${BASE_URL}/formaspagamentos`).then((response) => {
+    api.get(`${BASE_URL}/formaspagamentos`).then((response) => {
       setDadosFormaPagamento(response.data);
     });
   }, []);

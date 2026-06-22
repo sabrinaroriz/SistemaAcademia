@@ -18,7 +18,7 @@ import { mensagemSucesso, mensagemErro } from '../components/toastr';
 
 import '../custom.css';
 
-import axios from 'axios';
+import api from '../app/api';
 import { BASE_URL } from '../config/axios';
 //import { error } from 'toastr';
 
@@ -59,7 +59,7 @@ function CadastroFaturas() {
     const confirmar = window.confirm('Deseja realmente remover este ajuste financeiro?');
     if (!confirmar) return;
     try {
-      if (itemRemovido.id) {await axios.delete(`${baseURLlistaAjusteFinanceiroFatura}/${itemRemovido.id}`);
+      if (itemRemovido.id) {await api.delete(`${baseURLlistaAjusteFinanceiroFatura}/${itemRemovido.id}`);
       }
       const novosAjustesFinanceiros = listaAjusteFinanceiroFatura.filter((_, i) => i !== index);
       setListaAjusteFinanceiroFatura(novosAjustesFinanceiros);
@@ -145,12 +145,12 @@ function CadastroFaturas() {
       data = JSON.stringify(data);
 
       if (idParam == null) {
-        const resp = await axios.post(baseURL, data, {
+        const resp = await api.post(baseURL, data, {
             headers: { 'Content-Type': 'application/json' },
           });
           idFaturaSalvo = resp.data.id;
       } else {
-          await axios.put(`${baseURL}/${idParam}`, data, {
+          await api.put(`${baseURL}/${idParam}`, data, {
             headers: { 'Content-Type': 'application/json' },
           });
       }
@@ -158,12 +158,12 @@ function CadastroFaturas() {
       for(const item of listaAjusteFinanceiroFatura) {
         if(item.idAjusteFinanceiro === 0 ) continue;
         if(item.id == null){
-          await axios.post(baseURLlistaAjusteFinanceiroFatura, {
+          await api.post(baseURLlistaAjusteFinanceiroFatura, {
             idFatura: Number(idFaturaSalvo),
             idAjusteFinanceiro: Number(item.idAjusteFinanceiro)
           });
         }else{
-          await axios.put(`${baseURLlistaAjusteFinanceiroFatura}/${item.id}`, {
+          await api.put(`${baseURLlistaAjusteFinanceiroFatura}/${item.id}`, {
             idFatura: Number(idFaturaSalvo),
             idAjusteFinanceiro: Number(item.idAjusteFinanceiro)
           });
@@ -181,7 +181,7 @@ function CadastroFaturas() {
 
   async function buscar() {
     if (idParam != null) {
-      await axios.get(`${baseURL}/${idParam}`).then((response) => {
+      await api.get(`${baseURL}/${idParam}`).then((response) => {
         setDados(response.data);
       });
       setId(dados.id);
@@ -211,32 +211,32 @@ function CadastroFaturas() {
 
 
   useEffect(() => {
-    axios.get(`${BASE_URL}/clientes`).then((response) => {
+    api.get(`${BASE_URL}/clientes`).then((response) => {
       setDadosClientes(response.data);
     });
   }, []);
 
   useEffect(() => {
-    axios.get(`${BASE_URL}/planos`).then((response) => {
+    api.get(`${BASE_URL}/planos`).then((response) => {
       setDadosPlanos(response.data);
     });
   }, []);
 
   useEffect(() => {
-    axios.get(`${BASE_URL}/formaspagamentos`).then((response) => {
+    api.get(`${BASE_URL}/formaspagamentos`).then((response) => {
       setDadosFormasPagamento(response.data);
     });
   }, []);
 
   useEffect(() => {
-    axios.get(`${BASE_URL}/ajustesfinanceiros`).then((response) => {
+    api.get(`${BASE_URL}/ajustesfinanceiros`).then((response) => {
       setDadosAjustesFinanceiros(response.data);
     });
   }, []);
 
   useEffect(() => {
     if(idParam != null){
-      axios.get(`${BASE_URL}/listasajustesfinanceirosfaturas/fatura/${idParam}`)
+      api.get(`${BASE_URL}/listasajustesfinanceirosfaturas/fatura/${idParam}`)
       .then((response) => setDadosListaAjustesFinanceirosFatura(response.data));
     }
   }, [idParam]);
@@ -249,7 +249,7 @@ function CadastroFaturas() {
     const idsAjustes = listaAjusteFinanceiroFatura.filter(item => Number(item.idAjusteFinanceiro) > 0
     ).map(item => Number(item.idAjusteFinanceiro));
     const URL_CALCULO =`${BASE_URL}/faturas/calcular`;
-    axios.post(URL_CALCULO, {idCliente: Number(idCliente), idsAjustesFinanceiros:idsAjustes}
+    api.post(URL_CALCULO, {idCliente: Number(idCliente), idsAjustesFinanceiros:idsAjustes}
     ).then(response => {setValorFinal(response.data);
     }).catch(error => {console.error ('Erro ao calcular valor da fatura:', error);
       setValorFinal(0);
