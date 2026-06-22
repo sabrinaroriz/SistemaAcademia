@@ -1,11 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
 import Stack from '@mui/material/Stack';
 
 import Card from '../components/card';
 import FormGroup from '../components/form-group';
 
-import { mensagemSucesso } from '../components/toastr';
+import { Navigate } from 'react-router-dom';
+import { mensagemSucesso, mensagemErro } from '../components/toastr';
+import { autenticar } from '../app/service/authService';
+import { Link } from 'react-router-dom';
 
 import '../custom.css';
 
@@ -15,8 +18,41 @@ class Login extends React.Component {
     senha: '',
   };
 
-  logar = () => {
-    mensagemSucesso(`Usuário ${this.state.login} logado com sucesso!`);
+logar = () => {
+  autenticar({
+    login: this.state.login,
+    senha: this.state.senha
+  })
+  .then(response => {
+
+    sessionStorage.setItem(
+      'token_academia',
+      response.token
+    );
+
+    sessionStorage.setItem(
+      'usuario',
+      JSON.stringify(response)
+    );
+
+    sessionStorage.setItem(
+      'admin',
+      response.admin
+    );
+
+    mensagemSucesso('Login realizado com sucesso!');
+    window.location.href = '/';
+
+    })
+    .catch(error => {
+
+      mensagemErro(
+        error.response?.data?.message ||
+        'Usuário ou senha inválidos.'
+      );
+
+    });
+
   };
 
   cancelar = () => {
@@ -27,6 +63,13 @@ class Login extends React.Component {
   };
 
  render() {
+
+  const token = sessionStorage.getItem('token_academia');
+
+  if (token) {
+    return <Navigate to="/" replace />;
+  }
+
   return (
     <div className="login-page">
         <Card title="Acesso">
@@ -57,6 +100,12 @@ class Login extends React.Component {
             <button onClick={this.cancelar} className="btn btn-danger">
               Cancelar
             </button>
+            <Link
+              to="/cadastro-usuario"
+              className="btn btn-primary"
+            >
+              Cadastre-se
+            </Link>
           </Stack>
         </Card>
       </div>
