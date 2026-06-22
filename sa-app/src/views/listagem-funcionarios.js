@@ -13,13 +13,14 @@ import { IconButton } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 
-import axios from 'axios';
+import api from '../app/api';
 import { BASE_URL } from '../config/axios';
 
 const baseURL = `${BASE_URL}/funcionarios`;
 
 function ListagemFuncionarios() {
   const navigate = useNavigate();
+  const isAdmin = sessionStorage.getItem('admin') === 'true';
 
   const cadastrar = () => {
     navigate(`/cadastro-funcionarios`);
@@ -36,7 +37,7 @@ function ListagemFuncionarios() {
     let data = JSON.stringify({ id });
     let url = `${baseURL}/${id}`;
     console.log(url);
-    await axios
+    await api
       .delete(url, data, {
         headers: { 'Content-Type': 'application/json' },
       })
@@ -54,13 +55,13 @@ function ListagemFuncionarios() {
   }
 
   React.useEffect(() => {
-    axios.get(baseURL).then((response) => {
+    api.get(baseURL).then((response) => {
       setDados(response.data);
     });
   }, []);
 
   React.useEffect(() => {
-    axios.get(`${BASE_URL}/cargos`).then((response) => {
+    api.get(`${BASE_URL}/cargos`).then((response) => {
       setDadosCargos(response.data);
     });
   }, []);
@@ -79,13 +80,15 @@ function ListagemFuncionarios() {
         <div className='row'>
           <div className='col-lg-12'>
             <div className='bs-component'>
-              <button
-                type='button'
-                className='btn btn-primary'
-                onClick={() => cadastrar()}
-              >
-                Novo Funcionário
-              </button>
+              {isAdmin && (
+                <button 
+                  type='button' 
+                  className='btn btn-primary' 
+                  onClick={() => cadastrar()} 
+                > 
+                  Novo Funcionário
+                </button>
+              )}
               <table className='table table-hover'>
                 <thead>
                   <tr>
@@ -106,19 +109,26 @@ function ListagemFuncionarios() {
                       <td>{getNomeCargo(dado.idCargo)}</td>
                       <td>{dado.status  ? 'Ativo' : 'Inativo'}</td>
                       <td>
-                        <Stack spacing={1} padding={0} direction='row'>
-                          <IconButton
-                            aria-label='edit'
-                            onClick={() => editar(dado.id)}
-                          >
-                            <EditIcon />
-                          </IconButton>
-                          <IconButton
-                            aria-label='delete'
-                            onClick={() => excluir(dado.id)}
-                          >
-                            <DeleteIcon />
-                          </IconButton>
+                        <Stack spacing={1} padding={0} 
+                          direction='row'
+                        >
+                        {isAdmin && (
+                          <>
+                            <IconButton 
+                              aria-label='edit' 
+                              onClick={() => editar(dado.id)} 
+                            > 
+                              <EditIcon /> 
+                            </IconButton>
+
+                            <IconButton 
+                              aria-label='delete' 
+                              onClick={() => excluir(dado.id)} 
+                            > 
+                              <DeleteIcon /> 
+                            </IconButton> 
+                          </>
+                        )}
                         </Stack>
                       </td>
                     </tr>

@@ -13,13 +13,14 @@ import { IconButton } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 
-import axios from 'axios';
+import api from '../app/api';
 import { BASE_URL } from '../config/axios';
 
 const baseURL = `${BASE_URL}/planos`;
 
 function ListagemPlanos() {
   const navigate = useNavigate();
+    const isAdmin = sessionStorage.getItem('admin') === 'true';
 
   const cadastrar = () => {
     navigate(`/cadastro-planos`);
@@ -31,11 +32,13 @@ function ListagemPlanos() {
 
   const [dados, setDados] = React.useState(null);
 
+
+  
   async function excluir(id) {
     let data = JSON.stringify({ id });
     let url = `${baseURL}/${id}`;
     console.log(url);
-    await axios
+    await api
       .delete(url, data, {
         headers: { 'Content-Type': 'application/json' },
       })
@@ -60,9 +63,8 @@ function ListagemPlanos() {
     });
   }
 
-
   React.useEffect(() => {
-    axios.get(baseURL).then((response) => {
+    api.get(baseURL).then((response) => {
       setDados(response.data);
     });
   }, []);
@@ -74,14 +76,18 @@ function ListagemPlanos() {
       <Card title='Listagem de Planos'>
         <div className='row'>
           <div className='col-lg-12'>
+
             <div className='bs-component'>
-              <button
-                type='button'
-                className='btn btn-primary'
-                onClick={() => cadastrar()}
-              >
-                Novo Plano
-              </button>
+              {isAdmin && (
+                <button 
+                  type='button' 
+                  className='btn btn-primary' 
+                  onClick={() => cadastrar()} 
+                > 
+                  Novo Plano 
+                </button>
+              )}
+            
               <table className='table table-hover'>
                 <thead>
                   <tr>
@@ -98,19 +104,26 @@ function ListagemPlanos() {
                       <td>{dado.duracao}</td>
                       <td>{formatarMoeda(dado.valor)}</td>
                       <td>
-                        <Stack spacing={1} padding={0} direction='row'>
-                          <IconButton
-                            aria-label='edit'
-                            onClick={() => editar(dado.id)}
-                          >
-                            <EditIcon />
-                          </IconButton>
-                          <IconButton
-                            aria-label='delete'
-                            onClick={() => excluir(dado.id)}
-                          >
-                            <DeleteIcon />
-                          </IconButton>
+                        <Stack spacing={1} padding={0} 
+                          direction='row'
+                        >
+                        {isAdmin && (
+                          <>
+                            <IconButton 
+                              aria-label='edit' 
+                              onClick={() => editar(dado.id)} 
+                            > 
+                              <EditIcon /> 
+                            </IconButton>
+
+                            <IconButton 
+                              aria-label='delete' 
+                              onClick={() => excluir(dado.id)} 
+                            > 
+                              <DeleteIcon /> 
+                            </IconButton> 
+                          </>
+                        )}
                         </Stack>
                       </td>
                     </tr>
