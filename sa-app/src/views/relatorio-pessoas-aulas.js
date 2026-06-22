@@ -3,7 +3,7 @@ import Card from '../components/card';
 import { mensagemErro } from '../components/toastr';
 import '../custom.css';
 
-import axios from 'axios';
+import api from '../app/api';
 import { BASE_URL } from '../config/axios';
 
 import {
@@ -35,7 +35,7 @@ function RelatorioAcademiaPessoas() {
     const [dados, setDados] = useState(null);
     
     useEffect(() => {
-        axios.get(baseURL)
+        api.get(baseURL)
         .then((response) => {
             setDados(response.data);
         })

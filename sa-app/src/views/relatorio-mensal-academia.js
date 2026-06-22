@@ -5,7 +5,7 @@ import { mensagemErro } from '../components/toastr';
 import '../custom.css';
 import { Line } from 'react-chartjs-2';
 
-import axios from 'axios';
+import api from '../app/api';
 import { BASE_URL } from '../config/axios';
 
 import {
@@ -45,7 +45,7 @@ function RelatorioMensalAcademia() {
     useEffect(() => {
         const mesFormatado = `${ano}-${String(mes).padStart(2, '0')}`;
         console.log(mesFormatado, ano);
-        axios.get(`${baseURL}/mensal`, {params: {mes: mesFormatado, ano: Number(ano)}})
+        api.get(`${baseURL}/mensal`, {params: {mes: mesFormatado, ano: Number(ano)}})
         .then((response) => {
             setDados(response.data);
         })
