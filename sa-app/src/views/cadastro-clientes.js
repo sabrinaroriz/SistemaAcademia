@@ -35,6 +35,7 @@ function CadastroClientes() {
   const [telefone, setTelefone] = useState('');
   const [status, setStatus] = useState(null);
   const [dataNascimento, setDataNascimento] = useState(null);
+  const [sexo, setSexo] = useState(null);
   const [idPlano, setIdPlano] = useState('');
   const [logradouro, setLogradouro] = useState('');
   const [numero, setNumero] = useState('');
@@ -56,7 +57,7 @@ function CadastroClientes() {
 
   function limparFormulario() {
     const temCamposPreenchidos =
-      nome !== '' || cpf !== '' || telefone !== '' || status !== '' || dataNascimento !== '' || idPlano !== '' || logradouro !== '' || numero !== '' || complemento !== '' || bairro !== '' || cidade !== '' || estado !== '' || cep !== '';
+      nome !== '' || cpf !== '' || telefone !== '' || status !== '' || dataNascimento !== '' || sexo !== '' || idPlano !== '' || logradouro !== '' || numero !== '' || complemento !== '' || bairro !== '' || cidade !== '' || estado !== '' || cep !== '';
 
     if (!temCamposPreenchidos) {
       inicializar();
@@ -76,6 +77,7 @@ function CadastroClientes() {
       setTelefone('');
       setStatus(null);
       setDataNascimento(null);
+      setSexo(null);
       setIdPlano('');
       setLogradouro('');
       setNumero('');
@@ -91,6 +93,7 @@ function CadastroClientes() {
       setTelefone(dados.telefone);
       setStatus(dados.status);
       setDataNascimento(dayjs(dados.dataNascimento));
+      setSexo(dados.sexo);
       setIdPlano(dados.idPlano);
       setLogradouro(dados.logradouro);
       setNumero(dados.numero);
@@ -121,6 +124,10 @@ function CadastroClientes() {
     }
     if (!dataNascimento) {
       mensagemErro('O campo Data de Nascimento é obrigatório!');
+      return false;
+    }
+    if (sexo == null) {
+      mensagemErro('Selecione o sexo do cliente!');
       return false;
     }
     if (!logradouro || !logradouro.trim()) {
@@ -172,7 +179,7 @@ function CadastroClientes() {
     if (!validarCampos()) {
       return;
     }
-    let data = { id, nome, cpf, telefone, status, dataNascimento, idPlano, logradouro, numero, complemento ,bairro ,cidade ,estado, cep};
+    let data = { id, nome, cpf, telefone, status, sexo, dataNascimento, idPlano, logradouro, numero, complemento ,bairro ,cidade ,estado, cep};
     data = JSON.stringify(data);
     if (idParam == null) {
       await api
@@ -210,6 +217,7 @@ function CadastroClientes() {
       setNome(dados.nome);
       setCpf(dados.cpf);
       setTelefone(dados.telefone);
+      setSexo(dados.sexo);
       setStatus(dados.status);
       setDataNascimento(dayjs(dados.dataNascimento));
       setIdPlano(dados.idPlano);
@@ -302,6 +310,39 @@ function CadastroClientes() {
                   </Stack>
                 </LocalizationProvider>
               </FormGroup>
+
+
+              <FormGroup label='Sexo: *' htmlFor='inputSexo'>
+                <div>
+                    <div className="form-check form-check-inline">
+                        <input
+                            type="radio"
+                            id='sexoAtivo'
+                            className="form-check-input"
+                            name='sexo'
+                            checked={sexo === true}
+                            onChange={() => setSexo(true)}
+                        />
+                        <label className="form-check-label" htmlFor="sexoAtivo">
+                            Masculino
+                        </label>
+                    </div>
+                    <div className="form-check form-check-inline">
+                        <input
+                            type="radio"
+                            id='sexoInativo'
+                            className="form-check-input"
+                            name='sexo'
+                            checked={sexo === false}
+                            onChange={() => setSexo(false)}
+                        />
+                        <label className="form-check-label" htmlFor="sexoInativo">
+                            Feminino
+                        </label>
+                    </div>
+                </div>
+              </FormGroup>
+
 
               <h5 className="mb-3 mt-4">Endereço</h5>
               <FormGroup label='Logradouro: *' htmlFor='inputLogradouro'>

@@ -149,7 +149,17 @@ function CadastroFichasAvaliacaoFisica() {
     }
   }
 
+function getSexoCliente(id) {
+    if (!id || id === '0' || id === 0) return undefined;
+    const cliente = dadosClientes.find(c => Number(c.id) === Number(id));
+    return cliente ? cliente.sexo : undefined;
+  }
+
   async function calcularIMC() {
+    if (!idCliente || idCliente === '0' || idCliente === 0) {
+      mensagemErro('Selecione um Cliente primeiro!');
+      return;
+    }
     if (!peso || Number(peso) <= 0) {
       mensagemErro('Informe um peso válido!');
       return;
@@ -158,11 +168,17 @@ function CadastroFichasAvaliacaoFisica() {
       mensagemErro('Informe uma altura válida!');
       return;
     }
+    const sexo = getSexoCliente(idCliente);
+    if (sexo === undefined || sexo === null) {
+      mensagemErro('O cliente selecionado não possui o campo sexo cadastrado!');
+      return;
+    }
     try {
       const response = await api.post(`${baseURL}/calcular-imc`,
         {
           peso: Number(peso),
-          altura: Number(altura)
+          altura: Number(altura),
+          sexoCliente: Boolean(sexo)
         });
       const resultado = response.data;
       const partes = resultado.split(' - ');
