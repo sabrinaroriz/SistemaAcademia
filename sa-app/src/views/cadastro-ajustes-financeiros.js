@@ -179,7 +179,7 @@ function CadastroAjustesFinanceiros() {
                   >
                     <option value=''>Selecione...</option>
                     <option value='Desconto'>Desconto</option>
-                    <option value='Acréscimo'>Acréscimo</option>
+                    <option value='Acrescimo'>Acréscimo</option>
                 </select>
               </FormGroup>
               <FormGroup label='Unidade: *' htmlFor='SelectUnidade'>
